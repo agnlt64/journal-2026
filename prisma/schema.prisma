@@ -1,0 +1,88 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../lib/generated/prisma"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    // Pour le login principal
+  pinCodeHash   String?   // Code PIN à 4 chiffres (hashé pour sécurité)
+  
+  // User Settings
+  blurLevel     Int       @default(10) // Niveau de flou par défaut
+  itemsPerPage  Int       @default(20)
+  
+  entries       Entry[]
+  writings      Writing[]
+  tags          Tag[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#6366f1") // Default indigo color
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries   Entry[]  @relation("EntryTags")
+  
+  @@unique([userId, name])
+}
+
+model Entry {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  content     String    @db.Text
+  date        DateTime  // Date de l'entrée (modifiable)
+  
+  // Tags
+  tags        Tag[]     @relation("EntryTags")
+  
+  // Champs optionnels
+  wakeTime    DateTime? // Stocker l'heure
+  sleepTime   DateTime? // Stocker l'heure
+  didSport    Boolean   @default(false)
+  asmr        Boolean   @default(false)
+  
+  // Gestion du Lock
+  isLocked    Boolean   @default(false)
+  
+  // Images
+  images      Image[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId, date]) // Optimisation pour le tri décroissant
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String
+  entryId   String
+  entry     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+}
+
+// Les "Réflexions" hors journal
+model Writing {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String
+  content   String   @db.Text
+  
+  // Pas de date affichée, mais utile pour le tri interne
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
