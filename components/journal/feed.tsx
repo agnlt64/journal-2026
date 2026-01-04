@@ -23,19 +23,8 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
     const searchQuery = useAppStore(s => s.searchQuery);
     const setSearchQuery = useAppStore(s => s.setSearchQuery);
 
-    // Sync entries when initialEntries changes (after revalidatePath)
-    useEffect(() => {
-        setEntries(initialEntries);
-    }, [initialEntries]);
-
     // Search logic with debounce
     useEffect(() => {
-        // Skip the first render - we already have initialEntries
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
-
         const handler = setTimeout(async () => {
             setLoading(true);
             try {
@@ -98,7 +87,7 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
                 </div>
             </div>
 
-            {loading && <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>}
+            {/* {loading && <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>} */}
 
             <div className="space-y-6">
                 {filteredEntries.map(entry => (

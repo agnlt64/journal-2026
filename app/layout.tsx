@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`${inter.className} dark`}>
-        <BlurToggle />
+        {/* <BlurToggle /> */}
         <Header />
         <Sidebar />
         <main className="ml-16 pt-0">
