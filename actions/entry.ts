@@ -61,6 +61,7 @@ export async function createEntry(data: any) {
             sleepTime: parsed.sleepTime,
             didSport: parsed.didSport,
             asmr: parsed.asmr,
+            screenTime: parsed.screenTime,
             isLocked: parsed.isLocked,
             tags: parsed.tagIds?.length ? {
                 connect: parsed.tagIds.map(id => ({ id }))
@@ -108,6 +109,7 @@ export async function getEntries(page = 1, searchQuery = ""): Promise<{ data: En
             sleepTime: e.sleepTime,
             didSport: e.didSport,
             asmr: e.asmr,
+            screenTime: e.screenTime,
             isLocked: e.isLocked,
             images: isLocked ? [] : e.images.map((i: any) => ({ id: i.id, url: i.url })),
             createdAt: e.createdAt,
@@ -162,6 +164,7 @@ export async function updateEntry(id: string, data: any) {
             sleepTime: parsed.sleepTime,
             didSport: parsed.didSport,
             asmr: parsed.asmr,
+            screenTime: parsed.screenTime,
             isLocked: parsed.isLocked,
             tags: {
                 set: parsed.tagIds?.map(tid => ({ id: tid })) || []

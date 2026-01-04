@@ -45,6 +45,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             tagIds: entryToEdit.tags?.map(t => t.id) || [],
             wakeTime: entryToEdit.wakeTime ? new Date(entryToEdit.wakeTime) : undefined,
             sleepTime: entryToEdit.sleepTime ? new Date(entryToEdit.sleepTime) : undefined,
+            screenTime: entryToEdit.screenTime ?? undefined,
         } : {
             content: "",
             date: new Date(),
@@ -60,6 +61,10 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     const isLocked = watch("isLocked");
     const wakeTime = watch("wakeTime");
     const sleepTime = watch("sleepTime");
+    const screenTime = watch("screenTime");
+
+    // Check if selected date is a Monday (day 1)
+    const isMonday = date ? new Date(date).getDay() === 1 : false;
 
     // Load tags on open
     useEffect(() => {
@@ -259,6 +264,20 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                             />
                             <Label htmlFor="asmr">ASMR ?</Label>
                         </div>
+
+                        {/* Screen Time - Only on Mondays */}
+                        {isMonday && (
+                            <div className="col-span-2 flex flex-col gap-3">
+                                <Label>Temps d'écran moyen (minutes/jour)</Label>
+                                <Input
+                                    type="number"
+                                    min={0}
+                                    placeholder="Ex: 180 pour 3h"
+                                    value={screenTime ?? ""}
+                                    onChange={(e) => setValue("screenTime", e.target.value ? Number(e.target.value) : undefined)}
+                                />
+                            </div>
+                        )}
 
                         {/* Image Placeholder */}
                         <div className="col-span-2 flex flex-col gap-3">

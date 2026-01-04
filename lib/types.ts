@@ -11,6 +11,7 @@ export const entrySchema = z.object({
     sleepTime: z.date().optional(),
     didSport: z.boolean().default(false),
     asmr: z.boolean().default(false),
+    screenTime: z.number().optional(), // Temps d'écran moyen en minutes
     // Lock Logic
     isLocked: z.boolean().default(false),
 });
@@ -49,6 +50,7 @@ export interface EntryDTO {
     sleepTime: Date | null;
     didSport: boolean;
     asmr: boolean;
+    screenTime: number | null;
 
     isLocked: boolean;
     images: ImageDTO[]; // Empty if locked

@@ -54,6 +54,7 @@ model Entry {
   sleepTime   DateTime? // Stocker l'heure
   didSport    Boolean   @default(false)
   asmr        Boolean   @default(false)
+  screenTime  Int?      // Temps d'écran moyen en minutes (renseigné le lundi)
   
   // Gestion du Lock
   isLocked    Boolean   @default(false)
