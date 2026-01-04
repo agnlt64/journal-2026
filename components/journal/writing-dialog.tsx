@@ -37,7 +37,7 @@ export function WritingDialog({ children }: WritingDialogProps) {
             ? cloneElement(children as React.ReactElement<any>, { onClick: () => setOpen(true) })
             : <span onClick={() => setOpen(true)}>{children}</span>)
         : <Button onClick={() => setOpen(true)}>
-            <PenTool className="w-4 h-4 mr-2" /> New Reflection
+            <PenTool className="w-4 h-4 mr-2" /> Nouvelle réflexion
         </Button>;
 
     return (
@@ -47,20 +47,20 @@ export function WritingDialog({ children }: WritingDialogProps) {
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <PenTool className="w-5 h-5" />
-                        New Reflection
+                        Nouvelle réflexion
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="flex flex-col gap-3">
-                        <Label>Title</Label>
-                        <Input {...register("title")} placeholder="Topic..." />
+                        <Label>Titre</Label>
+                        <Input {...register("title")} placeholder="Sujet..." />
                     </div>
                     <div className="flex flex-col gap-3">
-                        <Label>Content</Label>
-                        <Textarea {...register("content")} className="min-h-[250px]" placeholder="Thoughts..." />
+                        <Label>Contenu</Label>
+                        <Textarea {...register("content")} className="min-h-[250px]" placeholder="Pensées..." />
                     </div>
                     <div className="flex justify-end gap-2">
-                        <Button type="submit">Save</Button>
+                        <Button type="submit">Enregistrer</Button>
                     </div>
                 </form>
             </DialogContent>

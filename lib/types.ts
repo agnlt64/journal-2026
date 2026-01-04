@@ -68,3 +68,22 @@ export interface WritingDTO {
     content: string;
     createdAt: Date;
 }
+
+// Goal types
+export const goalSchema = z.object({
+    title: z.string().min(1, "Title is required"),
+    description: z.string().optional(),
+    deadline: z.date(),
+});
+
+export type GoalFormValues = z.infer<typeof goalSchema>;
+
+export interface GoalDTO {
+    id: string;
+    title: string;
+    description: string | null;
+    deadline: Date;
+    isCompleted: boolean;
+    completedAt: Date | null;
+    createdAt: Date;
+}

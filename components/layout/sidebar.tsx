@@ -2,9 +2,10 @@
 
 import { EntryDialog } from "@/components/journal/entry-dialog";
 import { WritingDialog } from "@/components/journal/writing-dialog";
+import { GoalDialog } from "@/components/journal/goal-dialog";
 import { SettingsDialog } from "@/components/journal/settings-dialog";
 import { Button } from "@/components/ui/button";
-import { BookOpen, PenTool, Settings } from "lucide-react";
+import { BookOpen, PenTool, Target, Settings } from "lucide-react";
 
 export function Sidebar() {
     return (
@@ -13,7 +14,7 @@ export function Sidebar() {
             <div className="flex flex-col gap-2">
                 <EntryDialog>
                     <Button variant="ghost" size="icon-lg" title="New Entry">
-                        <BookOpen/>
+                        <BookOpen />
                     </Button>
                 </EntryDialog>
 
@@ -23,6 +24,13 @@ export function Sidebar() {
                         <PenTool />
                     </Button>
                 </WritingDialog>
+
+                {/* Goal Button */}
+                <GoalDialog>
+                    <Button variant="ghost" size="icon-lg" title="New Goal">
+                        <Target />
+                    </Button>
+                </GoalDialog>
             </div>
 
             {/* Spacer */}

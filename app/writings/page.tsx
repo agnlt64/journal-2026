@@ -8,7 +8,7 @@ export default async function WritingsPage() {
     return (
         <main className="container mx-auto py-8 max-w-3xl">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold">Reflections</h1>
+                <h1 className="text-2xl font-bold">Réflexions</h1>
                 <WritingDialog />
             </div>
 
@@ -24,7 +24,7 @@ export default async function WritingsPage() {
                     </Card>
                 ))}
                 {writings.length === 0 && (
-                    <p className="text-center text-muted-foreground">No reflections yet.</p>
+                    <p className="text-center text-muted-foreground">Aucune réflexion pour le moment.</p>
                 )}
             </div>
         </main>

@@ -20,6 +20,7 @@ model User {
   
   entries       Entry[]
   writings      Writing[]
+  goals         Goal[]
   tags          Tag[]
   
   createdAt     DateTime  @default(now())
@@ -85,4 +86,21 @@ model Writing {
   // Pas de date affichée, mais utile pour le tri interne
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Goal {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title       String
+  description String?   @db.Text
+  deadline    DateTime  // Date limite pour réaliser l'objectif
+  
+  // Completion status
+  isCompleted   Boolean   @default(false)
+  completedAt   DateTime? // When the goal was marked as completed
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

@@ -30,6 +30,15 @@ export function Header() {
                     >
                         Réflexions
                     </Link>
+                    <Link
+                        href="/objectifs"
+                        className={cn(
+                            "transition-colors hover:text-foreground/80 cursor-pointer",
+                            pathname === "/objectifs" ? "text-foreground" : "text-foreground/60"
+                        )}
+                    >
+                        Objectifs
+                    </Link>
                 </nav>
             </div>
         </header>

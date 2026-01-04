@@ -64,7 +64,7 @@ export function EntryCard({ entry: initialEntry }: { entry: EntryDTO }) {
                     {entry.didSport && <Badge variant="secondary">Sport</Badge>}
                     {entry.asmr && <Badge variant="secondary">ASMR</Badge>}
                     {entry.wakeTime && (
-                        <div className="text-xs text-muted-foreground flex gap-1">
+                        <div className="text-xs text-muted-foreground flex items-center gap-1">
                             <Sun className="w-3" /> {format(new Date(entry.wakeTime), "HH:mm")}
                         </div>
                     )}
