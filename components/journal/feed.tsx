@@ -1,38 +1,45 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getEntries } from "@/actions/entry";
-import { EntryDTO } from "@/lib/types";
+import { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore } from "@/store/use-app-store";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 
-export function Feed({ initialEntries }: { initialEntries: EntryDTO[] }) {
-    // We can use SWR or React Query for real stuff, but for now simple useEffect with Search
+interface FeedProps {
+    initialEntries: EntryDTO[];
+    availableTags: TagDTO[];
+}
+
+export function Feed({ initialEntries, availableTags }: FeedProps) {
     const [entries, setEntries] = useState<EntryDTO[]>(initialEntries);
     const [loading, setLoading] = useState(false);
+    const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+    const isFirstRender = useRef(true);
 
     const searchQuery = useAppStore(s => s.searchQuery);
     const setSearchQuery = useAppStore(s => s.setSearchQuery);
 
-    // We need a debounce hook to avoid spamming the server
-    // I'll inline the logic or create a hook file
-    // Let's create a hook file next.
-
-    // Search Logic
+    // Sync entries when initialEntries changes (after revalidatePath)
     useEffect(() => {
-        // If empty query, maybe revert to initial? Or re-fetch?
-        // Let's just re-fetch to be safe incase of updates.
+        setEntries(initialEntries);
+    }, [initialEntries]);
 
-        // Actually, handling this cleanly inside useEffect is tricky with debouncing.
-        // I'll assume passing searchQuery to the parent Page or managing it here.
-        // Let's simple fetch when searchQuery changes (debounced).
+    // Search logic with debounce
+    useEffect(() => {
+        // Skip the first render - we already have initialEntries
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
 
         const handler = setTimeout(async () => {
             setLoading(true);
             try {
-                const { data } = await getEntries(1, searchQuery); // Page 1 for search results
+                const { data } = await getEntries(1, searchQuery);
                 setEntries(data);
             } finally {
                 setLoading(false);
@@ -42,24 +49,63 @@ export function Feed({ initialEntries }: { initialEntries: EntryDTO[] }) {
         return () => clearTimeout(handler);
     }, [searchQuery]);
 
+    // Filter entries by selected tags
+    const filteredEntries = selectedTagIds.length > 0
+        ? entries.filter(entry =>
+            selectedTagIds.some(tagId => entry.tags.some(t => t.id === tagId))
+        )
+        : entries;
+
+    function toggleTag(tagId: string) {
+        setSelectedTagIds(prev =>
+            prev.includes(tagId)
+                ? prev.filter(id => id !== tagId)
+                : [...prev, tagId]
+        );
+    }
 
     return (
         <div className="space-y-4">
-            <Input
-                placeholder="Search entries..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="mb-6"
-            />
+            {/* Search and Tag Filters */}
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-3 items-center">
+                    <Input
+                        placeholder="Rechercher..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="flex-1"
+                    />
+                </div>
+
+                {/* Tag Filters */}
+                <div className="flex flex-wrap gap-2">
+                    {availableTags.map(tag => (
+                        <Badge
+                            key={tag.id}
+                            variant={selectedTagIds.includes(tag.id) ? "default" : "outline"}
+                            className="cursor-pointer transition-all"
+                            style={{
+                                backgroundColor: selectedTagIds.includes(tag.id) ? tag.color : 'transparent',
+                                borderColor: tag.color,
+                                color: selectedTagIds.includes(tag.id) ? 'white' : tag.color,
+                            }}
+                            onClick={() => toggleTag(tag.id)}
+                        >
+                            {tag.name}
+                            {selectedTagIds.includes(tag.id) && <X className="w-3 h-3 ml-1" />}
+                        </Badge>
+                    ))}
+                </div>
+            </div>
 
             {loading && <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>}
 
             <div className="space-y-6">
-                {entries.map(entry => (
+                {filteredEntries.map(entry => (
                     <EntryCard key={entry.id} entry={entry} />
                 ))}
-                {entries.length === 0 && !loading && (
-                    <p className="text-center text-muted-foreground">No entries found.</p>
+                {filteredEntries.length === 0 && !loading && (
+                    <p className="text-center text-muted-foreground">Aucune entrée trouvée.</p>
                 )}
             </div>
         </div>

@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, Lock, Unlock, Plus, X } from "lucide-react";
+import { CalendarIcon, Lock, Unlock, Plus, X, PenTool } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EntryDialogProps {
@@ -58,6 +58,8 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     const { register, handleSubmit, setValue, watch, reset } = form;
     const date = watch("date");
     const isLocked = watch("isLocked");
+    const wakeTime = watch("wakeTime");
+    const sleepTime = watch("sleepTime");
 
     // Load tags on open
     useEffect(() => {
@@ -90,7 +92,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             setSelectedTagIds([]);
         } catch (e) {
             console.error(e);
-            alert("Error saving entry. Check if you have a PIN set if locking.");
+            alert("Erreur lors de la sauvegarde. Vérifiez que vous avez un PIN défini si vous verrouillez l'entrée.");
         }
     }
 
@@ -117,7 +119,9 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     // Render trigger
     const triggerElement = isValidElement(children)
         ? cloneElement(children as React.ReactElement<any>, { onClick: () => setShow(true) })
-        : children;
+        : <Button onClick={() => setIsOpen(true)}>
+            <PenTool className="w-4 h-4 mr-2" /> Nouvelle entrée
+        </Button>;
 
     return (
         <Dialog open={show} onOpenChange={setShow}>
@@ -125,7 +129,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        {entryToEdit ? "Edit Entry" : "New Entry"}
+                        {entryToEdit ? "Modifier l'entrée" : "Nouvelle entrée"}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -133,7 +137,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
 
                     {/* Tags */}
                     <div className="flex flex-col gap-3">
-                        <Label>Tags</Label>
+                        <Label>Catégories</Label>
                         <div className="flex flex-wrap gap-2">
                             {availableTags.map(tag => (
                                 <Badge
@@ -156,10 +160,10 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         {/* Add new tag */}
                         <div className="flex gap-2 items-center">
                             <Input
-                                placeholder="New tag..."
+                                placeholder="Nouvelle catégorie..."
                                 value={newTagName}
                                 onChange={(e) => setNewTagName(e.target.value)}
-                                className="w-32"
+                                className="w-64"
                             />
                             <Input
                                 type="color"
@@ -186,7 +190,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                     )}
                                 >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                                    {date ? format(date, "PPP") : <span>Choisir une date</span>}
                                 </Button>
                             } />
                             <PopoverContent className="w-auto p-0">
@@ -201,20 +205,21 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
 
                     {/* Content */}
                     <div className="flex flex-col gap-3">
-                        <Label>Content (optional)</Label>
+                        <Label>Contenu (optionnel)</Label>
                         <Textarea
                             {...register("content")}
                             className="min-h-[200px]"
-                            placeholder="Write your thoughts..."
+                            placeholder="Écrivez vos pensées..."
                         />
                     </div>
 
                     {/* Optional Fields */}
                     <div className="grid grid-cols-2 gap-6 border-t pt-6">
                         <div className="flex flex-col gap-3">
-                            <Label>Wake Time</Label>
+                            <Label>Heure de réveil</Label>
                             <Input
                                 type="time"
+                                value={wakeTime ? `${String(new Date(wakeTime).getHours()).padStart(2, '0')}:${String(new Date(wakeTime).getMinutes()).padStart(2, '0')}` : ""}
                                 onChange={(e) => {
                                     const [h, m] = e.target.value.split(':');
                                     const d = new Date();
@@ -225,9 +230,10 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                             />
                         </div>
                         <div className="flex flex-col gap-3">
-                            <Label>Sleep Time</Label>
+                            <Label>Heure de coucher</Label>
                             <Input
                                 type="time"
+                                value={sleepTime ? `${String(new Date(sleepTime).getHours()).padStart(2, '0')}:${String(new Date(sleepTime).getMinutes()).padStart(2, '0')}` : ""}
                                 onChange={(e) => {
                                     const [h, m] = e.target.value.split(':');
                                     const d = new Date();
@@ -243,7 +249,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 checked={watch("didSport")}
                                 onCheckedChange={(c) => setValue("didSport", c as boolean)}
                             />
-                            <Label htmlFor="sport">Did Sport?</Label>
+                            <Label htmlFor="sport">Sport ?</Label>
                         </div>
                         <div className="flex items-center gap-3">
                             <Checkbox
@@ -251,13 +257,13 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 checked={watch("asmr")}
                                 onCheckedChange={(c) => setValue("asmr", c as boolean)}
                             />
-                            <Label htmlFor="asmr">ASMR?</Label>
+                            <Label htmlFor="asmr">ASMR ?</Label>
                         </div>
 
                         {/* Image Placeholder */}
                         <div className="col-span-2 flex flex-col gap-3">
-                            <Label>Images (TODO)</Label>
-                            <Input placeholder="Image URL (mock)" disabled />
+                            <Label>Images (À venir)</Label>
+                            <Input placeholder="URL de l'image (mock)" disabled />
                         </div>
                     </div>
 
@@ -271,14 +277,14 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 onClick={() => setValue("isLocked", !isLocked)}
                             >
                                 {isLocked ? <Lock className="w-4 h-4 mr-2" /> : <Unlock className="w-4 h-4 mr-2" />}
-                                {isLocked ? "Locked" : "Open"}
+                                {isLocked ? "Verrouillée" : "Ouverte"}
                             </Button>
                             <span className="text-xs text-muted-foreground">
-                                {isLocked ? "Requires PIN to view." : "Visible to all."}
+                                {isLocked ? "PIN requis pour voir." : "Visible par tous."}
                             </span>
                         </div>
 
-                        <Button type="submit">Save</Button>
+                        <Button type="submit">Enregistrer</Button>
                     </div>
 
                 </form>

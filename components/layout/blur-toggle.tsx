@@ -8,10 +8,6 @@ export function BlurToggle() {
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Ignore if typing in input/textarea
-            const target = e.target as HTMLElement;
-            if (['INPUT', 'TEXTAREA'].includes(target.tagName) || target.isContentEditable) return;
-
             if (e.key.toLowerCase() === 'b') {
                 toggleBlur();
             }

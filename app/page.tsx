@@ -1,12 +1,20 @@
-import { getEntries } from "@/actions/entry";
+import { getEntries, getTags } from "@/actions/entry";
 import { Feed } from "@/components/journal/feed";
+import { EntryDialog } from "@/components/journal/entry-dialog";
 
 export default async function Home() {
-    const { data: initialEntries } = await getEntries();
+    const [{ data: initialEntries }, tags] = await Promise.all([
+        getEntries(),
+        getTags()
+    ]);
 
     return (
         <main className="container mx-auto py-8 max-w-3xl">
-            <Feed initialEntries={initialEntries} />
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-2xl font-bold">Entrées</h1>
+                <EntryDialog />
+            </div>
+            <Feed initialEntries={initialEntries} availableTags={tags} />
         </main>
     );
 }
