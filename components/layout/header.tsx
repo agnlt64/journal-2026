@@ -39,6 +39,15 @@ export function Header() {
                     >
                         Objectifs
                     </Link>
+                    <Link
+                        href="/stats"
+                        className={cn(
+                            "transition-colors hover:text-foreground/80 cursor-pointer",
+                            pathname === "/stats" ? "text-foreground" : "text-foreground/60"
+                        )}
+                    >
+                        Stats
+                    </Link>
                 </nav>
             </div>
         </header>
