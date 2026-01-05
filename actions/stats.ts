@@ -33,7 +33,10 @@ export async function getEntryDates(): Promise<Date[]> {
     const user = await getCurrentUser();
 
     const entries = await db.entry.findMany({
-        where: { userId: user.id },
+        where: {
+            userId: user.id,
+            content: { not: "" }
+        },
         select: { date: true },
     });
 
