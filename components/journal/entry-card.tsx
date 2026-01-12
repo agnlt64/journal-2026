@@ -102,7 +102,9 @@ export function EntryCard({ entry: initialEntry }: { entry: EntryDTO }) {
                     </div>
                 ) : (
                     <div className="whitespace-pre-wrap">
-                        {entry.content}
+                        {entry.content?.length === 0
+                        ? <p className="text-sm italic text-muted-foreground">Pas de texte</p>
+                        : entry.content}
                     </div>
                 )}
             </CardContent>

@@ -73,16 +73,16 @@ export async function createEntry(data: any) {
     return { success: true };
 }
 
-export async function getEntries(page = 1, searchQuery = ""): Promise<{ data: EntryDTO[], total: number }> {
+export async function getEntries(page = 1, searchQuery = "", includeEmpty = false): Promise<{ data: EntryDTO[], total: number }> {
     const user = await getCurrentUser();
     const itemsPerPage = user.itemsPerPage || 20;
 
     const where: any = {
         userId: user.id,
-        // Only show entries with content
-        content: searchQuery
-            ? { contains: searchQuery, mode: 'insensitive' }
-            : { not: "" },
+        ...(searchQuery
+            ? { content: { contains: searchQuery, mode: 'insensitive' } }
+            : (!includeEmpty ? { content: { not: "" } } : {})
+        ),
     };
 
     const [entries, total] = await Promise.all([

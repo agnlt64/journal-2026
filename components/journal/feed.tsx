@@ -28,7 +28,7 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
         const handler = setTimeout(async () => {
             setLoading(true);
             try {
-                const { data } = await getEntries(1, searchQuery);
+                const { data } = await getEntries(1, searchQuery, true);
                 setEntries(data);
             } finally {
                 setLoading(false);

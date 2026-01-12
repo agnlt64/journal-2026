@@ -4,7 +4,7 @@ import { EntryDialog } from "@/components/journal/entry-dialog";
 
 export default async function Home() {
     const [{ data: initialEntries }, tags] = await Promise.all([
-        getEntries(),
+        getEntries(1, "", true),
         getTags()
     ]);
 
