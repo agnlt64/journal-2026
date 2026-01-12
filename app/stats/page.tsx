@@ -1,5 +1,6 @@
 import { getStatsData, getEntryDates } from "@/actions/stats";
 import { SleepChart } from "@/components/stats/sleep-chart";
+import { ScreenTimeChart } from "@/components/stats/screen-time-chart";
 import { EntryCalendar } from "@/components/stats/entry-calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -23,6 +24,16 @@ export default async function StatsPage() {
                     </CardHeader>
                     <CardContent>
                         <SleepChart entries={entries} />
+                    </CardContent>
+                </Card>
+
+                {/* Screen Time Chart */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Temps d'écran moyen par semaine</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ScreenTimeChart entries={entries} />
                     </CardContent>
                 </Card>
 
