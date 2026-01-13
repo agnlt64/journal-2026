@@ -1,13 +1,15 @@
-import { getStatsData, getEntryDates } from "@/actions/stats";
+import { getStatsData, getEntryDates, getCounter } from "@/actions/stats";
 import { SleepChart } from "@/components/stats/sleep-chart";
 import { ScreenTimeChart } from "@/components/stats/screen-time-chart";
 import { EntryCalendar } from "@/components/stats/entry-calendar";
+import { Counter } from "@/components/stats/counter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function StatsPage() {
-    const [entries, entryDates] = await Promise.all([
+    const [entries, entryDates, counterValue] = await Promise.all([
         getStatsData(),
-        getEntryDates()
+        getEntryDates(),
+        getCounter()
     ]);
 
     return (
@@ -17,6 +19,16 @@ export default async function StatsPage() {
             </div>
 
             <div className="grid gap-8">
+                {/* Counter */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Compteur</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Counter initialValue={counterValue} />
+                    </CardContent>
+                </Card>
+
                 {/* Sleep/Wake Chart */}
                 <Card>
                     <CardHeader>

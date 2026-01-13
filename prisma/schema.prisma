@@ -17,6 +17,7 @@ model User {
   // User Settings
   blurLevel     Int       @default(10) // Niveau de flou par défaut
   itemsPerPage  Int       @default(20)
+  counter       Int       @default(0)  // Compteur persistant
   
   entries       Entry[]
   writings      Writing[]

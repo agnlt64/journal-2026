@@ -42,3 +42,20 @@ export async function getEntryDates(): Promise<Date[]> {
 
     return entries.map(e => e.date);
 }
+
+export async function getCounter(): Promise<number> {
+    const user = await getCurrentUser();
+    return user.counter;
+}
+
+export async function updateCounter(delta: number): Promise<number> {
+    const user = await getCurrentUser();
+
+    const updated = await db.user.update({
+        where: { id: user.id },
+        data: { counter: user.counter + delta }
+    });
+
+    return updated.counter;
+}
+
