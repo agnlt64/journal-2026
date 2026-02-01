@@ -1,11 +1,13 @@
 import { getEntries, getTags } from "@/actions/entry";
+import { getUserSettings } from "@/actions/user";
 import { Feed } from "@/components/journal/feed";
 import { EntryDialog } from "@/components/journal/entry-dialog";
 
 export default async function Home() {
-    const [{ data: initialEntries }, tags] = await Promise.all([
+    const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
         getEntries(1, "", true),
-        getTags()
+        getTags(),
+        getUserSettings()
     ]);
 
     return (
@@ -14,7 +16,12 @@ export default async function Home() {
                 <h1 className="text-2xl font-bold">Entrées</h1>
                 <EntryDialog />
             </div>
-            <Feed initialEntries={initialEntries} availableTags={tags} />
+            <Feed
+                initialEntries={initialEntries}
+                initialTotal={total}
+                itemsPerPage={settings.itemsPerPage}
+                availableTags={tags}
+            />
         </main>
     );
 }

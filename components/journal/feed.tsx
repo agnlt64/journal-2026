@@ -6,30 +6,40 @@ import { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/use-app-store";
-import { Loader2, X } from "lucide-react";
+import { Loader2, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface FeedProps {
     initialEntries: EntryDTO[];
+    initialTotal: number;
+    itemsPerPage: number;
     availableTags: TagDTO[];
 }
 
-export function Feed({ initialEntries, availableTags }: FeedProps) {
+export function Feed({ initialEntries, initialTotal, itemsPerPage, availableTags }: FeedProps) {
     const [entries, setEntries] = useState<EntryDTO[]>(initialEntries);
+    const [total, setTotal] = useState(initialTotal);
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
-    const isFirstRender = useRef(true);
 
     const searchQuery = useAppStore(s => s.searchQuery);
     const setSearchQuery = useAppStore(s => s.setSearchQuery);
 
-    // Search logic with debounce
+    const totalPages = Math.ceil(total / itemsPerPage);
+    const hasPrevPage = page > 1;
+    const hasNextPage = page < totalPages;
+
+    // Search logic with debounce - reset to page 1 on search
     useEffect(() => {
         const handler = setTimeout(async () => {
             setLoading(true);
             try {
-                const { data } = await getEntries(1, searchQuery, true);
+                const { data, total: newTotal } = await getEntries(1, searchQuery, true);
                 setEntries(data);
+                setTotal(newTotal);
+                setPage(1);
             } finally {
                 setLoading(false);
             }
@@ -37,6 +47,18 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
 
         return () => clearTimeout(handler);
     }, [searchQuery]);
+
+    async function goToPage(newPage: number) {
+        setLoading(true);
+        try {
+            const { data, total: newTotal } = await getEntries(newPage, searchQuery, true);
+            setEntries(data);
+            setTotal(newTotal);
+            setPage(newPage);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     // Filter entries by selected tags
     const filteredEntries = selectedTagIds.length > 0
@@ -87,8 +109,7 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
                 </div>
             </div>
 
-            {/* {loading && <div className="flex justify-center p-4"><Loader2 className="animate-spin" /></div>} */}
-
+            {/* Entries */}
             <div className="space-y-6">
                 {filteredEntries.map(entry => (
                     <EntryCard key={entry.id} entry={entry} />
@@ -97,6 +118,32 @@ export function Feed({ initialEntries, availableTags }: FeedProps) {
                     <p className="text-center text-muted-foreground">Aucune entrée trouvée.</p>
                 )}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 pt-4">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => goToPage(page - 1)}
+                        disabled={!hasPrevPage || loading}
+                    >
+                        <ChevronLeft className="h-5 w-5" />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                        Page {page} / {totalPages}
+                    </span>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => goToPage(page + 1)}
+                        disabled={!hasNextPage || loading}
+                    >
+                        <ChevronRight className="h-5 w-5" />
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }
+
