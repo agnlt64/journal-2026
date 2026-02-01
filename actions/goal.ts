@@ -52,3 +52,24 @@ export async function toggleGoalCompletion(goalId: string) {
 
     revalidatePath("/objectifs");
 }
+
+export async function updateGoalRemark(goalId: string, remark: string | null) {
+    const user = await getCurrentUser();
+
+    const goal = await db.goal.findFirst({
+        where: { id: goalId, userId: user.id }
+    });
+
+    if (!goal) {
+        throw new Error("Goal not found");
+    }
+
+    await db.goal.update({
+        where: { id: goalId },
+        data: {
+            remark: remark?.trim() || null,
+        }
+    });
+
+    revalidatePath("/objectifs");
+}

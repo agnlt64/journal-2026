@@ -87,5 +87,6 @@ export interface GoalDTO {
     deadline: Date;
     isCompleted: boolean;
     completedAt: Date | null;
+    remark: string | null;
     createdAt: Date;
 }

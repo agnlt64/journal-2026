@@ -103,6 +103,9 @@ model Goal {
   isCompleted   Boolean   @default(false)
   completedAt   DateTime? // When the goal was marked as completed
   
+  // Post-deadline remark
+  remark        String?   @db.Text  // Remark for past objectives
+  
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
