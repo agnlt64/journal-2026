@@ -24,14 +24,14 @@ export default async function Home() {
         <div className="relative">
           {/* Label */}
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-px bg-gradient-to-r from-[#00f5ff] to-transparent" />
+            <div className="w-8 h-px bg-linear-to-r from-[#00f5ff] to-transparent" />
             <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(0,245,255,0.6)] uppercase">
               Enregistrements Quotidiens
             </span>
           </div>
           
           <div className="flex items-end justify-between">
-            <h1 className="font-[family-name:var(--font-display)] text-5xl font-bold text-white tracking-tight">
+            <h1 className="font-(family-name:--font-display) text-5xl font-bold text-white tracking-tight">
               ENTRÉES
             </h1>
             
@@ -46,7 +46,7 @@ export default async function Home() {
                   "transition-all duration-500 group"
                 )}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <span className="absolute inset-0 bg-linear-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 <Plus className="w-4 h-4 mr-2 relative z-10" />
                 <span className="relative z-10">NOUVELLE ENTRÉE</span>
               </Button>

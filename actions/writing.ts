@@ -2,10 +2,10 @@
 
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { writingSchema } from "@/lib/types";
+import { writingSchema, WritingFormValues } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
-export async function createWriting(data: any) {
+export async function createWriting(data: WritingFormValues) {
     const user = await getCurrentUser();
     const parsed = writingSchema.parse(data);
 

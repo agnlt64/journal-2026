@@ -16,7 +16,7 @@ export default async function WritingsPage() {
                 
                 <div className="relative">
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-px bg-gradient-to-r from-[#b829dd] to-transparent" />
+                        <div className="w-8 h-px bg-linear-to-r from-[#b829dd] to-transparent" />
                         <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(184,41,221,0.6)] uppercase">
                             Pensées Profondes
                         </span>
@@ -25,7 +25,7 @@ export default async function WritingsPage() {
                 <div className="flex items-end justify-between">
                     <div>
                         <p className="text-[#888888] text-sm mb-1 tracking-wide uppercase">Pensées Profondes & Idées</p>
-                        <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold text-[#f5f0e8]">
+                        <h1 className="font-(family-name:--font-display) text-4xl font-bold text-[#f5f0e8]">
                             RÉFLEXIONS
                         </h1>
                     </div>
@@ -40,7 +40,7 @@ export default async function WritingsPage() {
                                 "transition-all duration-500 group"
                             )}
                         >
-                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                            <span className="absolute inset-0 bg-linear-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                             <span className="relative z-10 flex items-center">
                                 <Plus className="w-4 h-4 mr-2" />
                                 NOUVELLE RÉFLEXION
@@ -62,7 +62,7 @@ export default async function WritingsPage() {
 
             {/* Writings Grid */}
             <div className="space-y-6">
-                {writings.map((w: any, index: number) => (
+                {writings.map((w, index: number) => (
                     <article
                         key={w.id}
                         className={cn(
@@ -74,7 +74,7 @@ export default async function WritingsPage() {
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
                         {/* Top gradient line */}
-                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(184,41,221,0.4)] to-transparent" />
+                        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(184,41,221,0.4)] to-transparent" />
                         
                         <div className="p-6">
                             <div className="flex items-center gap-2 mb-4">
@@ -84,7 +84,7 @@ export default async function WritingsPage() {
                                 </span>
                             </div>
                             
-                            <h3 className="font-[family-name:var(--font-display)] text-xl font-medium text-white mb-3 tracking-wide">
+                            <h3 className="font-(family-name:--font-display) text-xl font-medium text-white mb-3 tracking-wide">
                                 {w.title}
                             </h3>
                             
@@ -97,11 +97,11 @@ export default async function WritingsPage() {
                 
                 {writings.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-20 text-center relative">
-                        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(184,41,221,0.02)] to-transparent rounded-3xl" />
+                        <div className="absolute inset-0 bg-linear-to-b from-[rgba(184,41,221,0.02)] to-transparent rounded-3xl" />
                         <div className="relative w-24 h-24 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] flex items-center justify-center mb-6">
                             <Feather className="w-10 h-10 text-[rgba(184,41,221,0.4)]" />
                         </div>
-                        <h3 className="font-[family-name:var(--font-display)] text-2xl text-white mb-2 tracking-wider">
+                        <h3 className="font-(family-name:--font-display) text-2xl text-white mb-2 tracking-wider">
                             AUCUNE RÉFLEXION
                         </h3>
                         <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">

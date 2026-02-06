@@ -2,8 +2,9 @@
 
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { entrySchema, EntryDTO, TagDTO } from "@/lib/types";
+import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { revalidatePath } from "next/cache";
+import type { Image, Tag } from "@/lib/generated/prisma/client";
 
 // Default tags to create for new users
 const DEFAULT_TAGS = [
@@ -44,7 +45,7 @@ export async function createTag(name: string, color: string): Promise<TagDTO> {
     return { id: tag.id, name: tag.name, color: tag.color };
 }
 
-export async function createEntry(data: any) {
+export async function createEntry(data: EntryFormValues & { tagIds?: string[] }) {
     const user = await getCurrentUser();
     const parsed = entrySchema.parse(data);
 
@@ -111,7 +112,7 @@ export async function getEntries(page = 1, searchQuery = "", includeEmpty = fals
             asmr: e.asmr,
             screenTime: e.screenTime,
             isLocked: e.isLocked,
-            images: isLocked ? [] : e.images.map((i: any) => ({ id: i.id, url: i.url })),
+            images: isLocked ? [] : e.images.map((i: Image) => ({ id: i.id, url: i.url })),
             createdAt: e.createdAt,
             updatedAt: e.updatedAt,
         };
@@ -139,8 +140,8 @@ export async function getLockedEntry(id: string, pin: string) {
         success: true,
         data: {
             ...entry,
-            tags: entry.tags.map((t: any) => ({ id: t.id, name: t.name, color: t.color })),
-            images: entry.images.map((i: any) => ({ id: i.id, url: i.url }))
+            tags: entry.tags.map((t: Tag) => ({ id: t.id, name: t.name, color: t.color })),
+            images: entry.images.map((i: Image) => ({ id: i.id, url: i.url }))
         }
     };
 }
@@ -151,7 +152,7 @@ export async function deleteEntry(id: string) {
     revalidatePath("/");
 }
 
-export async function updateEntry(id: string, data: any) {
+export async function updateEntry(id: string, data: EntryFormValues & { tagIds?: string[] }) {
     const user = await getCurrentUser();
     const parsed = entrySchema.parse(data);
 

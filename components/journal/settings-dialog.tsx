@@ -37,7 +37,13 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
         }
     }, [open, setValue]);
 
-    async function onSubmit(data: any) {
+    interface SettingsFormData {
+        blurLevel: number;
+        itemsPerPage: number;
+        pinCode: string;
+    }
+
+    async function onSubmit(data: SettingsFormData) {
         setLoading(true);
         try {
             await updateSettings({
@@ -56,7 +62,7 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
     // Render trigger - use cloneElement to add onClick instead of nesting buttons
     const triggerElement = children
         ? (isValidElement(children)
-            ? cloneElement(children as React.ReactElement<any>, { onClick: () => setOpen(true) })
+            ? cloneElement(children as React.ReactElement<{ onClick?: () => void }>, { onClick: () => setOpen(true) })
             : <span onClick={() => setOpen(true)}>{children}</span>)
         : <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
             <Settings className="w-5 h-5" />
@@ -66,9 +72,9 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
         <Dialog open={open} onOpenChange={setOpen}>
             {triggerElement}
             <DialogContent className="max-w-lg w-[90vw] bg-[rgba(5,5,8,0.95)] border border-[rgba(0,245,255,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_30px_rgba(0,245,255,0.1)]">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
                 <DialogHeader className="pb-6 border-b border-[rgba(255,255,255,0.08)]">
-                    <DialogTitle className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-white flex items-center gap-2">
+                    <DialogTitle className="font-(family-name:--font-display) text-2xl tracking-wider text-white flex items-center gap-2">
                         <Settings className="w-5 h-5 text-[#00f5ff]" />
                         PARAMÈTRES
                     </DialogTitle>
@@ -92,7 +98,7 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
                             maxLength={4}
                             placeholder="****"
                             {...register("pinCode")}
-                            className="rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white font-[family-name:var(--font-mono)] tracking-widest"
+                            className="rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white font-mono tracking-widest"
                         />
                         <p className="text-xs text-[rgba(255,255,255,0.4)]">Laissez vide pour conserver le PIN actuel.</p>
                     </div>

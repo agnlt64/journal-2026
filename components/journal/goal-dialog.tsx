@@ -58,9 +58,9 @@ export function GoalDialog({ children }: GoalDialogProps) {
         <Dialog open={open} onOpenChange={setOpen}>
             {triggerElement}
             <DialogContent className="max-w-2xl w-[90vw] bg-[rgba(5,5,8,0.95)] border border-[rgba(255,0,110,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_30px_rgba(255,0,110,0.1)]">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#ff006e] to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#ff006e] to-transparent opacity-50" />
                 <DialogHeader className="pb-6 border-b border-[rgba(255,255,255,0.08)]">
-                    <DialogTitle className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-white flex items-center gap-2">
+                    <DialogTitle className="font-(family-name:--font-display) text-2xl tracking-wider text-white flex items-center gap-2">
                         <Target className="w-5 h-5 text-[#ff006e]" />
                         NOUVEL OBJECTIF
                     </DialogTitle>

@@ -20,7 +20,7 @@ export function Header() {
       <div className="h-full mx-6 mt-4">
         <div className="glass-crystal h-full rounded-2xl px-6 flex items-center justify-between relative overflow-hidden">
           {/* Animated gradient line */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.5)] to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.5)] to-transparent" />
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
@@ -30,7 +30,7 @@ export function Header() {
               <Diamond className="w-4 h-4 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" />
             </div>
             <div className="flex flex-col">
-              <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-[0.2em] text-white">
+              <span className="font-(family-name:--font-display) text-xl font-bold tracking-[0.2em] text-white">
                 VOID
               </span>
               <span className="text-[10px] text-[rgba(0,245,255,0.6)] tracking-[0.3em] uppercase">
@@ -63,7 +63,7 @@ export function Header() {
                   {/* Bottom glow line */}
                   <span 
                     className={cn(
-                      "absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] rounded-full transition-all duration-300",
+                      "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full transition-all duration-300",
                       isActive ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-50"
                     )}
                     style={{ backgroundColor: item.color, boxShadow: `0 0 10px ${item.color}` }}
@@ -78,7 +78,7 @@ export function Header() {
           {/* Time Display */}
           <div className="hidden md:flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#00f5ff] animate-pulse shadow-[0_0_10px_#00f5ff]" />
-            <span className="font-[family-name:var(--font-mono)] text-xs text-[rgba(255,255,255,0.5)] tracking-wider">
+            <span className="font-mono text-xs text-[rgba(255,255,255,0.5)] tracking-wider">
               {new Date().toLocaleTimeString("fr-FR", { 
                 hour: "2-digit", 
                 minute: "2-digit",

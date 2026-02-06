@@ -9,10 +9,10 @@ interface SleepChartProps {
 }
 
 // Convert time to shifted hours for night-centric display
-function timeToShiftedHours(date: Date | null, isSleepTime: boolean): number | null {
+function timeToShiftedHours(date: Date | null, _isSleepTime: boolean): number | null {
     if (!date) return null;
     const d = new Date(date);
-    let hours = d.getHours() + d.getMinutes() / 60;
+    const hours = d.getHours() + d.getMinutes() / 60;
 
     let shifted = hours - 18;
     if (shifted < 0) shifted += 24;

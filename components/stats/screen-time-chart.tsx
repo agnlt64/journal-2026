@@ -59,7 +59,7 @@ export function ScreenTimeChart({ entries }: ScreenTimeChartProps) {
     if (chartData.length === 0) {
         return (
             <div className="flex items-center justify-center h-64 text-muted-foreground">
-                Aucune donnée de temps d'écran disponible
+                Aucune donnée de temps d&apos;écran disponible
             </div>
         );
     }

@@ -36,7 +36,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
       } else {
         setError("CODE PIN INCORRECT");
       }
-    } catch (err) {
+    } catch {
       setError("ERREUR DE DÉVERROUILLAGE");
     }
   }
@@ -57,7 +57,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
       style={{ animationDelay: `${index * 100}ms` }}
     >
       {/* Top gradient line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent" />
 
       {/* Content */}
       <div className="p-6">
@@ -69,13 +69,13 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
               <span className="text-[9px] font-medium tracking-[0.2em] text-[rgba(0,245,255,0.6)] uppercase">
                 {format(entryDate, "MMM")}
               </span>
-              <span className="font-[family-name:var(--font-display)] text-2xl font-bold text-white">
+              <span className="font-(family-name:--font-display) text-2xl font-bold text-white">
                 {format(entryDate, "d")}
               </span>
             </div>
 
             <div>
-              <h3 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
+              <h3 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
                 {format(entryDate, "EEEE")}
               </h3>
               <p className="text-xs text-[rgba(255,255,255,0.4)] tracking-wider">
@@ -86,7 +86,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
 
           {/* Tags & Edit - Same row */}
           <div className="flex items-center gap-3">
-            <div className="flex flex-wrap gap-1.5 justify-end max-w-[200px]">
+            <div className="flex flex-wrap gap-1.5 justify-end max-w-50">
               {entry.tags?.map((tag) => (
                 <span
                   key={tag.id}
@@ -118,7 +118,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
             {entry.wakeTime && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Sun className="w-3.5 h-3.5 text-[#ffbe0b]" />
-                <span className="text-[rgba(255,255,255,0.5)] font-[family-name:var(--font-mono)]">
+                <span className="text-[rgba(255,255,255,0.5)] font-mono">
                   {format(new Date(entry.wakeTime), "HH:mm")}
                 </span>
               </div>
@@ -154,7 +154,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
                   <Lock className="w-7 h-7 text-[#00f5ff]" />
                 </div>
               </div>
-              <p className="text-sm text-[rgba(255,255,255,0.4)] mb-4 tracking-wider font-[family-name:var(--font-mono)]">
+              <p className="text-sm text-[rgba(255,255,255,0.4)] mb-4 tracking-wider font-mono">
                 ENTRÉE CHIFFRÉE
               </p>
 
@@ -173,7 +173,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
                     value={pinInput}
                     onChange={(e) => setPinInput(e.target.value)}
                     placeholder="PIN"
-                    className="w-24 h-9 rounded-xl bg-[rgba(0,0,0,0.3)] border-[rgba(0,245,255,0.2)] text-center text-white placeholder:text-[rgba(255,255,255,0.3)] font-[family-name:var(--font-mono)] text-sm tracking-widest"
+                    className="w-24 h-9 rounded-xl bg-[rgba(0,0,0,0.3)] border-[rgba(0,245,255,0.2)] text-center text-white placeholder:text-[rgba(255,255,255,0.3)] font-mono text-sm tracking-widest"
                     autoFocus
                   />
                   <Button

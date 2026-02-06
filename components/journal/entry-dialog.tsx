@@ -52,7 +52,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             didSport: false,
             asmr: false,
             isLocked: false,
-        }) as any,
+        }),
     });
 
     const { register, handleSubmit, setValue, watch, reset } = form;
@@ -118,7 +118,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     }
 
     const triggerElement = isValidElement(children)
-        ? cloneElement(children as React.ReactElement<any>, { onClick: () => setShow(true) })
+        ? cloneElement(children as React.ReactElement<{ onClick?: () => void }>, { onClick: () => setShow(true) })
         : <Button onClick={() => setIsOpen(true)}>
             <PenTool className="w-4 h-4 mr-2" /> New Entry
         </Button>;
@@ -132,11 +132,11 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                 "rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_30px_rgba(0,245,255,0.1)]"
             )}>
                 {/* Top glow */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
                 
                 <DialogHeader className="pb-2 border-b border-[rgba(255,255,255,0.08)]">
                     <DialogTitle className={cn(
-                        "font-[family-name:var(--font-display)] text-2xl tracking-wider",
+                        "font-(family-name:--font-display) text-2xl tracking-wider",
                         "text-white"
                     )}>
                         {entryToEdit ? "MODIFIER L&apos;ENTRÉE" : "NOUVELLE ENTRÉE"}
@@ -240,7 +240,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         <Textarea
                             {...register("content")}
                             className={cn(
-                                "min-h-[180px] rounded-xl",
+                                "min-h-45 rounded-xl",
                                 "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
                                 "text-white placeholder:text-[rgba(255,255,255,0.3)]",
                                 "focus:border-[rgba(0,245,255,0.3)] focus:shadow-[0_0_20px_rgba(0,245,255,0.1)]",
@@ -270,7 +270,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 className={cn(
                                     "rounded-xl h-10",
                                     "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
-                                    "text-white font-[family-name:var(--font-mono)]"
+                                    "text-white font-mono"
                                 )}
                             />
                         </div>
@@ -292,7 +292,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 className={cn(
                                     "rounded-xl h-10",
                                     "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
-                                    "text-white font-[family-name:var(--font-mono)]"
+                                    "text-white font-mono"
                                 )}
                             />
                         </div>

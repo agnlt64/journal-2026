@@ -21,13 +21,13 @@ export default async function StatsPage() {
                 
                 <div className="relative">
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-px bg-gradient-to-r from-[#ffbe0b] via-[#ff006e] to-[#00f5ff]" />
+                        <div className="w-8 h-px bg-linear-to-r from-[#ffbe0b] via-[#ff006e] to-[#00f5ff]" />
                         <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(255,255,255,0.4)] uppercase">
                             Analyses Personnelles
                         </span>
                     </div>
                     
-                    <h1 className="font-[family-name:var(--font-display)] text-5xl font-bold text-white tracking-tight">
+                    <h1 className="font-(family-name:--font-display) text-5xl font-bold text-white tracking-tight">
                         STATISTIQUES
                     </h1>
                 </div>
@@ -40,12 +40,12 @@ export default async function StatsPage() {
                     "rounded-2xl border p-6 relative overflow-hidden",
                     "bg-[rgba(10,10,18,0.5)] border-[rgba(0,245,255,0.1)]"
                 )}>
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 rounded-xl bg-[rgba(0,245,255,0.1)] border border-[rgba(0,245,255,0.2)] flex items-center justify-center">
                             <Activity className="w-5 h-5 text-[#00f5ff]" />
                         </div>
-                        <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
+                        <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
                             Compteur
                         </h2>
                     </div>
@@ -57,12 +57,12 @@ export default async function StatsPage() {
                     "rounded-2xl border p-6 relative overflow-hidden",
                     "bg-[rgba(10,10,18,0.5)] border-[rgba(184,41,221,0.1)]"
                 )}>
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#b829dd] to-transparent opacity-50" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#b829dd] to-transparent opacity-50" />
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 rounded-xl bg-[rgba(184,41,221,0.1)] border border-[rgba(184,41,221,0.2)] flex items-center justify-center">
                             <Moon className="w-5 h-5 text-[#b829dd]" />
                         </div>
-                        <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
+                        <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
                             Cycles de Sommeil
                         </h2>
                     </div>
@@ -74,12 +74,12 @@ export default async function StatsPage() {
                     "rounded-2xl border p-6 relative overflow-hidden",
                     "bg-[rgba(10,10,18,0.5)] border-[rgba(255,0,110,0.1)]"
                 )}>
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#ff006e] to-transparent opacity-50" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#ff006e] to-transparent opacity-50" />
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 rounded-xl bg-[rgba(255,0,110,0.1)] border border-[rgba(255,0,110,0.2)] flex items-center justify-center">
                             <Smartphone className="w-5 h-5 text-[#ff006e]" />
                         </div>
-                        <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
+                        <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
                             Temps d&apos;Écran Hebdomadaire
                         </h2>
                     </div>
@@ -91,12 +91,12 @@ export default async function StatsPage() {
                     "rounded-2xl border p-6 relative overflow-hidden",
                     "bg-[rgba(10,10,18,0.5)] border-[rgba(255,190,11,0.1)]"
                 )}>
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#ffbe0b] to-transparent opacity-50" />
+                    <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#ffbe0b] to-transparent opacity-50" />
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-10 h-10 rounded-xl bg-[rgba(255,190,11,0.1)] border border-[rgba(255,190,11,0.2)] flex items-center justify-center">
                             <CalendarDays className="w-5 h-5 text-[#ffbe0b]" />
                         </div>
-                        <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
+                        <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
                             Calendrier des Entrées
                         </h2>
                     </div>

@@ -34,7 +34,7 @@ export function WritingDialog({ children }: WritingDialogProps) {
     // Render trigger - use cloneElement to add onClick instead of nesting buttons
     const triggerElement = children
         ? (isValidElement(children)
-            ? cloneElement(children as React.ReactElement<any>, { onClick: () => setOpen(true) })
+            ? cloneElement(children as React.ReactElement<{ onClick?: () => void }>, { onClick: () => setOpen(true) })
             : <span onClick={() => setOpen(true)}>{children}</span>)
         : <Button onClick={() => setOpen(true)}>
             <PenTool className="w-4 h-4 mr-2" /> NOUVELLE RÉFLEXION
@@ -44,9 +44,9 @@ export function WritingDialog({ children }: WritingDialogProps) {
         <Dialog open={open} onOpenChange={setOpen}>
             {triggerElement}
             <DialogContent className="max-w-4xl w-[95vw] bg-[rgba(5,5,8,0.95)] border border-[rgba(184,41,221,0.2)] rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_30px_rgba(184,41,221,0.1)]">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#b829dd] to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#b829dd] to-transparent opacity-50" />
                 <DialogHeader className="pb-6 border-b border-[rgba(255,255,255,0.08)]">
-                    <DialogTitle className="font-[family-name:var(--font-display)] text-2xl tracking-wider text-white flex items-center gap-2">
+                    <DialogTitle className="font-(family-name:--font-display) text-2xl tracking-wider text-white flex items-center gap-2">
                         <PenTool className="w-5 h-5 text-[#b829dd]" />
                         NOUVELLE RÉFLEXION
                     </DialogTitle>

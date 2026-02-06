@@ -6,7 +6,7 @@ import { toggleGoalCompletion, updateGoalRemark } from "@/actions/goal";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Target, CheckCircle2, XCircle, MessageSquare, X, Save, Calendar } from "lucide-react";
+import { CheckCircle2, XCircle, MessageSquare, X, Save, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GoalCardProps {
@@ -118,7 +118,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                     <div className="flex-1 min-w-0">
                         {/* Title */}
                         <h3 className={cn(
-                            "font-[family-name:var(--font-display)] text-base font-medium tracking-wide transition-all duration-300",
+                            "font-(family-name:--font-display) text-base font-medium tracking-wide transition-all duration-300",
                             goal.isCompleted ? "text-[#00f5ff] line-through opacity-60" : "text-white"
                         )}>
                             {goal.title}
@@ -127,7 +127,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                         {/* Deadline */}
                         <div className="flex items-center gap-1.5 mt-1.5 text-xs text-[rgba(255,255,255,0.4)]">
                             <Calendar className="w-3 h-3" />
-                            <span className="font-[family-name:var(--font-mono)]">ÉCHÉANCE {formattedDeadline.toUpperCase()}</span>
+                            <span className="font-mono">ÉCHÉANCE {formattedDeadline.toUpperCase()}</span>
                         </div>
 
                         {/* Description */}
@@ -182,7 +182,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                             onChange={(e) => setRemarkText(e.target.value)}
                                             placeholder="Ajouter une note..."
                                             className={cn(
-                                                "min-h-[80px] rounded-xl text-sm",
+                                                "min-h-20 rounded-xl text-sm",
                                                 "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
                                                 "text-white placeholder:text-[rgba(255,255,255,0.3)]"
                                             )}

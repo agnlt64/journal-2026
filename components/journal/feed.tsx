@@ -100,7 +100,7 @@ export function Feed({
               "transition-all duration-500"
             )}
           />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
         </div>
 
         {/* Tag Filters */}
@@ -150,11 +150,11 @@ export function Feed({
             ))}
             {filteredEntries.length === 0 && !loading && (
               <div className="flex flex-col items-center justify-center py-20 text-center relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,245,255,0.02)] to-transparent rounded-3xl" />
+                <div className="absolute inset-0 bg-linear-to-b from-[rgba(0,245,255,0.02)] to-transparent rounded-3xl" />
                 <div className="relative w-24 h-24 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] flex items-center justify-center mb-6">
                   <div className="text-4xl opacity-50">◈</div>
                 </div>
-                <h3 className="font-[family-name:var(--font-display)] text-2xl text-white mb-2 tracking-wider">
+                <h3 className="font-(family-name:--font-display) text-2xl text-white mb-2 tracking-wider">
                   AUCUNE ENTRÉE
                 </h3>
                 <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">
