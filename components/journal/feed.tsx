@@ -89,7 +89,7 @@ export function Feed({
         <div className="relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgba(255,255,255,0.3)] group-focus-within:text-[#00f5ff] transition-colors duration-300" />
           <Input
-            placeholder="Search your entries..."
+            placeholder="Rechercher vos entrées..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={cn(
@@ -141,7 +141,7 @@ export function Feed({
               <Loader2 className="w-10 h-10 text-[#00f5ff] animate-spin" />
               <div className="absolute inset-0 blur-xl bg-[#00f5ff] opacity-30" />
             </div>
-            <p className="mt-4 text-[rgba(255,255,255,0.4)] text-sm tracking-wider">LOADING ENTRIES...</p>
+            <p className="mt-4 text-[rgba(255,255,255,0.4)] text-sm tracking-wider">CHARGEMENT DES ENTRÉES...</p>
           </div>
         ) : (
           <>
@@ -155,10 +155,10 @@ export function Feed({
                   <div className="text-4xl opacity-50">◈</div>
                 </div>
                 <h3 className="font-[family-name:var(--font-display)] text-2xl text-white mb-2 tracking-wider">
-                  NO ENTRIES
+                  AUCUNE ENTRÉE
                 </h3>
                 <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">
-                  Your journal is a blank canvas. Create your first entry to begin your journey.
+                  Votre journal est une toile vierge. Créez votre première entrée pour commencer votre voyage.
                 </p>
               </div>
             )}

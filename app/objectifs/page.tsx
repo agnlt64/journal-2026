@@ -10,7 +10,7 @@ function groupGoalsByPeriod(goals: GoalDTO[]): Map<string, GoalDTO[]> {
 
     for (const goal of goals) {
         const deadline = new Date(goal.deadline);
-        const key = new Intl.DateTimeFormat('en-US', {
+        const key = new Intl.DateTimeFormat('fr-FR', {
             month: 'long',
             year: 'numeric'
         }).format(deadline);
@@ -38,15 +38,15 @@ export default async function ObjectifsPage() {
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-8 h-px bg-gradient-to-r from-[#ff006e] to-transparent" />
                         <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(255,0,110,0.6)] uppercase">
-                            Track Progress
+                            Suivre la Progression
                         </span>
                     </div>
                     
                 <div className="flex items-end justify-between">
                     <div>
-                        <p className="text-[#888888] text-sm mb-1 tracking-wide uppercase">Track Your Progress</p>
+                        <p className="text-[#888888] text-sm mb-1 tracking-wide uppercase">Suivez Votre Progression</p>
                         <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold text-[#f5f0e8]">
-                            Goals
+                            OBJECTIFS
                         </h1>
                     </div>
                     <GoalDialog>
@@ -63,7 +63,7 @@ export default async function ObjectifsPage() {
                             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                             <span className="relative z-10 flex items-center">
                                 <Plus className="w-4 h-4 mr-2" />
-                                NEW GOAL
+                                NOUVEL OBJECTIF
                             </span>
                         </button>
                     </GoalDialog>
@@ -73,7 +73,7 @@ export default async function ObjectifsPage() {
                         <div className="flex items-center gap-2">
                             <Target className="w-4 h-4 text-[rgba(255,0,110,0.6)]" />
                             <span className="text-sm text-[rgba(255,255,255,0.5)]">
-                                {goals.length} <span className="text-[rgba(255,255,255,0.3)]">goals defined</span>
+                                {goals.length} <span className="text-[rgba(255,255,255,0.3)]">objectifs définis</span>
                             </span>
                         </div>
                     </div>
@@ -109,10 +109,10 @@ export default async function ObjectifsPage() {
                             <Target className="w-10 h-10 text-[rgba(255,0,110,0.4)]" />
                         </div>
                         <h3 className="font-[family-name:var(--font-display)] text-2xl text-white mb-2 tracking-wider">
-                            NO GOALS
+                            AUCUN OBJECTIF
                         </h3>
                         <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">
-                            Set meaningful goals to track your progress throughout your journey.
+                            Définissez des objectifs significatifs pour suivre votre progression tout au long de votre voyage.
                         </p>
                     </div>
                 )}

@@ -26,13 +26,13 @@ export default async function Home() {
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-px bg-gradient-to-r from-[#00f5ff] to-transparent" />
             <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(0,245,255,0.6)] uppercase">
-              Daily Records
+              Enregistrements Quotidiens
             </span>
           </div>
           
           <div className="flex items-end justify-between">
             <h1 className="font-[family-name:var(--font-display)] text-5xl font-bold text-white tracking-tight">
-              ENTRIES
+              ENTRÉES
             </h1>
             
             <EntryDialog>
@@ -48,7 +48,7 @@ export default async function Home() {
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                 <Plus className="w-4 h-4 mr-2 relative z-10" />
-                <span className="relative z-10">NEW ENTRY</span>
+                <span className="relative z-10">NOUVELLE ENTRÉE</span>
               </Button>
             </EntryDialog>
           </div>
@@ -58,12 +58,12 @@ export default async function Home() {
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[rgba(0,245,255,0.6)]" />
               <span className="text-sm text-[rgba(255,255,255,0.5)]">
-                {total} <span className="text-[rgba(255,255,255,0.3)]">entries recorded</span>
+                {total} <span className="text-[rgba(255,255,255,0.3)]">entrées enregistrées</span>
               </span>
             </div>
             <div className="w-1 h-1 rounded-full bg-[rgba(255,255,255,0.2)]" />
             <span className="text-sm text-[rgba(255,255,255,0.3)]">
-              {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+              {new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
             </span>
           </div>
         </div>

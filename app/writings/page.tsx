@@ -2,7 +2,7 @@ import { getWritings } from "@/actions/writing";
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { Feather, Sparkles, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+
 
 export default async function WritingsPage() {
     const writings = await getWritings();
@@ -18,15 +18,15 @@ export default async function WritingsPage() {
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-8 h-px bg-gradient-to-r from-[#b829dd] to-transparent" />
                         <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(184,41,221,0.6)] uppercase">
-                            Deep Thoughts
+                            Pensées Profondes
                         </span>
                     </div>
                     
                 <div className="flex items-end justify-between">
                     <div>
-                        <p className="text-[#888888] text-sm mb-1 tracking-wide uppercase">Deep Thoughts & Ideas</p>
+                        <p className="text-[#888888] text-sm mb-1 tracking-wide uppercase">Pensées Profondes & Idées</p>
                         <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold text-[#f5f0e8]">
-                            Reflections
+                            RÉFLEXIONS
                         </h1>
                     </div>
                     <WritingDialog>
@@ -43,7 +43,7 @@ export default async function WritingsPage() {
                             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                             <span className="relative z-10 flex items-center">
                                 <Plus className="w-4 h-4 mr-2" />
-                                NEW REFLECTION
+                                NOUVELLE RÉFLEXION
                             </span>
                         </button>
                     </WritingDialog>
@@ -53,7 +53,7 @@ export default async function WritingsPage() {
                         <div className="flex items-center gap-2">
                             <Sparkles className="w-4 h-4 text-[rgba(184,41,221,0.6)]" />
                             <span className="text-sm text-[rgba(255,255,255,0.5)]">
-                                {writings.length} <span className="text-[rgba(255,255,255,0.3)]">reflections recorded</span>
+                                {writings.length} <span className="text-[rgba(255,255,255,0.3)]">réflexions enregistrées</span>
                             </span>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ export default async function WritingsPage() {
                             <div className="flex items-center gap-2 mb-4">
                                 <Feather className="w-4 h-4 text-[rgba(184,41,221,0.6)]" />
                                 <span className="text-[10px] text-[rgba(255,255,255,0.4)] tracking-[0.2em] uppercase">
-                                    {format(new Date(w.createdAt), "MMMM d, yyyy")}
+                                    {new Date(w.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                                 </span>
                             </div>
                             
@@ -102,10 +102,10 @@ export default async function WritingsPage() {
                             <Feather className="w-10 h-10 text-[rgba(184,41,221,0.4)]" />
                         </div>
                         <h3 className="font-[family-name:var(--font-display)] text-2xl text-white mb-2 tracking-wider">
-                            NO REFLECTIONS
+                            AUCUNE RÉFLEXION
                         </h3>
                         <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">
-                            Capture your deeper thoughts and ideas. Reflections are perfect for long-form writing.
+                            Capturez vos pensées profondes et vos idées. Les réflexions sont parfaites pour l&apos;écriture longue.
                         </p>
                     </div>
                 )}

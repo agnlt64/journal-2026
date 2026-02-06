@@ -3,7 +3,7 @@ import { SleepChart } from "@/components/stats/sleep-chart";
 import { ScreenTimeChart } from "@/components/stats/screen-time-chart";
 import { EntryCalendar } from "@/components/stats/entry-calendar";
 import { Counter } from "@/components/stats/counter";
-import { BarChart3, Moon, Smartphone, CalendarDays, Activity } from "lucide-react";
+import { Moon, Smartphone, CalendarDays, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default async function StatsPage() {
@@ -23,12 +23,12 @@ export default async function StatsPage() {
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-8 h-px bg-gradient-to-r from-[#ffbe0b] via-[#ff006e] to-[#00f5ff]" />
                         <span className="text-[10px] font-medium tracking-[0.3em] text-[rgba(255,255,255,0.4)] uppercase">
-                            Personal Analytics
+                            Analyses Personnelles
                         </span>
                     </div>
                     
                     <h1 className="font-[family-name:var(--font-display)] text-5xl font-bold text-white tracking-tight">
-                        ANALYTICS
+                        STATISTIQUES
                     </h1>
                 </div>
             </header>
@@ -46,7 +46,7 @@ export default async function StatsPage() {
                             <Activity className="w-5 h-5 text-[#00f5ff]" />
                         </div>
                         <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
-                            Counter
+                            Compteur
                         </h2>
                     </div>
                     <Counter initialValue={counterValue} />
@@ -63,7 +63,7 @@ export default async function StatsPage() {
                             <Moon className="w-5 h-5 text-[#b829dd]" />
                         </div>
                         <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
-                            Sleep Patterns
+                            Cycles de Sommeil
                         </h2>
                     </div>
                     <SleepChart entries={entries} />
@@ -80,7 +80,7 @@ export default async function StatsPage() {
                             <Smartphone className="w-5 h-5 text-[#ff006e]" />
                         </div>
                         <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
-                            Weekly Screen Time
+                            Temps d&apos;Écran Hebdomadaire
                         </h2>
                     </div>
                     <ScreenTimeChart entries={entries} />
@@ -97,7 +97,7 @@ export default async function StatsPage() {
                             <CalendarDays className="w-5 h-5 text-[#ffbe0b]" />
                         </div>
                         <h2 className="font-[family-name:var(--font-display)] text-lg font-medium text-white tracking-wide">
-                            Entry Calendar
+                            Calendrier des Entrées
                         </h2>
                     </div>
                     <EntryCalendar entryDates={entryDates} />

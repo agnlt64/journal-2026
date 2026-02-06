@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
+
 import { CalendarIcon, Lock, Unlock, Plus, PenTool, Clock, Activity, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -93,7 +93,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             setSelectedTagIds([]);
         } catch (e) {
             console.error(e);
-            alert("Error saving. Make sure you have a PIN set if you're locking the entry.");
+            alert("Erreur lors de l&apos;enregistrement. Assurez-vous d&apos;avoir défini un code PIN si vous verrouillez l&apos;entrée.");
         }
     }
 
@@ -134,19 +134,19 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                 {/* Top glow */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
                 
-                <DialogHeader className="pb-6 border-b border-[rgba(255,255,255,0.08)]">
+                <DialogHeader className="pb-2 border-b border-[rgba(255,255,255,0.08)]">
                     <DialogTitle className={cn(
                         "font-[family-name:var(--font-display)] text-2xl tracking-wider",
                         "text-white"
                     )}>
-                        {entryToEdit ? "EDIT ENTRY" : "NEW ENTRY"}
+                        {entryToEdit ? "MODIFIER L&apos;ENTRÉE" : "NOUVELLE ENTRÉE"}
                     </DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pt-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     {/* Tags Section */}
                     <div className="space-y-3">
-                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Categories</Label>
+                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Catégories</Label>
                         <div className="flex flex-wrap gap-2">
                             {availableTags.map(tag => (
                                 <button
@@ -173,7 +173,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         {/* Add new tag */}
                         <div className="flex gap-2 items-center pt-2">
                             <Input
-                                placeholder="New category..."
+                                placeholder="Nouvelle catégorie..."
                                 value={newTagName}
                                 onChange={(e) => setNewTagName(e.target.value)}
                                 className={cn(
@@ -221,7 +221,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                     )}
                                 >
                                     <CalendarIcon className="mr-2 h-4 w-4 text-[#00f5ff]" />
-                                    {date ? format(date, "PPP") : <span>Choose a date</span>}
+                                    {date ? new Date(date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : <span>Choisir une date</span>}
                                 </Button>
                             } />
                             <PopoverContent className="w-auto p-0 bg-[rgba(10,10,18,0.95)] border border-[rgba(0,245,255,0.2)] rounded-xl">
@@ -236,7 +236,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
 
                     {/* Content */}
                     <div className="space-y-3">
-                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Content</Label>
+                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Contenu</Label>
                         <Textarea
                             {...register("content")}
                             className={cn(
@@ -246,7 +246,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 "focus:border-[rgba(0,245,255,0.3)] focus:shadow-[0_0_20px_rgba(0,245,255,0.1)]",
                                 "leading-relaxed"
                             )}
-                            placeholder="Write your thoughts here..."
+                            placeholder="Écrivez vos pensées ici..."
                         />
                     </div>
 
@@ -255,7 +255,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         <div className="space-y-2">
                             <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider flex items-center gap-2">
                                 <Clock className="w-3 h-3 text-[#ffbe0b]" />
-                                Wake Time
+                                Heure de Réveil
                             </Label>
                             <Input
                                 type="time"
@@ -277,7 +277,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         <div className="space-y-2">
                             <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider flex items-center gap-2">
                                 <Clock className="w-3 h-3 text-[#b829dd]" />
-                                Sleep Time
+                                Heure de Coucher
                             </Label>
                             <Input
                                 type="time"
@@ -306,7 +306,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                             />
                             <Label htmlFor="sport" className="text-white flex items-center gap-2 cursor-pointer text-sm">
                                 <Activity className="w-4 h-4 text-[#00f5ff]" />
-                                Exercise
+                                Sport
                             </Label>
                         </div>
                         
@@ -326,12 +326,12 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                         {isMonday && (
                             <div className="col-span-2 space-y-2">
                                 <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">
-                                    Screen Time (minutes/day)
+                                    Temps d&apos;Écran (minutes/jour)
                                 </Label>
                                 <Input
                                     type="number"
                                     min={0}
-                                    placeholder="e.g. 180 for 3h"
+                                    placeholder="ex. 180 pour 3h"
                                     value={screenTime ?? ""}
                                     onChange={(e) => setValue("screenTime", e.target.value ? Number(e.target.value) : undefined)}
                                     className={cn(
@@ -358,10 +358,10 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 )}
                             >
                                 {isLocked ? <Lock className="w-4 h-4 mr-2" /> : <Unlock className="w-4 h-4 mr-2" />}
-                                {isLocked ? "LOCKED" : "UNLOCKED"}
+                                {isLocked ? "VERROUILLÉ" : "DÉVERROUILLÉ"}
                             </Button>
                             <span className="text-xs text-[rgba(255,255,255,0.3)]">
-                                {isLocked ? "PIN required" : "Public entry"}
+                                {isLocked ? "Code PIN requis" : "Entrée publique"}
                             </span>
                         </div>
 
@@ -374,7 +374,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                 "transition-all duration-300 tracking-wider"
                             )}
                         >
-                            SAVE ENTRY
+                            ENREGISTRER L&apos;ENTRÉE
                         </Button>
                     </div>
                 </form>

@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { Diamond, Hexagon } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "ENTRIES", color: "#00f5ff" },
-  { href: "/writings", label: "REFLECTIONS", color: "#b829dd" },
-  { href: "/objectifs", label: "GOALS", color: "#ff006e" },
-  { href: "/stats", label: "ANALYTICS", color: "#ffbe0b" },
+  { href: "/", label: "ENTRÉES", color: "#00f5ff" },
+  { href: "/writings", label: "RÉFLEXIONS", color: "#b829dd" },
+  { href: "/objectifs", label: "OBJECTIFS", color: "#ff006e" },
+  { href: "/stats", label: "STATISTIQUES", color: "#ffbe0b" },
 ];
 
 export function Header() {
@@ -79,7 +79,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#00f5ff] animate-pulse shadow-[0_0_10px_#00f5ff]" />
             <span className="font-[family-name:var(--font-mono)] text-xs text-[rgba(255,255,255,0.5)] tracking-wider">
-              {new Date().toLocaleTimeString("en-US", { 
+              {new Date().toLocaleTimeString("fr-FR", { 
                 hour: "2-digit", 
                 minute: "2-digit",
                 hour12: false 

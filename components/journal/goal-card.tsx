@@ -48,14 +48,14 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
         setIsEditingRemark(false);
     }
 
-    const formattedDeadline = new Intl.DateTimeFormat('en-US', {
+    const formattedDeadline = new Intl.DateTimeFormat('fr-FR', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     }).format(deadlineDate);
 
     const formattedCompletedAt = goal.completedAt
-        ? new Intl.DateTimeFormat('en-US', {
+        ? new Intl.DateTimeFormat('fr-FR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
@@ -127,7 +127,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                         {/* Deadline */}
                         <div className="flex items-center gap-1.5 mt-1.5 text-xs text-[rgba(255,255,255,0.4)]">
                             <Calendar className="w-3 h-3" />
-                            <span className="font-[family-name:var(--font-mono)]">DUE {formattedDeadline.toUpperCase()}</span>
+                            <span className="font-[family-name:var(--font-mono)]">ÉCHÉANCE {formattedDeadline.toUpperCase()}</span>
                         </div>
 
                         {/* Description */}
@@ -141,7 +141,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                         {isPastDeadline && (
                             <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.05)]">
                                 <div className="flex items-center gap-3 mb-3">
-                                    <span className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">Status</span>
+                                    <span className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">Statut</span>
                                     <div className="flex gap-2">
                                         <Button
                                             size="sm"
@@ -155,7 +155,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                             )}
                                         >
                                             <CheckCircle2 className="w-3 h-3 mr-1" />
-                                            ACHIEVED
+                                            ATTEINT
                                         </Button>
                                         <Button
                                             size="sm"
@@ -169,7 +169,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                             )}
                                         >
                                             <XCircle className="w-3 h-3 mr-1" />
-                                            MISSED
+                                            MANQUÉ
                                         </Button>
                                     </div>
                                 </div>
@@ -180,7 +180,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                         <Textarea
                                             value={remarkText}
                                             onChange={(e) => setRemarkText(e.target.value)}
-                                            placeholder="Add a note..."
+                                            placeholder="Ajouter une note..."
                                             className={cn(
                                                 "min-h-[80px] rounded-xl text-sm",
                                                 "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
@@ -195,7 +195,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                                 className="rounded-lg bg-[rgba(0,245,255,0.15)] text-[#00f5ff] border border-[rgba(0,245,255,0.3)] hover:bg-[rgba(0,245,255,0.25)] h-8 text-xs"
                                             >
                                                 <Save className="w-3 h-3 mr-1" />
-                                                SAVE
+                                                ENREGISTRER
                                             </Button>
                                             <Button
                                                 size="sm"
@@ -205,7 +205,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                                 className="rounded-lg border-[rgba(255,255,255,0.1)] text-[rgba(255,255,255,0.5)] h-8 text-xs"
                                             >
                                                 <X className="w-3 h-3 mr-1" />
-                                                CANCEL
+                                                ANNULER
                                             </Button>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                                     onClick={() => setIsEditingRemark(true)}
                                                     className="h-6 text-[10px] text-[rgba(255,255,255,0.4)] hover:text-[#00f5ff]"
                                                 >
-                                                    EDIT
+                                                    MODIFIER
                                                 </Button>
                                             </div>
                                         ) : (
@@ -237,7 +237,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                                                 className="h-6 text-[10px] text-[rgba(255,255,255,0.4)] hover:text-[#00f5ff]"
                                             >
                                                 <MessageSquare className="w-3 h-3 mr-1" />
-                                                ADD NOTE
+                                                AJOUTER UNE NOTE
                                             </Button>
                                         )}
                                     </div>
@@ -249,7 +249,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
                         {!isPastDeadline && goal.isCompleted && formattedCompletedAt && (
                             <p className="mt-3 text-xs text-[#00f5ff] flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" />
-                                Completed on {formattedCompletedAt}
+                                Complété le {formattedCompletedAt}
                             </p>
                         )}
                     </div>

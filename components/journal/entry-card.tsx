@@ -34,10 +34,10 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
         setEntry(res.data as EntryDTO);
         setIsUnlocking(false);
       } else {
-        setError("INCORRECT PIN");
+        setError("CODE PIN INCORRECT");
       }
     } catch (err) {
-      setError("ERROR UNLOCKING");
+      setError("ERREUR DE DÉVERROUILLAGE");
     }
   }
 
@@ -126,13 +126,13 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
             {isEvening && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Moon className="w-3.5 h-3.5 text-[#b829dd]" />
-                <span className="text-[rgba(255,255,255,0.5)]">EVENING</span>
+                <span className="text-[rgba(255,255,255,0.5)]">SOIR</span>
               </div>
             )}
             {entry.didSport && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Activity className="w-3.5 h-3.5 text-[#00f5ff]" />
-                <span className="text-[#00f5ff]">ACTIVE</span>
+                <span className="text-[#00f5ff]">ACTIF</span>
               </div>
             )}
             {entry.asmr && (
@@ -155,7 +155,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
                 </div>
               </div>
               <p className="text-sm text-[rgba(255,255,255,0.4)] mb-4 tracking-wider font-[family-name:var(--font-mono)]">
-                ENCRYPTED ENTRY
+                ENTRÉE CHIFFRÉE
               </p>
 
               {!isUnlocking ? (
@@ -164,7 +164,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
                   variant="outline"
                   className="rounded-xl border-[rgba(0,245,255,0.3)] text-[#00f5ff] hover:bg-[rgba(0,245,255,0.1)] hover:border-[rgba(0,245,255,0.5)] tracking-wider text-xs"
                 >
-                  UNLOCK
+                  DÉVERROUILLER
                 </Button>
               ) : (
                 <form onSubmit={handleUnlock} className="flex gap-2">
@@ -181,7 +181,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
                     size="sm"
                     className="h-9 rounded-xl bg-[rgba(0,245,255,0.2)] text-[#00f5ff] border border-[rgba(0,245,255,0.3)] hover:bg-[rgba(0,245,255,0.3)]"
                   >
-                    OPEN
+                    OUVRIR
                   </Button>
                 </form>
               )}
@@ -193,7 +193,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
             <div className="text-[rgba(255,255,255,0.8)] leading-relaxed">
               {!entry.content || entry.content.length === 0 ? (
                 <p className="text-sm text-[rgba(255,255,255,0.3)] italic tracking-wide">
-                  No content recorded for this day...
+                  Aucun contenu enregistré pour ce jour...
                 </p>
               ) : (
                 <div className="whitespace-pre-wrap">
