@@ -58,7 +58,7 @@ export function WritingDialog({ children }: WritingDialogProps) {
                     </div>
                     <div className="flex flex-col gap-3">
                         <Label className="text-[10px] text-[rgba(184,41,221,0.6)] uppercase tracking-[0.2em]">Contenu</Label>
-                        <Textarea {...register("content")} className="min-h-[250px] rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white placeholder:text-[rgba(255,255,255,0.3)]" placeholder="Pensées..." />
+                        <Textarea {...register("content")} className="min-h-62.5 rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white placeholder:text-[rgba(255,255,255,0.3)]" placeholder="Pensées..." />
                     </div>
                     <div className="flex justify-end gap-2 border-t border-[rgba(255,255,255,0.05)] pt-6">
                         <Button type="submit" className="rounded-xl h-10 px-6 bg-[rgba(184,41,221,0.15)] text-[#b829dd] border border-[rgba(184,41,221,0.4)] hover:bg-[rgba(184,41,221,0.25)] hover:shadow-[0_0_30px_rgba(184,41,221,0.2)] transition-all duration-300 tracking-wider">ENREGISTRER</Button>

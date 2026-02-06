@@ -72,7 +72,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
                     </div>
                     <div className="flex flex-col gap-3">
                         <Label className="text-[10px] text-[rgba(255,0,110,0.6)] uppercase tracking-[0.2em]">Description (optionnelle)</Label>
-                        <Textarea {...register("description")} className="min-h-[120px] rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white placeholder:text-[rgba(255,255,255,0.3)]" placeholder="Détails de l'objectif..." />
+                        <Textarea {...register("description")} className="min-h-30 rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white placeholder:text-[rgba(255,255,255,0.3)]" placeholder="Détails de l'objectif..." />
                     </div>
                     <div className="flex flex-col gap-3">
                         <Label className="text-[10px] text-[rgba(255,0,110,0.6)] uppercase tracking-[0.2em]">Date limite</Label>
