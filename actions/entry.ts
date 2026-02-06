@@ -77,7 +77,7 @@ export async function getEntries(page = 1, searchQuery = "", includeEmpty = fals
     const user = await getCurrentUser();
     const itemsPerPage = user.itemsPerPage || 20;
 
-    const where: any = {
+    const where = {
         userId: user.id,
         ...(searchQuery
             ? { content: { contains: searchQuery, mode: 'insensitive' } }
@@ -97,14 +97,14 @@ export async function getEntries(page = 1, searchQuery = "", includeEmpty = fals
     ]);
 
     // Transform to DTO with Redaction
-    const dtos: EntryDTO[] = entries.map((e: any) => {
+    const dtos: EntryDTO[] = entries.map((e) => {
         const isLocked = e.isLocked;
 
         return {
             id: e.id,
             content: isLocked ? null : e.content,
             date: e.date,
-            tags: e.tags.map((t: any) => ({ id: t.id, name: t.name, color: t.color })),
+            tags: e.tags.map((t) => ({ id: t.id, name: t.name, color: t.color })),
             wakeTime: e.wakeTime,
             sleepTime: e.sleepTime,
             didSport: e.didSport,

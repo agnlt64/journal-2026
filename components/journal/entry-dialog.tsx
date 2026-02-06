@@ -12,11 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, Lock, Unlock, Plus, X, PenTool } from "lucide-react";
+import { CalendarIcon, Lock, Unlock, Plus, PenTool, Clock, Activity, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EntryDialogProps {
@@ -31,7 +30,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     const [availableTags, setAvailableTags] = useState<TagDTO[]>([]);
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
     const [newTagName, setNewTagName] = useState("");
-    const [newTagColor, setNewTagColor] = useState("#6366f1");
+    const [newTagColor, setNewTagColor] = useState("#00f5ff");
 
     const show = open ?? isOpen;
     const setShow = onOpenChange ?? setIsOpen;
@@ -63,10 +62,8 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
     const sleepTime = watch("sleepTime");
     const screenTime = watch("screenTime");
 
-    // Check if selected date is a Monday (day 1)
     const isMonday = date ? new Date(date).getDay() === 1 : false;
 
-    // Load tags on open
     useEffect(() => {
         if (show) {
             getTags().then(tags => {
@@ -80,7 +77,6 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
         }
     }, [show, entryToEdit]);
 
-    // Update form when selected tags change
     useEffect(() => {
         setValue("tagIds", selectedTagIds);
     }, [selectedTagIds, setValue]);
@@ -97,7 +93,7 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             setSelectedTagIds([]);
         } catch (e) {
             console.error(e);
-            alert("Erreur lors de la sauvegarde. Vérifiez que vous avez un PIN défini si vous verrouillez l'entrée.");
+            alert("Error saving. Make sure you have a PIN set if you're locking the entry.");
         }
     }
 
@@ -121,84 +117,114 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
         );
     }
 
-    // Render trigger
     const triggerElement = isValidElement(children)
         ? cloneElement(children as React.ReactElement<any>, { onClick: () => setShow(true) })
         : <Button onClick={() => setIsOpen(true)}>
-            <PenTool className="w-4 h-4 mr-2" /> Nouvelle entrée
+            <PenTool className="w-4 h-4 mr-2" /> New Entry
         </Button>;
 
     return (
         <Dialog open={show} onOpenChange={setShow}>
             {triggerElement}
-            <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle>
-                        {entryToEdit ? "Modifier l'entrée" : "Nouvelle entrée"}
+            <DialogContent className={cn(
+                "max-w-3xl w-[95vw] max-h-[90vh] overflow-y-auto",
+                "bg-[rgba(5,5,8,0.95)] border border-[rgba(0,245,255,0.2)]",
+                "rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.8),0_0_30px_rgba(0,245,255,0.1)]"
+            )}>
+                {/* Top glow */}
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff] to-transparent opacity-50" />
+                
+                <DialogHeader className="pb-6 border-b border-[rgba(255,255,255,0.08)]">
+                    <DialogTitle className={cn(
+                        "font-[family-name:var(--font-display)] text-2xl tracking-wider",
+                        "text-white"
+                    )}>
+                        {entryToEdit ? "EDIT ENTRY" : "NEW ENTRY"}
                     </DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-                    {/* Tags */}
-                    <div className="flex flex-col gap-3">
-                        <Label>Catégories</Label>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pt-6">
+                    {/* Tags Section */}
+                    <div className="space-y-3">
+                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Categories</Label>
                         <div className="flex flex-wrap gap-2">
                             {availableTags.map(tag => (
-                                <Badge
+                                <button
                                     key={tag.id}
-                                    variant={selectedTagIds.includes(tag.id) ? "default" : "outline"}
-                                    className="cursor-pointer transition-all"
-                                    style={{
-                                        backgroundColor: selectedTagIds.includes(tag.id) ? tag.color : 'transparent',
-                                        borderColor: tag.color,
-                                        color: selectedTagIds.includes(tag.id) ? 'white' : tag.color,
-                                    }}
+                                    type="button"
                                     onClick={() => toggleTag(tag.id)}
+                                    className={cn(
+                                        "px-3 py-1.5 rounded-lg text-xs font-medium tracking-wider transition-all duration-300 border",
+                                        selectedTagIds.includes(tag.id)
+                                            ? "border-transparent text-white"
+                                            : "border-[rgba(255,255,255,0.1)] text-[rgba(255,255,255,0.4)] hover:border-[rgba(255,255,255,0.2)] hover:text-white"
+                                    )}
+                                    style={{
+                                        backgroundColor: selectedTagIds.includes(tag.id) ? `${tag.color}30` : "transparent",
+                                        borderColor: selectedTagIds.includes(tag.id) ? `${tag.color}60` : undefined,
+                                        boxShadow: selectedTagIds.includes(tag.id) ? `0 0 15px ${tag.color}30` : undefined,
+                                    }}
                                 >
                                     {tag.name}
-                                    {selectedTagIds.includes(tag.id) && <X className="w-3 h-3 ml-1" />}
-                                </Badge>
+                                </button>
                             ))}
                         </div>
 
                         {/* Add new tag */}
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-2 items-center pt-2">
                             <Input
-                                placeholder="Nouvelle catégorie..."
+                                placeholder="New category..."
                                 value={newTagName}
                                 onChange={(e) => setNewTagName(e.target.value)}
-                                className="w-64"
+                                className={cn(
+                                    "w-40 rounded-xl h-9",
+                                    "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                    "text-white placeholder:text-[rgba(255,255,255,0.3)] text-sm"
+                                )}
                             />
                             <Input
                                 type="color"
                                 value={newTagColor}
                                 onChange={(e) => setNewTagColor(e.target.value)}
-                                className="w-12 h-9 p-1 border-none"
+                                className={cn(
+                                    "w-10 h-9 p-1 rounded-xl",
+                                    "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]"
+                                )}
                             />
-                            <Button type="button" size="sm" variant="outline" onClick={handleCreateTag}>
+                            <Button
+                                type="button"
+                                size="sm"
+                                onClick={handleCreateTag}
+                                className={cn(
+                                    "h-9 rounded-xl",
+                                    "bg-[rgba(0,245,255,0.15)] text-[#00f5ff] border border-[rgba(0,245,255,0.3)]",
+                                    "hover:bg-[rgba(0,245,255,0.25)]"
+                                )}
+                            >
                                 <Plus className="w-4 h-4" />
                             </Button>
                         </div>
                     </div>
 
                     {/* Date Picker */}
-                    <div className="flex flex-col gap-3">
-                        <Label>Date</Label>
+                    <div className="space-y-3">
+                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Date</Label>
                         <Popover>
                             <PopoverTrigger render={
                                 <Button
-                                    variant={"outline"}
+                                    variant="outline"
                                     className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !date && "text-muted-foreground"
+                                        "w-full justify-start text-left font-normal rounded-xl h-11",
+                                        "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                        "text-white hover:bg-[rgba(255,255,255,0.05)] hover:border-[rgba(0,245,255,0.3)]",
+                                        !date && "text-[rgba(255,255,255,0.3)]"
                                     )}
                                 >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {date ? format(date, "PPP") : <span>Choisir une date</span>}
+                                    <CalendarIcon className="mr-2 h-4 w-4 text-[#00f5ff]" />
+                                    {date ? format(date, "PPP") : <span>Choose a date</span>}
                                 </Button>
                             } />
-                            <PopoverContent className="w-auto p-0">
+                            <PopoverContent className="w-auto p-0 bg-[rgba(10,10,18,0.95)] border border-[rgba(0,245,255,0.2)] rounded-xl">
                                 <Calendar
                                     mode="single"
                                     selected={date}
@@ -209,19 +235,28 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                     </div>
 
                     {/* Content */}
-                    <div className="flex flex-col gap-3">
-                        <Label>Contenu (optionnel)</Label>
+                    <div className="space-y-3">
+                        <Label className="text-[10px] text-[rgba(0,245,255,0.6)] uppercase tracking-[0.2em]">Content</Label>
                         <Textarea
                             {...register("content")}
-                            className="min-h-[200px]"
-                            placeholder="Écrivez vos pensées..."
+                            className={cn(
+                                "min-h-[180px] rounded-xl",
+                                "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                "text-white placeholder:text-[rgba(255,255,255,0.3)]",
+                                "focus:border-[rgba(0,245,255,0.3)] focus:shadow-[0_0_20px_rgba(0,245,255,0.1)]",
+                                "leading-relaxed"
+                            )}
+                            placeholder="Write your thoughts here..."
                         />
                     </div>
 
-                    {/* Optional Fields */}
-                    <div className="grid grid-cols-2 gap-6 border-t pt-6">
-                        <div className="flex flex-col gap-3">
-                            <Label>Heure de réveil</Label>
+                    {/* Optional Fields Grid */}
+                    <div className="grid grid-cols-2 gap-4 border-t border-[rgba(255,255,255,0.05)] pt-6">
+                        <div className="space-y-2">
+                            <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider flex items-center gap-2">
+                                <Clock className="w-3 h-3 text-[#ffbe0b]" />
+                                Wake Time
+                            </Label>
                             <Input
                                 type="time"
                                 value={wakeTime ? `${String(new Date(wakeTime).getHours()).padStart(2, '0')}:${String(new Date(wakeTime).getMinutes()).padStart(2, '0')}` : ""}
@@ -232,10 +267,18 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                     d.setMinutes(Number(m));
                                     setValue("wakeTime", d);
                                 }}
+                                className={cn(
+                                    "rounded-xl h-10",
+                                    "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                    "text-white font-[family-name:var(--font-mono)]"
+                                )}
                             />
                         </div>
-                        <div className="flex flex-col gap-3">
-                            <Label>Heure de coucher</Label>
+                        <div className="space-y-2">
+                            <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider flex items-center gap-2">
+                                <Clock className="w-3 h-3 text-[#b829dd]" />
+                                Sleep Time
+                            </Label>
                             <Input
                                 type="time"
                                 value={sleepTime ? `${String(new Date(sleepTime).getHours()).padStart(2, '0')}:${String(new Date(sleepTime).getMinutes()).padStart(2, '0')}` : ""}
@@ -246,66 +289,94 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
                                     d.setMinutes(Number(m));
                                     setValue("sleepTime", d);
                                 }}
+                                className={cn(
+                                    "rounded-xl h-10",
+                                    "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                    "text-white font-[family-name:var(--font-mono)]"
+                                )}
                             />
                         </div>
-                        <div className="flex items-center gap-3">
+                        
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
                             <Checkbox
                                 id="sport"
                                 checked={watch("didSport")}
                                 onCheckedChange={(c) => setValue("didSport", c as boolean)}
+                                className="border-[rgba(0,245,255,0.3)] data-[state=checked]:bg-[#00f5ff] data-[state=checked]:border-[#00f5ff]"
                             />
-                            <Label htmlFor="sport">Sport ?</Label>
+                            <Label htmlFor="sport" className="text-white flex items-center gap-2 cursor-pointer text-sm">
+                                <Activity className="w-4 h-4 text-[#00f5ff]" />
+                                Exercise
+                            </Label>
                         </div>
-                        <div className="flex items-center gap-3">
+                        
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
                             <Checkbox
                                 id="asmr"
                                 checked={watch("asmr")}
                                 onCheckedChange={(c) => setValue("asmr", c as boolean)}
+                                className="border-[rgba(255,0,110,0.3)] data-[state=checked]:bg-[#ff006e] data-[state=checked]:border-[#ff006e]"
                             />
-                            <Label htmlFor="asmr">ASMR ?</Label>
+                            <Label htmlFor="asmr" className="text-white flex items-center gap-2 cursor-pointer text-sm">
+                                <Zap className="w-4 h-4 text-[#ff006e]" />
+                                ASMR
+                            </Label>
                         </div>
 
-                        {/* Screen Time - Only on Mondays */}
                         {isMonday && (
-                            <div className="col-span-2 flex flex-col gap-3">
-                                <Label>Temps d'écran moyen (minutes/jour)</Label>
+                            <div className="col-span-2 space-y-2">
+                                <Label className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">
+                                    Screen Time (minutes/day)
+                                </Label>
                                 <Input
                                     type="number"
                                     min={0}
-                                    placeholder="Ex: 180 pour 3h"
+                                    placeholder="e.g. 180 for 3h"
                                     value={screenTime ?? ""}
                                     onChange={(e) => setValue("screenTime", e.target.value ? Number(e.target.value) : undefined)}
+                                    className={cn(
+                                        "rounded-xl h-10",
+                                        "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
+                                        "text-white placeholder:text-[rgba(255,255,255,0.3)]"
+                                    )}
                                 />
                             </div>
                         )}
-
-                        {/* Image Placeholder */}
-                        <div className="col-span-2 flex flex-col gap-3">
-                            <Label>Images (À venir)</Label>
-                            <Input placeholder="URL de l'image (mock)" disabled />
-                        </div>
                     </div>
 
-                    {/* Lock Logic */}
-                    <div className="flex items-center justify-between border-t pt-6">
+                    {/* Lock & Submit */}
+                    <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.05)] pt-6">
                         <div className="flex items-center gap-3">
                             <Button
                                 type="button"
-                                variant={isLocked ? "destructive" : "outline"}
-                                size="sm"
                                 onClick={() => setValue("isLocked", !isLocked)}
+                                className={cn(
+                                    "rounded-xl transition-all duration-300 h-10",
+                                    isLocked
+                                        ? "bg-[rgba(255,0,110,0.15)] text-[#ff006e] border border-[rgba(255,0,110,0.4)] hover:bg-[rgba(255,0,110,0.25)]"
+                                        : "bg-[rgba(255,255,255,0.03)] text-[rgba(255,255,255,0.5)] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]"
+                                )}
                             >
                                 {isLocked ? <Lock className="w-4 h-4 mr-2" /> : <Unlock className="w-4 h-4 mr-2" />}
-                                {isLocked ? "Verrouillée" : "Ouverte"}
+                                {isLocked ? "LOCKED" : "UNLOCKED"}
                             </Button>
-                            <span className="text-xs text-muted-foreground">
-                                {isLocked ? "PIN requis pour voir." : "Visible par tous."}
+                            <span className="text-xs text-[rgba(255,255,255,0.3)]">
+                                {isLocked ? "PIN required" : "Public entry"}
                             </span>
                         </div>
 
-                        <Button type="submit">Enregistrer</Button>
+                        <Button
+                            type="submit"
+                            className={cn(
+                                "rounded-xl h-10 px-6",
+                                "bg-[rgba(0,245,255,0.15)] text-[#00f5ff] border border-[rgba(0,245,255,0.4)]",
+                                "hover:bg-[rgba(0,245,255,0.25)] hover:shadow-[0_0_30px_rgba(0,245,255,0.2)]",
+                                "transition-all duration-300 tracking-wider"
+                            )}
+                        >
+                            SAVE ENTRY
+                        </Button>
                     </div>
-
                 </form>
             </DialogContent>
         </Dialog>

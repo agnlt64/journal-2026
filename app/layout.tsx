@@ -1,15 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { BlurToggle } from "@/components/layout/blur-toggle";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 
-const inter = Inter({ subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Mon Journal 2026",
-  description: "Journal Personnel",
+  title: "VOID | Journal 2026",
+  description: "A crystalline space for your thoughts",
 };
 
 export default function RootLayout({
@@ -18,12 +29,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body className={`${inter.className} dark`}>
-        {/* <BlurToggle /> */}
+    <html lang="fr" className="dark">
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}>
         <Header />
         <Sidebar />
-        <main className="ml-16 pt-0">
+        <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
           {children}
         </main>
       </body>
