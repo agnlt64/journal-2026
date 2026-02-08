@@ -3,10 +3,19 @@
 import { ProjectDTO, PROJECT_STATUS_LABELS, PROJECT_STATUS_COLORS } from "@/lib/types";
 import { ProjectDialog } from "./project-dialog";
 import { deleteProject, updateProjectStatus } from "@/actions/project";
-import { FolderGit, ExternalLink, Edit, Trash2, MoreVertical } from "lucide-react";
+import { FolderGit, ExternalLink, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+
+const STATUS_OPTIONS: ProjectDTO["status"][] = ["DRAFT", "IN_PROGRESS", "POC_DONE", "MVP_DONE", "DONE", "ARCHIVED"];
 
 interface ProjectCardProps {
     project: ProjectDTO;
@@ -15,6 +24,7 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const [currentStatus, setCurrentStatus] = useState<ProjectDTO["status"]>(project.status);
     const statusColor = PROJECT_STATUS_COLORS[project.status];
     const statusLabel = PROJECT_STATUS_LABELS[project.status];
 
@@ -28,7 +38,9 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         }
     }
 
-    async function handleStatusChange(newStatus: ProjectDTO["status"]) {
+    async function handleStatusChange(newStatus: ProjectDTO["status"] | null) {
+        if (!newStatus) return;
+        setCurrentStatus(newStatus);
         await updateProjectStatus(project.id, newStatus);
     }
 
@@ -146,26 +158,37 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.05)]">
                     <div className="flex items-center gap-2">
                         <span className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">
-                            Changer le statut:
+                            Statut:
                         </span>
-                        <div className="flex gap-1">
-                            {["DRAFT", "IN_PROGRESS", "POC_DONE", "MVP_DONE", "DONE"].map((status) => (
-                                <button
-                                    key={status}
-                                    onClick={() => handleStatusChange(status as ProjectDTO["status"])}
-                                    className={cn(
-                                        "w-6 h-6 rounded border transition-all duration-300",
-                                        project.status === status 
-                                            ? "border-white shadow-[0_0_10px_rgba(255,255,255,0.3)]" 
-                                            : "border-transparent hover:border-[rgba(255,255,255,0.3)]"
-                                    )}
-                                    style={{
-                                        backgroundColor: PROJECT_STATUS_COLORS[status as ProjectDTO["status"]],
-                                    }}
-                                    title={PROJECT_STATUS_LABELS[status as ProjectDTO["status"]]}
-                                />
-                            ))}
-                        </div>
+                        <Select value={currentStatus} onValueChange={handleStatusChange}>
+                            <SelectTrigger
+                                size="sm"
+                                className="min-w-36 bg-transparent border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)] text-white"
+                            >
+                                <SelectValue>
+                                    <div className="flex items-center gap-2">
+                                        <div
+                                            className="w-2 h-2 rounded-full"
+                                            style={{ backgroundColor: PROJECT_STATUS_COLORS[currentStatus] }}
+                                        />
+                                        <span>{PROJECT_STATUS_LABELS[currentStatus]}</span>
+                                    </div>
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {STATUS_OPTIONS.map((status) => (
+                                    <SelectItem key={status} value={status}>
+                                        <div className="flex items-center gap-2">
+                                            <div
+                                                className="w-2 h-2 rounded-full"
+                                                style={{ backgroundColor: PROJECT_STATUS_COLORS[status] }}
+                                            />
+                                            <span>{PROJECT_STATUS_LABELS[status]}</span>
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             </div>
