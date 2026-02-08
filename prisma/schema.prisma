@@ -22,6 +22,7 @@ model User {
   entries       Entry[]
   writings      Writing[]
   goals         Goal[]
+  projects      Project[]
   tags          Tag[]
   
   createdAt     DateTime  @default(now())
@@ -108,4 +109,43 @@ model Goal {
   
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+// Project management
+model Project {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title       String
+  description String?   @db.Text
+  status      ProjectStatus @default(DRAFT)
+  
+  // External links/resources
+  links       ProjectLink[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([userId, status])
+}
+
+enum ProjectStatus {
+  DRAFT
+  IN_PROGRESS
+  POC_DONE
+  MVP_DONE
+  DONE
+  ARCHIVED
+}
+
+model ProjectLink {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  title       String    // Display title for the link
+  url         String    // The actual URL
+  
+  createdAt   DateTime  @default(now())
 }

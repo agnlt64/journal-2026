@@ -7,6 +7,7 @@ import { Diamond, Hexagon } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "ENTRÉES", color: "#00f5ff" },
+  { href: "/projets", label: "PROJETS", color: "#7bb88b" },
   { href: "/writings", label: "RÉFLEXIONS", color: "#b829dd" },
   { href: "/objectifs", label: "OBJECTIFS", color: "#ff006e" },
   { href: "/stats", label: "STATISTIQUES", color: "#ffbe0b" },

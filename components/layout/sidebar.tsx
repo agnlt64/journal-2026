@@ -3,9 +3,10 @@
 import { EntryDialog } from "@/components/journal/entry-dialog";
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { GoalDialog } from "@/components/journal/goal-dialog";
+import { ProjectDialog } from "@/components/journal/project-dialog";
 import { SettingsDialog } from "@/components/journal/settings-dialog";
 import { Button } from "@/components/ui/button";
-import { Plus, Feather, Target, Settings } from "lucide-react";
+import { Plus, Feather, Target, FolderGit, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
@@ -67,6 +68,23 @@ export function Sidebar() {
             <Target className="w-5 h-5 text-[#00f5ff] relative z-10 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
           </Button>
         </GoalDialog>
+
+        {/* Projects - Green accent */}
+        <ProjectDialog>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "w-12 h-12 rounded-xl transition-all duration-500 relative overflow-hidden group",
+              "bg-linear-to-br from-[rgba(123,184,139,0.2)] to-[rgba(123,184,139,0.05)]",
+              "border border-[rgba(123,184,139,0.3)]",
+              "hover:border-[#7bb88b] hover:shadow-[0_0_30px_rgba(123,184,139,0.3)]"
+            )}
+          >
+            <div className="absolute inset-0 bg-linear-to-br from-[#7bb88b] to-[#6aa87a] opacity-0 group-hover:opacity-20 transition-opacity duration-500" />
+            <FolderGit className="w-5 h-5 text-[#7bb88b] relative z-10 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
+          </Button>
+        </ProjectDialog>
 
         {/* Spacer */}
         <div className="flex-1 min-h-5" />

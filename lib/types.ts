@@ -90,3 +90,6 @@ export interface GoalDTO {
     remark: string | null;
     createdAt: Date;
 }
+
+// Re-export project types
+export * from "./types/project";

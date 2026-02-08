@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VOID | Journal 2026",
+  title: "Journal 2026",
   description: "Un espace cristallin pour vos pensées",
 };
 
