@@ -14,9 +14,10 @@ import { useState } from "react";
 interface EntryCardProps {
   entry: EntryDTO;
   index?: number;
+  onEntryChange?: () => void;
 }
 
-export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
+export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: EntryCardProps) {
   const [entry, setEntry] = useState(initialEntry);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [pinInput, setPinInput] = useState("");
@@ -33,6 +34,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
       if (res.success && res.data) {
         setEntry(res.data as EntryDTO);
         setIsUnlocking(false);
+        onEntryChange?.();
       } else {
         setError("CODE PIN INCORRECT");
       }
@@ -102,7 +104,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
               ))}
             </div>
 
-            <EntryDialog entryToEdit={entry}>
+            <EntryDialog entryToEdit={entry} onSuccess={onEntryChange}>
               <button
                 className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,245,255,0.1)] border border-transparent hover:border-[rgba(0,245,255,0.3)]"
               >
@@ -126,7 +128,7 @@ export function EntryCard({ entry: initialEntry, index = 0 }: EntryCardProps) {
             {isEvening && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Moon className="w-3.5 h-3.5 text-[#b829dd]" />
-                <span className="text-[rgba(255,255,255,0.5)]">SOIR</span>
+                <span className="text-[rgba(255,255,255,0.5)]">{format(new Date(entry.sleepTime ?? ""), "HH:mm")}</span>
               </div>
             )}
             {entry.didSport && (

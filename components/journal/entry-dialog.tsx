@@ -23,9 +23,10 @@ interface EntryDialogProps {
     entryToEdit?: EntryDTO;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
+    onSuccess?: () => void;
 }
 
-export function EntryDialog({ children, entryToEdit, open, onOpenChange }: EntryDialogProps) {
+export function EntryDialog({ children, entryToEdit, open, onOpenChange, onSuccess }: EntryDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [availableTags, setAvailableTags] = useState<TagDTO[]>([]);
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
@@ -91,6 +92,8 @@ export function EntryDialog({ children, entryToEdit, open, onOpenChange }: Entry
             setShow(false);
             reset();
             setSelectedTagIds([]);
+            // Call onSuccess callback to refresh the feed
+            onSuccess?.();
         } catch (e) {
             console.error(e);
             alert("Erreur lors de l&apos;enregistrement. Assurez-vous d&apos;avoir défini un code PIN si vous verrouillez l&apos;entrée.");

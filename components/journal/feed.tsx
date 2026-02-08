@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getEntries } from "@/actions/entry";
 import { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
@@ -28,6 +28,7 @@ export function Feed({
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const searchQuery = useAppStore((s) => s.searchQuery);
   const setSearchQuery = useAppStore((s) => s.setSearchQuery);
@@ -35,6 +36,21 @@ export function Feed({
   const totalPages = Math.ceil(total / itemsPerPage);
   const hasPrevPage = page > 1;
   const hasNextPage = page < totalPages;
+
+  // Function to refresh entries from server
+  const refreshEntries = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data, total: newTotal } = await getEntries(page, searchQuery, true);
+      setEntries(data);
+      setTotal(newTotal);
+      setRefreshKey(prev => prev + 1);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, searchQuery]);
+
+
 
   useEffect(() => {
     const handler = setTimeout(async () => {
@@ -51,6 +67,8 @@ export function Feed({
 
     return () => clearTimeout(handler);
   }, [searchQuery]);
+
+
 
   async function goToPage(newPage: number) {
     setLoading(true);
@@ -146,7 +164,12 @@ export function Feed({
         ) : (
           <>
             {filteredEntries.map((entry, index) => (
-              <EntryCard key={entry.id} entry={entry} index={index} />
+              <EntryCard
+                key={`${entry.id}-${refreshKey}`}
+                entry={entry}
+                index={index}
+                onEntryChange={refreshEntries}
+              />
             ))}
             {filteredEntries.length === 0 && !loading && (
               <div className="flex flex-col items-center justify-center py-20 text-center relative">

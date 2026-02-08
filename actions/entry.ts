@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import type { Image, Tag } from "@/lib/generated/prisma/client";
+import { Prisma } from "@/lib/generated/prisma/client";
 
 // Default tags to create for new users
 const DEFAULT_TAGS = [
@@ -78,10 +79,10 @@ export async function getEntries(page = 1, searchQuery = "", includeEmpty = fals
     const user = await getCurrentUser();
     const itemsPerPage = user.itemsPerPage || 20;
 
-    const where = {
+    const where: Prisma.EntryWhereInput = {
         userId: user.id,
         ...(searchQuery
-            ? { content: { contains: searchQuery, mode: 'insensitive' } }
+            ? { content: { contains: searchQuery, mode: Prisma.QueryMode.insensitive } }
             : (!includeEmpty ? { content: { not: "" } } : {})
         ),
     };
@@ -100,19 +101,20 @@ export async function getEntries(page = 1, searchQuery = "", includeEmpty = fals
     // Transform to DTO with Redaction
     const dtos: EntryDTO[] = entries.map((e) => {
         const isLocked = e.isLocked;
+        const entryWithRelations = e as typeof e & { tags: Tag[], images: Image[] };
 
         return {
             id: e.id,
             content: isLocked ? null : e.content,
             date: e.date,
-            tags: e.tags.map((t) => ({ id: t.id, name: t.name, color: t.color })),
+            tags: entryWithRelations.tags.map((t: Tag) => ({ id: t.id, name: t.name, color: t.color })),
             wakeTime: e.wakeTime,
             sleepTime: e.sleepTime,
             didSport: e.didSport,
             asmr: e.asmr,
             screenTime: e.screenTime,
             isLocked: e.isLocked,
-            images: isLocked ? [] : e.images.map((i: Image) => ({ id: i.id, url: i.url })),
+            images: isLocked ? [] : entryWithRelations.images.map((i: Image) => ({ id: i.id, url: i.url })),
             createdAt: e.createdAt,
             updatedAt: e.updatedAt,
         };

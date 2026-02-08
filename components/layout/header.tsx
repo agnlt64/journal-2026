@@ -78,13 +78,6 @@ export function Header() {
           {/* Time Display */}
           <div className="hidden md:flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-[#00f5ff] animate-pulse shadow-[0_0_10px_#00f5ff]" />
-            <span className="font-mono text-xs text-[rgba(255,255,255,0.5)] tracking-wider">
-              {new Date().toLocaleTimeString("fr-FR", { 
-                hour: "2-digit", 
-                minute: "2-digit",
-                hour12: false 
-              })}
-            </span>
           </div>
         </div>
       </div>
