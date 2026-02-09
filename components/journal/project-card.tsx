@@ -26,7 +26,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [currentStatus, setCurrentStatus] = useState<ProjectDTO["status"]>(project.status);
     const statusColor = PROJECT_STATUS_COLORS[project.status];
-    const statusLabel = PROJECT_STATUS_LABELS[project.status];
 
     async function handleDelete() {
         if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
@@ -82,16 +81,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                             <h3 className="font-(family-name:--font-display) text-base font-medium text-white tracking-wide">
                                 {project.title}
                             </h3>
-                            <span 
-                                className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border"
-                                style={{
-                                    backgroundColor: `${statusColor}15`,
-                                    borderColor: `${statusColor}30`,
-                                    color: statusColor
-                                }}
-                            >
-                                {statusLabel}
-                            </span>
                         </div>
                     </div>
                     
