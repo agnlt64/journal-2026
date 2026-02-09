@@ -17,7 +17,11 @@ interface EntryCardProps {
   onEntryChange?: () => void;
 }
 
-export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: EntryCardProps) {
+export function EntryCard({
+  entry: initialEntry,
+  index = 0,
+  onEntryChange,
+}: EntryCardProps) {
   const [entry, setEntry] = useState(initialEntry);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [pinInput, setPinInput] = useState("");
@@ -54,7 +58,7 @@ export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: Ent
         "bg-[rgba(10,10,18,0.5)] border border-[rgba(0,245,255,0.1)]",
         "hover:border-[rgba(0,245,255,0.3)] hover:shadow-[0_0_40px_rgba(0,245,255,0.1)]",
         isGlobalBlurred && "blur-md hover:blur-none",
-        "animate-fade-in-up"
+        "animate-fade-in-up",
       )}
       style={{ animationDelay: `${index * 100}ms` }}
     >
@@ -105,9 +109,7 @@ export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: Ent
             </div>
 
             <EntryDialog entryToEdit={entry} onSuccess={onEntryChange}>
-              <button
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,245,255,0.1)] border border-transparent hover:border-[rgba(0,245,255,0.3)]"
-              >
+              <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-[rgba(0,245,255,0.1)] border border-transparent hover:border-[rgba(0,245,255,0.3)]">
                 <Edit className="w-4 h-4 text-[rgba(0,245,255,0.7)]" />
               </button>
             </EntryDialog>
@@ -128,7 +130,9 @@ export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: Ent
             {isEvening && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Moon className="w-3.5 h-3.5 text-[#b829dd]" />
-                <span className="text-[rgba(255,255,255,0.5)]">{format(new Date(entry.sleepTime ?? ""), "HH:mm")}</span>
+                <span className="text-[rgba(255,255,255,0.5)]">
+                  {format(new Date(entry.sleepTime ?? ""), "HH:mm")}
+                </span>
               </div>
             )}
             {entry.didSport && (
@@ -188,7 +192,9 @@ export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: Ent
                 </form>
               )}
               {error && (
-                <p className="text-xs text-[#ff3864] mt-3 tracking-wider">{error}</p>
+                <p className="text-xs text-[#ff3864] mt-3 tracking-wider">
+                  {error}
+                </p>
               )}
             </div>
           ) : (
@@ -198,9 +204,7 @@ export function EntryCard({ entry: initialEntry, index = 0, onEntryChange }: Ent
                   Aucun contenu enregistré pour ce jour...
                 </p>
               ) : (
-                <div className="whitespace-pre-wrap">
-                  {entry.content}
-                </div>
+                <div className="whitespace-pre-wrap">{entry.content}</div>
               )}
             </div>
           )}

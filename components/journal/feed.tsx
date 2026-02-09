@@ -41,22 +41,28 @@ export function Feed({
   const refreshEntries = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, total: newTotal } = await getEntries(page, searchQuery, true);
+      const { data, total: newTotal } = await getEntries(
+        page,
+        searchQuery,
+        true,
+      );
       setEntries(data);
       setTotal(newTotal);
-      setRefreshKey(prev => prev + 1);
+      setRefreshKey((prev) => prev + 1);
     } finally {
       setLoading(false);
     }
   }, [page, searchQuery]);
 
-
-
   useEffect(() => {
     const handler = setTimeout(async () => {
       setLoading(true);
       try {
-        const { data, total: newTotal } = await getEntries(1, searchQuery, true);
+        const { data, total: newTotal } = await getEntries(
+          1,
+          searchQuery,
+          true,
+        );
         setEntries(data);
         setTotal(newTotal);
         setPage(1);
@@ -68,12 +74,14 @@ export function Feed({
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-
-
   async function goToPage(newPage: number) {
     setLoading(true);
     try {
-      const { data, total: newTotal } = await getEntries(newPage, searchQuery, true);
+      const { data, total: newTotal } = await getEntries(
+        newPage,
+        searchQuery,
+        true,
+      );
       setEntries(data);
       setTotal(newTotal);
       setPage(newPage);
@@ -86,8 +94,8 @@ export function Feed({
     selectedTagIds.length > 0
       ? entries.filter((entry) =>
           selectedTagIds.some((tagId) =>
-            entry.tags.some((t) => t.id === tagId)
-          )
+            entry.tags.some((t) => t.id === tagId),
+          ),
         )
       : entries;
 
@@ -95,7 +103,7 @@ export function Feed({
     setSelectedTagIds((prev) =>
       prev.includes(tagId)
         ? prev.filter((id) => id !== tagId)
-        : [...prev, tagId]
+        : [...prev, tagId],
     );
   }
 
@@ -115,7 +123,7 @@ export function Feed({
               "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
               "text-white placeholder:text-[rgba(255,255,255,0.3)]",
               "focus:border-[rgba(0,245,255,0.5)] focus:shadow-[0_0_20px_rgba(0,245,255,0.1)]",
-              "transition-all duration-500"
+              "transition-all duration-500",
             )}
           />
           <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.3)] to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
@@ -135,12 +143,16 @@ export function Feed({
                     "border",
                     isSelected
                       ? "border-transparent text-white"
-                      : "border-[rgba(255,255,255,0.1)] text-[rgba(255,255,255,0.5)] hover:border-[rgba(255,255,255,0.2)] hover:text-white"
+                      : "border-[rgba(255,255,255,0.1)] text-[rgba(255,255,255,0.5)] hover:border-[rgba(255,255,255,0.2)] hover:text-white",
                   )}
                   style={{
-                    backgroundColor: isSelected ? `${tag.color}30` : "transparent",
+                    backgroundColor: isSelected
+                      ? `${tag.color}30`
+                      : "transparent",
                     borderColor: isSelected ? `${tag.color}60` : undefined,
-                    boxShadow: isSelected ? `0 0 15px ${tag.color}30` : undefined,
+                    boxShadow: isSelected
+                      ? `0 0 15px ${tag.color}30`
+                      : undefined,
                   }}
                 >
                   {tag.name}
@@ -159,7 +171,9 @@ export function Feed({
               <Loader2 className="w-10 h-10 text-[#00f5ff] animate-spin" />
               <div className="absolute inset-0 blur-xl bg-[#00f5ff] opacity-30" />
             </div>
-            <p className="mt-4 text-[rgba(255,255,255,0.4)] text-sm tracking-wider">CHARGEMENT DES ENTRÉES...</p>
+            <p className="mt-4 text-[rgba(255,255,255,0.4)] text-sm tracking-wider">
+              CHARGEMENT DES ENTRÉES...
+            </p>
           </div>
         ) : (
           <>
@@ -181,7 +195,8 @@ export function Feed({
                   AUCUNE ENTRÉE
                 </h3>
                 <p className="text-[rgba(255,255,255,0.4)] text-sm max-w-md">
-                  Votre journal est une toile vierge. Créez votre première entrée pour commencer votre voyage.
+                  Votre journal est une toile vierge. Créez votre première
+                  entrée pour commencer votre voyage.
                 </p>
               </div>
             )}
@@ -202,7 +217,7 @@ export function Feed({
               "bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)]",
               "text-[rgba(255,255,255,0.5)] hover:text-white hover:border-[rgba(0,245,255,0.3)]",
               "disabled:opacity-30 disabled:cursor-not-allowed",
-              "transition-all duration-300"
+              "transition-all duration-300",
             )}
           >
             <ChevronLeft className="h-5 w-5" />
@@ -217,7 +232,7 @@ export function Feed({
                   "w-10 h-10 rounded-xl text-sm font-medium transition-all duration-300",
                   p === page
                     ? "bg-[rgba(0,245,255,0.2)] text-[#00f5ff] border border-[rgba(0,245,255,0.5)] shadow-[0_0_15px_rgba(0,245,255,0.2)]"
-                    : "text-[rgba(255,255,255,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]"
+                    : "text-[rgba(255,255,255,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]",
                 )}
               >
                 {p}
@@ -235,7 +250,7 @@ export function Feed({
               "bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)]",
               "text-[rgba(255,255,255,0.5)] hover:text-white hover:border-[rgba(0,245,255,0.3)]",
               "disabled:opacity-30 disabled:cursor-not-allowed",
-              "transition-all duration-300"
+              "transition-all duration-300",
             )}
           >
             <ChevronRight className="h-5 w-5" />

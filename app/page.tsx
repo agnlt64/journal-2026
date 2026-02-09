@@ -10,7 +10,7 @@ export default async function Home() {
   const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
     getEntries(1, "", true),
     getTags(),
-    getUserSettings()
+    getUserSettings(),
   ]);
 
   return (
@@ -20,7 +20,7 @@ export default async function Home() {
         {/* Decorative elements */}
         <div className="absolute -top-4 -left-4 w-24 h-24 bg-[rgba(0,245,255,0.03)] rounded-full blur-2xl" />
         <div className="absolute top-8 right-0 w-32 h-32 bg-[rgba(184,41,221,0.03)] rounded-full blur-2xl" />
-        
+
         <div className="relative">
           {/* Label */}
           <div className="flex items-center gap-2 mb-2">
@@ -29,12 +29,12 @@ export default async function Home() {
               Enregistrements Quotidiens
             </span>
           </div>
-          
+
           <div className="flex items-end justify-between">
             <h1 className="font-(family-name:--font-display) text-5xl font-bold text-white tracking-tight">
               ENTRÉES
             </h1>
-            
+
             <EntryDialog>
               <Button
                 className={cn(
@@ -43,7 +43,7 @@ export default async function Home() {
                   "text-[#00f5ff] font-medium tracking-wider text-sm",
                   "hover:bg-[rgba(0,245,255,0.1)] hover:border-[#00f5ff]",
                   "hover:shadow-[0_0_30px_rgba(0,245,255,0.3)]",
-                  "transition-all duration-500 group"
+                  "transition-all duration-500 group",
                 )}
               >
                 <span className="absolute inset-0 bg-linear-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
@@ -52,18 +52,26 @@ export default async function Home() {
               </Button>
             </EntryDialog>
           </div>
-          
+
           {/* Stats row */}
           <div className="flex items-center gap-6 mt-6">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[rgba(0,245,255,0.6)]" />
               <span className="text-sm text-[rgba(255,255,255,0.5)]">
-                {total} <span className="text-[rgba(255,255,255,0.3)]">entrées enregistrées</span>
+                {total}{" "}
+                <span className="text-[rgba(255,255,255,0.3)]">
+                  entrées enregistrées
+                </span>
               </span>
             </div>
             <div className="w-1 h-1 rounded-full bg-[rgba(255,255,255,0.2)]" />
             <span className="text-sm text-[rgba(255,255,255,0.3)]">
-              {new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+              {new Date().toLocaleDateString("fr-FR", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </span>
           </div>
         </div>

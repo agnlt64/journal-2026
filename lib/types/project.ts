@@ -10,7 +10,14 @@ export const projectLinkSchema = z.object({
 export const projectSchema = z.object({
   title: z.string().min(1, "Le titre est requis"),
   description: z.string().optional(),
-  status: z.enum(["DRAFT", "IN_PROGRESS", "POC_DONE", "MVP_DONE", "DONE", "ARCHIVED"]),
+  status: z.enum([
+    "DRAFT",
+    "IN_PROGRESS",
+    "POC_DONE",
+    "MVP_DONE",
+    "DONE",
+    "ARCHIVED",
+  ]),
   links: z.array(projectLinkSchema),
 });
 
@@ -28,7 +35,13 @@ export interface ProjectDTO {
   id: string;
   title: string;
   description: string | null;
-  status: "DRAFT" | "IN_PROGRESS" | "POC_DONE" | "MVP_DONE" | "DONE" | "ARCHIVED";
+  status:
+    | "DRAFT"
+    | "IN_PROGRESS"
+    | "POC_DONE"
+    | "MVP_DONE"
+    | "DONE"
+    | "ARCHIVED";
   links: ProjectLinkDTO[];
   createdAt: Date;
   updatedAt: Date;

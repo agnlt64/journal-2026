@@ -22,7 +22,7 @@ export function Header() {
         <div className="glass-crystal h-full rounded-2xl px-6 flex items-center justify-between relative overflow-hidden">
           {/* Animated gradient line */}
           <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.5)] to-transparent" />
-          
+
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
@@ -50,26 +50,33 @@ export function Header() {
                   href={item.href}
                   className={cn(
                     "relative px-4 py-2 text-xs font-medium tracking-[0.15em] transition-all duration-500 rounded-lg group",
-                    isActive ? "text-white" : "text-[rgba(255,255,255,0.4)] hover:text-white"
+                    isActive
+                      ? "text-white"
+                      : "text-[rgba(255,255,255,0.4)] hover:text-white",
                   )}
                 >
                   {/* Active indicator */}
                   {isActive && (
-                    <span 
+                    <span
                       className="absolute inset-0 rounded-lg opacity-20"
                       style={{ backgroundColor: item.color }}
                     />
                   )}
-                  
+
                   {/* Bottom glow line */}
-                  <span 
+                  <span
                     className={cn(
                       "absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full transition-all duration-300",
-                      isActive ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-50"
+                      isActive
+                        ? "w-full opacity-100"
+                        : "w-0 opacity-0 group-hover:w-1/2 group-hover:opacity-50",
                     )}
-                    style={{ backgroundColor: item.color, boxShadow: `0 0 10px ${item.color}` }}
+                    style={{
+                      backgroundColor: item.color,
+                      boxShadow: `0 0 10px ${item.color}`,
+                    }}
                   />
-                  
+
                   <span className="relative">{item.label}</span>
                 </Link>
               );

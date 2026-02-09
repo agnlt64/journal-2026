@@ -30,12 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="dark">
-      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}>
+      <body
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}
+      >
         <Header />
         <Sidebar />
-        <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
-          {children}
-        </main>
+        <main className="ml-24 pt-28 pb-8 px-6 relative z-10">{children}</main>
       </body>
     </html>
   );
