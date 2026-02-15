@@ -1,10 +1,7 @@
 import { getEntries, getTags } from "@/actions/entry";
 import { getUserSettings } from "@/actions/user";
 import { Feed } from "@/components/journal/feed";
-import { EntryDialog } from "@/components/journal/entry-dialog";
-import { Button } from "@/components/ui/button";
-import { Plus, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
 
 export default async function Home() {
   const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
@@ -34,23 +31,6 @@ export default async function Home() {
             <h1 className="font-(family-name:--font-display) text-5xl font-bold text-white tracking-tight">
               ENTRÉES
             </h1>
-
-            <EntryDialog>
-              <Button
-                className={cn(
-                  "relative overflow-hidden rounded-xl px-6 py-5",
-                  "bg-transparent border border-[rgba(0,245,255,0.5)]",
-                  "text-[#00f5ff] font-medium tracking-wider text-sm",
-                  "hover:bg-[rgba(0,245,255,0.1)] hover:border-[#00f5ff]",
-                  "hover:shadow-[0_0_30px_rgba(0,245,255,0.3)]",
-                  "transition-all duration-500 group",
-                )}
-              >
-                <span className="absolute inset-0 bg-linear-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                <Plus className="w-4 h-4 mr-2 relative z-10" />
-                <span className="relative z-10">NOUVELLE ENTRÉE</span>
-              </Button>
-            </EntryDialog>
           </div>
 
           {/* Stats row */}

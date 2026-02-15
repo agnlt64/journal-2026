@@ -127,11 +127,11 @@ export function EntryCard({
                 </span>
               </div>
             )}
-            {isEvening && (
+            {entry.sleepTime && isEvening && (
               <div className="flex items-center gap-1.5 text-xs">
                 <Moon className="w-3.5 h-3.5 text-[#b829dd]" />
                 <span className="text-[rgba(255,255,255,0.5)]">
-                  {format(new Date(entry.sleepTime ?? ""), "HH:mm")}
+                  {format(new Date(entry.sleepTime), "HH:mm")}
                 </span>
               </div>
             )}

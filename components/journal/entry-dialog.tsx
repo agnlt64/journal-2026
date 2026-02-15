@@ -127,7 +127,7 @@ export function EntryDialog({
     } catch (e) {
       console.error(e);
       alert(
-        "Erreur lors de l&apos;enregistrement. Assurez-vous d&apos;avoir défini un code PIN si vous verrouillez l&apos;entrée.",
+        "Erreur lors de l'enregistrement. Assurez-vous d'avoir défini un code PIN si vous verrouillez l'entrée.",
       );
     }
   }
@@ -182,7 +182,7 @@ export function EntryDialog({
               "text-white",
             )}
           >
-            {entryToEdit ? "MODIFIER L&apos;ENTRÉE" : "NOUVELLE ENTRÉE"}
+            {entryToEdit ? "MODIFIER L'ENTRÉE" : "NOUVELLE ENTRÉE"}
           </DialogTitle>
         </DialogHeader>
 

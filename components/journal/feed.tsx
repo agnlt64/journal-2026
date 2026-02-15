@@ -4,10 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import { getEntries } from "@/actions/entry";
 import { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
+import { EntryDialog } from "./entry-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/store/use-app-store";
-import { Loader2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FeedProps {
@@ -161,6 +162,26 @@ export function Feed({
             })}
           </div>
         )}
+      </div>
+
+      {/* Create Entry Button */}
+      <div className="flex justify-end">
+        <EntryDialog onSuccess={refreshEntries}>
+          <Button
+            className={cn(
+              "relative overflow-hidden rounded-xl px-6 py-5",
+              "bg-transparent border border-[rgba(0,245,255,0.5)]",
+              "text-[#00f5ff] font-medium tracking-wider text-sm",
+              "hover:bg-[rgba(0,245,255,0.1)] hover:border-[#00f5ff]",
+              "hover:shadow-[0_0_30px_rgba(0,245,255,0.3)]",
+              "transition-all duration-500 group",
+            )}
+          >
+            <span className="absolute inset-0 bg-linear-to-r from-transparent via-[rgba(0,245,255,0.1)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+            <Plus className="w-4 h-4 mr-2 relative z-10" />
+            <span className="relative z-10">NOUVELLE ENTRÉE</span>
+          </Button>
+        </EntryDialog>
       </div>
 
       {/* Entries */}
