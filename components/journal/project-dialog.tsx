@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, cloneElement, isValidElement } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   projectSchema,
@@ -65,13 +65,13 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
         },
   });
 
-  const { register, control, handleSubmit, reset, watch, setValue } = form;
+  const { register, control, handleSubmit, reset, setValue } = form;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "links",
   });
 
-  const currentStatus = watch("status");
+  const currentStatus = useWatch({ control, name: "status" });
 
   async function onSubmit(data: ProjectFormValues) {
     try {

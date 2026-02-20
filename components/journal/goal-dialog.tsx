@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, cloneElement, isValidElement } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { goalSchema, GoalFormValues } from "@/lib/types";
 import { createGoal } from "@/actions/goal";
@@ -32,7 +32,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
     },
   });
 
-  const { register, handleSubmit, reset, setValue, watch } = form;
+  const { register, handleSubmit, reset, setValue, control } = form;
 
   async function onSubmit(data: GoalFormValues) {
     await createGoal(data);
@@ -48,7 +48,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
     }
   }
 
-  const deadlineValue = watch("deadline");
+  const deadlineValue = useWatch({ control, name: "deadline" });
 
   // Render trigger - use cloneElement to add onClick instead of nesting buttons
   const triggerElement = children ? (

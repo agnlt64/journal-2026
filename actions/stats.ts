@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 
 export interface StatsEntry {
   id: string;
@@ -12,7 +12,7 @@ export interface StatsEntry {
 }
 
 export async function getStatsData(): Promise<StatsEntry[]> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const entries = await db.entry.findMany({
     where: { userId: user.id },
@@ -30,7 +30,7 @@ export async function getStatsData(): Promise<StatsEntry[]> {
 }
 
 export async function getEntryDates(): Promise<Date[]> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const entries = await db.entry.findMany({
     where: {
@@ -44,12 +44,12 @@ export async function getEntryDates(): Promise<Date[]> {
 }
 
 export async function getCounter(): Promise<number> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   return user.counter;
 }
 
 export async function updateCounter(delta: number): Promise<number> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const updated = await db.user.update({
     where: { id: user.id },

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 import { revalidatePath } from "next/cache";
 
 export async function updateSettings(data: {
@@ -9,7 +9,7 @@ export async function updateSettings(data: {
   itemsPerPage?: number;
   pinCode?: string;
 }) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   await db.user.update({
     where: { id: user.id },
@@ -24,7 +24,7 @@ export async function updateSettings(data: {
 }
 
 export async function getUserSettings() {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   return {
     blurLevel: user.blurLevel,
     itemsPerPage: user.itemsPerPage,

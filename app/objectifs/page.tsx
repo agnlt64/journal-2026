@@ -15,17 +15,19 @@ function groupGoalsByPeriod(goals: GoalDTO[]): Map<string, GoalDTO[]> {
       year: "numeric",
     }).format(deadline);
 
-    if (!groups.has(key)) {
-      groups.set(key, []);
+    const periodGoals = groups.get(key);
+    if (periodGoals) {
+      periodGoals.push(goal);
+    } else {
+      groups.set(key, [goal]);
     }
-    groups.get(key)!.push(goal);
   }
 
   return groups;
 }
 
 export default async function ObjectifsPage() {
-  const goals = (await getGoals()) as GoalDTO[];
+  const goals = await getGoals();
   const groupedGoals = groupGoalsByPeriod(goals);
 
   return (

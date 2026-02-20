@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 import { writingSchema, WritingFormValues } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 export async function createWriting(data: WritingFormValues) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = writingSchema.parse(data);
 
   await db.writing.create({
@@ -21,7 +21,7 @@ export async function createWriting(data: WritingFormValues) {
 }
 
 export async function getWritings() {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   return await db.writing.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },

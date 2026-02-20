@@ -36,7 +36,7 @@ export function EntryCard({
     try {
       const res = await getLockedEntry(entry.id, pinInput);
       if (res.success && res.data) {
-        setEntry(res.data as EntryDTO);
+        setEntry(res.data);
         setIsUnlocking(false);
         onEntryChange?.();
       } else {

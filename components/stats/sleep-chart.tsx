@@ -18,10 +18,7 @@ interface SleepChartProps {
 }
 
 // Convert time to shifted hours for night-centric display
-function timeToShiftedHours(
-  date: Date | null,
-  _isSleepTime: boolean,
-): number | null {
+function timeToShiftedHours(date: Date | null): number | null {
   if (!date) return null;
   const d = new Date(date);
   const hours = d.getHours() + d.getMinutes() / 60;
@@ -55,8 +52,8 @@ export function SleepChart({ entries }: SleepChartProps) {
           day: "2-digit",
           month: "2-digit",
         }).format(new Date(entry.date)),
-        wakeTime: timeToShiftedHours(entry.wakeTime, false),
-        sleepTime: timeToShiftedHours(entry.sleepTime, true),
+        wakeTime: timeToShiftedHours(entry.wakeTime),
+        sleepTime: timeToShiftedHours(entry.sleepTime),
       }));
   }, [entries]);
 

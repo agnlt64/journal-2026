@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, cloneElement, isValidElement } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { createEntry, updateEntry, getTags, createTag } from "@/actions/entry";
@@ -60,38 +60,45 @@ export function EntryDialog({
   const show = open ?? isOpen;
   const setShow = onOpenChange ?? setIsOpen;
 
+  const defaultValues = entryToEdit
+    ? {
+        ...entryToEdit,
+        content: entryToEdit.content ?? "",
+        date: new Date(entryToEdit.date),
+        tagIds: entryToEdit.tags?.map((t) => t.id) || [],
+        wakeTime: entryToEdit.wakeTime
+          ? new Date(entryToEdit.wakeTime)
+          : undefined,
+        sleepTime: entryToEdit.sleepTime
+          ? new Date(entryToEdit.sleepTime)
+          : undefined,
+        screenTime: entryToEdit.screenTime ?? undefined,
+        didSport: entryToEdit.didSport,
+        asmr: entryToEdit.asmr,
+        isLocked: entryToEdit.isLocked,
+      }
+    : {
+        content: "",
+        date: new Date(),
+        tagIds: [],
+        didSport: false,
+        asmr: false,
+        isLocked: false,
+      };
+
   const form = useForm({
     resolver: zodResolver(entrySchema),
-    defaultValues: entryToEdit
-      ? {
-          ...entryToEdit,
-          content: entryToEdit.content ?? "",
-          date: new Date(entryToEdit.date),
-          tagIds: entryToEdit.tags?.map((t) => t.id) || [],
-          wakeTime: entryToEdit.wakeTime
-            ? new Date(entryToEdit.wakeTime)
-            : undefined,
-          sleepTime: entryToEdit.sleepTime
-            ? new Date(entryToEdit.sleepTime)
-            : undefined,
-          screenTime: entryToEdit.screenTime ?? undefined,
-        }
-      : {
-          content: "",
-          date: new Date(),
-          tagIds: [],
-          didSport: false,
-          asmr: false,
-          isLocked: false,
-        },
+    defaultValues,
   });
 
-  const { register, handleSubmit, setValue, watch, reset } = form;
-  const date = watch("date");
-  const isLocked = watch("isLocked");
-  const wakeTime = watch("wakeTime");
-  const sleepTime = watch("sleepTime");
-  const screenTime = watch("screenTime");
+  const { register, handleSubmit, setValue, reset, control } = form;
+  const date = useWatch({ control, name: "date" });
+  const isLocked = useWatch({ control, name: "isLocked" });
+  const wakeTime = useWatch({ control, name: "wakeTime" });
+  const sleepTime = useWatch({ control, name: "sleepTime" });
+  const screenTime = useWatch({ control, name: "screenTime" });
+  const didSport = useWatch({ control, name: "didSport" });
+  const asmr = useWatch({ control, name: "asmr" });
 
   const isMonday = date ? new Date(date).getDay() === 1 : false;
 
@@ -374,8 +381,10 @@ export function EntryDialog({
             <div className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
               <Checkbox
                 id="sport"
-                checked={watch("didSport")}
-                onCheckedChange={(c) => setValue("didSport", c as boolean)}
+                checked={didSport}
+                onCheckedChange={(checked) =>
+                  setValue("didSport", checked === true)
+                }
                 className="border-[rgba(0,245,255,0.3)] data-[state=checked]:bg-[#00f5ff] data-[state=checked]:border-[#00f5ff]"
               />
               <Label
@@ -390,8 +399,10 @@ export function EntryDialog({
             <div className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
               <Checkbox
                 id="asmr"
-                checked={watch("asmr")}
-                onCheckedChange={(c) => setValue("asmr", c as boolean)}
+                checked={asmr}
+                onCheckedChange={(checked) =>
+                  setValue("asmr", checked === true)
+                }
                 className="border-[rgba(255,0,110,0.3)] data-[state=checked]:bg-[#ff006e] data-[state=checked]:border-[#ff006e]"
               />
               <Label

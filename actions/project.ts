@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 import {
   projectSchema,
   ProjectFormValues,
@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import type { ProjectLink } from "@/lib/generated/prisma/client";
 
 export async function getProjects(): Promise<ProjectDTO[]> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const projects = await db.project.findMany({
     where: { userId: user.id },
@@ -38,7 +38,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
 }
 
 export async function createProject(data: ProjectFormValues) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = projectSchema.parse(data);
 
   const project = await db.project.create({
@@ -62,7 +62,7 @@ export async function createProject(data: ProjectFormValues) {
 }
 
 export async function updateProject(id: string, data: ProjectFormValues) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = projectSchema.parse(data);
 
   // Delete existing links and create new ones
@@ -91,7 +91,7 @@ export async function updateProject(id: string, data: ProjectFormValues) {
 }
 
 export async function deleteProject(id: string) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   await db.project.delete({
     where: { id, userId: user.id },
@@ -104,7 +104,7 @@ export async function updateProjectStatus(
   id: string,
   status: ProjectDTO["status"],
 ) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   await db.project.update({
     where: { id, userId: user.id },

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import type { Image, Tag } from "@/lib/generated/prisma/client";
@@ -25,7 +25,7 @@ export async function ensureDefaultTags(userId: string) {
 }
 
 export async function getTags(): Promise<TagDTO[]> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   await ensureDefaultTags(user.id);
 
   const tags = await db.tag.findMany({
@@ -37,7 +37,7 @@ export async function getTags(): Promise<TagDTO[]> {
 }
 
 export async function createTag(name: string, color: string): Promise<TagDTO> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const tag = await db.tag.create({
     data: { userId: user.id, name, color },
@@ -49,7 +49,7 @@ export async function createTag(name: string, color: string): Promise<TagDTO> {
 export async function createEntry(
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = entrySchema.parse(data);
 
   if (parsed.isLocked && !user.pinCodeHash) {
@@ -86,7 +86,7 @@ export async function getEntries(
   searchQuery = "",
   includeEmpty = false,
 ): Promise<{ data: EntryDTO[]; total: number }> {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const itemsPerPage = user.itemsPerPage || 20;
 
   const where: Prisma.EntryWhereInput = {
@@ -117,13 +117,12 @@ export async function getEntries(
   // Transform to DTO with Redaction
   const dtos: EntryDTO[] = entries.map((e) => {
     const isLocked = e.isLocked;
-    const entryWithRelations = e as typeof e & { tags: Tag[]; images: Image[] };
 
     return {
       id: e.id,
       content: isLocked ? null : e.content,
       date: e.date,
-      tags: entryWithRelations.tags.map((t: Tag) => ({
+      tags: e.tags.map((t: Tag) => ({
         id: t.id,
         name: t.name,
         color: t.color,
@@ -136,7 +135,7 @@ export async function getEntries(
       isLocked: e.isLocked,
       images: isLocked
         ? []
-        : entryWithRelations.images.map((i: Image) => ({
+        : e.images.map((i: Image) => ({
             id: i.id,
             url: i.url,
           })),
@@ -149,7 +148,7 @@ export async function getEntries(
 }
 
 export async function getLockedEntry(id: string, pin: string) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   if (!user.pinCodeHash) throw new Error("No PIN set");
   if (user.pinCodeHash !== pin) {
@@ -178,7 +177,7 @@ export async function getLockedEntry(id: string, pin: string) {
 }
 
 export async function deleteEntry(id: string) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   await db.entry.delete({ where: { id, userId: user.id } });
   revalidatePath("/");
 }
@@ -187,7 +186,7 @@ export async function updateEntry(
   id: string,
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = entrySchema.parse(data);
 
   await db.entry.update({

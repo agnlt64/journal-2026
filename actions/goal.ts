@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/auth";
+import { getOrCreateUser } from "@/lib/user-context";
 import { goalSchema } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 export async function createGoal(data: unknown) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   const parsed = goalSchema.parse(data);
 
   await db.goal.create({
@@ -22,7 +22,7 @@ export async function createGoal(data: unknown) {
 }
 
 export async function getGoals() {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
   return await db.goal.findMany({
     where: { userId: user.id },
     orderBy: { deadline: "asc" },
@@ -30,7 +30,7 @@ export async function getGoals() {
 }
 
 export async function toggleGoalCompletion(goalId: string) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },
@@ -54,7 +54,7 @@ export async function toggleGoalCompletion(goalId: string) {
 }
 
 export async function updateGoalRemark(goalId: string, remark: string | null) {
-  const user = await getCurrentUser();
+  const user = await getOrCreateUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },

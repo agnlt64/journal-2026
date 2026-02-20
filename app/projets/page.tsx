@@ -15,10 +15,12 @@ function groupProjectsByStatus(
   const groups = new Map<ProjectDTO["status"], ProjectDTO[]>();
 
   for (const project of projects) {
-    if (!groups.has(project.status)) {
-      groups.set(project.status, []);
+    const statusGroup = groups.get(project.status);
+    if (statusGroup) {
+      statusGroup.push(project);
+    } else {
+      groups.set(project.status, [project]);
     }
-    groups.get(project.status)!.push(project);
   }
 
   return groups;
