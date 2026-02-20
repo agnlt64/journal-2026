@@ -24,7 +24,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
     id: p.id,
     title: p.title,
     description: p.description,
-    status: p.status as ProjectDTO["status"],
+    status: p.status,
     links: p.links.map(
       (l: ProjectLink): ProjectLinkDTO => ({
         id: l.id,

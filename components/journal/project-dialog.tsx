@@ -7,7 +7,9 @@ import {
   projectSchema,
   ProjectFormValues,
   ProjectDTO,
+  PROJECT_STATUS_COLORS,
   PROJECT_STATUS_LABELS,
+  PROJECT_STATUS_OPTIONS,
 } from "@/lib/types";
 import { createProject, updateProject } from "@/actions/project";
 
@@ -33,30 +35,11 @@ const STATUS_OPTIONS: {
   value: ProjectDTO["status"];
   label: string;
   color: string;
-}[] = [
-  { value: "DRAFT", label: PROJECT_STATUS_LABELS["DRAFT"], color: "#888888" },
-  {
-    value: "IN_PROGRESS",
-    label: PROJECT_STATUS_LABELS["IN_PROGRESS"],
-    color: "#00f5ff",
-  },
-  {
-    value: "POC_DONE",
-    label: PROJECT_STATUS_LABELS["POC_DONE"],
-    color: "#b829dd",
-  },
-  {
-    value: "MVP_DONE",
-    label: PROJECT_STATUS_LABELS["MVP_DONE"],
-    color: "#ffbe0b",
-  },
-  { value: "DONE", label: PROJECT_STATUS_LABELS["DONE"], color: "#7bb88b" },
-  {
-    value: "ARCHIVED",
-    label: PROJECT_STATUS_LABELS["ARCHIVED"],
-    color: "#555555",
-  },
-];
+}[] = PROJECT_STATUS_OPTIONS.map((status) => ({
+  value: status,
+  label: PROJECT_STATUS_LABELS[status],
+  color: PROJECT_STATUS_COLORS[status],
+}));
 
 export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
   const [open, setOpen] = useState(false);
@@ -77,7 +60,7 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
       : {
           title: "",
           description: "",
-          status: "DRAFT",
+          status: "IDEA",
           links: [],
         },
   });

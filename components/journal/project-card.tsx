@@ -4,6 +4,7 @@ import {
   ProjectDTO,
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_COLORS,
+  PROJECT_STATUS_OPTIONS,
 } from "@/lib/types";
 import { ProjectDialog } from "./project-dialog";
 import { deleteProject, updateProjectStatus } from "@/actions/project";
@@ -19,14 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const STATUS_OPTIONS: ProjectDTO["status"][] = [
-  "DRAFT",
-  "IN_PROGRESS",
-  "POC_DONE",
-  "MVP_DONE",
-  "DONE",
-  "ARCHIVED",
-];
+const STATUS_OPTIONS: ProjectDTO["status"][] = PROJECT_STATUS_OPTIONS;
 
 interface ProjectCardProps {
   project: ProjectDTO;
@@ -165,7 +159,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             <Select value={currentStatus} onValueChange={handleStatusChange}>
               <SelectTrigger
                 size="sm"
-                className="min-w-36 bg-transparent border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)] text-white"
+                className="w-56 bg-transparent border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)] text-white"
               >
                 <SelectValue>
                   <div className="flex items-center gap-2">
@@ -179,7 +173,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                   </div>
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="w-56 min-w-56">
                 {STATUS_OPTIONS.map((status) => (
                   <SelectItem key={status} value={status}>
                     <div className="flex items-center gap-2">

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProjectStatus } from "@/lib/generated/prisma/client";
 
 // Project schemas
 export const projectLinkSchema = z.object({
@@ -10,14 +11,7 @@ export const projectLinkSchema = z.object({
 export const projectSchema = z.object({
   title: z.string().min(1, "Le titre est requis"),
   description: z.string().optional(),
-  status: z.enum([
-    "DRAFT",
-    "IN_PROGRESS",
-    "POC_DONE",
-    "MVP_DONE",
-    "DONE",
-    "ARCHIVED",
-  ]),
+  status: z.nativeEnum(ProjectStatus),
   links: z.array(projectLinkSchema),
 });
 
@@ -35,34 +29,42 @@ export interface ProjectDTO {
   id: string;
   title: string;
   description: string | null;
-  status:
-    | "DRAFT"
-    | "IN_PROGRESS"
-    | "POC_DONE"
-    | "MVP_DONE"
-    | "DONE"
-    | "ARCHIVED";
+  status: ProjectStatus;
   links: ProjectLinkDTO[];
   createdAt: Date;
   updatedAt: Date;
 }
 
 // Status labels in French
-export const PROJECT_STATUS_LABELS: Record<ProjectDTO["status"], string> = {
-  DRAFT: "Brouillon",
-  IN_PROGRESS: "En cours",
-  POC_DONE: "POC Terminé",
-  MVP_DONE: "MVP Terminé",
+export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
+  IDEA: "Idée",
+  RESEARCH: "Recherches en cours",
+  STARTED: "Commencé",
+  ACTIVE_DEV: "Développement actif",
   DONE: "Terminé",
-  ARCHIVED: "Archivé",
 };
 
 // Status colors
-export const PROJECT_STATUS_COLORS: Record<ProjectDTO["status"], string> = {
-  DRAFT: "#888888",
-  IN_PROGRESS: "#00f5ff",
-  POC_DONE: "#b829dd",
-  MVP_DONE: "#ffbe0b",
-  DONE: "#7bb88b",
-  ARCHIVED: "#555555",
+export const PROJECT_STATUS_COLORS: Record<ProjectStatus, string> = {
+  IDEA: "#F0AC0E",
+  RESEARCH: "#06B6D4",
+  STARTED: "#D946EF",
+  ACTIVE_DEV: "#3B82F6",
+  DONE: "#10B981",
 };
+
+export const PROJECT_STATUS_OPTIONS: ProjectStatus[] = [
+  ProjectStatus.IDEA,
+  ProjectStatus.RESEARCH,
+  ProjectStatus.STARTED,
+  ProjectStatus.ACTIVE_DEV,
+  ProjectStatus.DONE,
+];
+
+export const PROJECT_STATUS_ORDER: ProjectStatus[] = [
+  ProjectStatus.ACTIVE_DEV,
+  ProjectStatus.STARTED,
+  ProjectStatus.RESEARCH,
+  ProjectStatus.IDEA,
+  ProjectStatus.DONE,
+];

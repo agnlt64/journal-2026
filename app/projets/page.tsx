@@ -2,19 +2,23 @@ import { getProjects } from "@/actions/project";
 import { ProjectDialog } from "@/components/journal/project-dialog";
 import { ProjectCard } from "@/components/journal/project-card";
 import { FolderGit } from "lucide-react";
-import { PROJECT_STATUS_LABELS, ProjectDTO } from "@/lib/types";
+import {
+  PROJECT_STATUS_COLORS,
+  PROJECT_STATUS_LABELS,
+  PROJECT_STATUS_ORDER,
+  ProjectDTO,
+} from "@/lib/types";
 
 function groupProjectsByStatus(
   projects: ProjectDTO[],
-): Map<string, ProjectDTO[]> {
-  const groups = new Map<string, ProjectDTO[]>();
+): Map<ProjectDTO["status"], ProjectDTO[]> {
+  const groups = new Map<ProjectDTO["status"], ProjectDTO[]>();
 
   for (const project of projects) {
-    const key = PROJECT_STATUS_LABELS[project.status];
-    if (!groups.has(key)) {
-      groups.set(key, []);
+    if (!groups.has(project.status)) {
+      groups.set(project.status, []);
     }
-    groups.get(key)!.push(project);
+    groups.get(project.status)!.push(project);
   }
 
   return groups;
@@ -23,16 +27,6 @@ function groupProjectsByStatus(
 export default async function ProjetsPage() {
   const projects = await getProjects();
   const groupedProjects = groupProjectsByStatus(projects);
-
-  // Define status order
-  const statusOrder = [
-    "En cours",
-    "POC Terminé",
-    "MVP Terminé",
-    "Terminé",
-    "Brouillon",
-    "Archivé",
-  ];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -69,18 +63,20 @@ export default async function ProjetsPage() {
 
       {/* Projects by Status */}
       <div className="space-y-10">
-        {statusOrder.map((statusLabel) => {
-          const statusProjects = groupedProjects.get(statusLabel);
+        {PROJECT_STATUS_ORDER.map((status) => {
+          const statusProjects = groupedProjects.get(status);
           if (!statusProjects || statusProjects.length === 0) return null;
 
           return (
-            <section key={statusLabel}>
+            <section key={status}>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-[rgba(123,184,139,0.1)] border border-[rgba(123,184,139,0.2)] flex items-center justify-center">
-                  <FolderGit className="w-5 h-5 text-[#7bb88b]" />
+                  <FolderGit className="w-5 h-5" style={{ color: PROJECT_STATUS_COLORS[status] }}/>
                 </div>
                 <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
-                  {statusLabel}
+                  <span>
+                    {PROJECT_STATUS_LABELS[status]}
+                  </span>
                 </h2>
                 <div className="flex-1 h-px bg-linear-to-r from-[rgba(123,184,139,0.2)] to-transparent" />
               </div>
