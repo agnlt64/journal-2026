@@ -21,6 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Journal 2026",
   description: "Un espace cristallin pour vos pensées",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
