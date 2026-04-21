@@ -73,23 +73,20 @@ export default async function ProjetsPage() {
             <section key={status}>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-[rgba(123,184,139,0.1)] border border-[rgba(123,184,139,0.2)] flex items-center justify-center">
-                  <FolderGit className="w-5 h-5" style={{ color: PROJECT_STATUS_COLORS[status] }}/>
+                  <FolderGit
+                    className="w-5 h-5"
+                    style={{ color: PROJECT_STATUS_COLORS[status] }}
+                  />
                 </div>
                 <h2 className="font-(family-name:--font-display) text-lg font-medium text-white tracking-wide">
-                  <span>
-                    {PROJECT_STATUS_LABELS[status]}
-                  </span>
+                  {PROJECT_STATUS_LABELS[status]}
                 </h2>
                 <div className="flex-1 h-px bg-linear-to-r from-[rgba(123,184,139,0.2)] to-transparent" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {statusProjects.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
+                  <ProjectCard key={project.id} project={project} index={index} />
                 ))}
               </div>
             </section>

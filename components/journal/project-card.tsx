@@ -4,23 +4,10 @@ import {
   ProjectDTO,
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_COLORS,
-  PROJECT_STATUS_OPTIONS,
 } from "@/lib/types";
-import { ProjectDialog } from "./project-dialog";
-import { deleteProject, updateProjectStatus } from "@/actions/project";
-import { FolderGit, ExternalLink, Edit, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FolderGit, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-
-const STATUS_OPTIONS: ProjectDTO["status"][] = PROJECT_STATUS_OPTIONS;
+import { useRouter } from "next/navigation";
 
 interface ProjectCardProps {
   project: ProjectDTO;
@@ -28,40 +15,25 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState<ProjectDTO["status"]>(
-    project.status,
-  );
   const statusColor = PROJECT_STATUS_COLORS[project.status];
-
-  async function handleDelete() {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
-    setIsDeleting(true);
-    try {
-      await deleteProject(project.id);
-    } finally {
-      setIsDeleting(false);
-    }
-  }
-
-  async function handleStatusChange(newStatus: ProjectDTO["status"] | null) {
-    if (!newStatus) return;
-    setCurrentStatus(newStatus);
-    await updateProjectStatus(project.id, newStatus);
-  }
+  const router = useRouter();
 
   return (
     <div
+      onClick={() => router.push(`/projets/${project.id}`)}
       className={cn(
-        "group relative rounded-xl transition-all duration-500 overflow-hidden",
+        "relative rounded-xl overflow-hidden cursor-pointer",
         "bg-[rgba(10,10,18,0.5)] border",
+        "transition-all duration-300",
         "hover:shadow-[0_0_30px_rgba(0,0,0,0.3)]",
+        "hover:-translate-y-0.5",
         "animate-fade-in-up",
       )}
       style={{
         animationDelay: `${index * 50}ms`,
         borderColor: `${statusColor}30`,
       }}
+      role="link"
     >
       {/* Top accent line */}
       <div
@@ -91,32 +63,22 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <ProjectDialog projectToEdit={project}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-8 h-8 rounded-lg hover:bg-[rgba(123,184,139,0.1)] border border-transparent hover:border-[rgba(123,184,139,0.3)]"
-              >
-                <Edit className="w-4 h-4 text-[rgba(123,184,139,0.7)]" />
-              </Button>
-            </ProjectDialog>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="w-8 h-8 rounded-lg hover:bg-[rgba(255,56,100,0.1)] border border-transparent hover:border-[rgba(255,56,100,0.3)]"
-            >
-              <Trash2 className="w-4 h-4 text-[rgba(255,56,100,0.7)]" />
-            </Button>
+          {/* Status badge */}
+          <div
+            className="px-3 py-1.5 rounded-lg text-xs font-medium tracking-wider border shrink-0"
+            style={{
+              backgroundColor: `${statusColor}15`,
+              borderColor: `${statusColor}30`,
+              color: statusColor,
+            }}
+          >
+            {PROJECT_STATUS_LABELS[project.status]}
           </div>
         </div>
 
         {/* Description */}
         {project.description && (
-          <p className="text-sm text-[rgba(255,255,255,0.6)] leading-relaxed mb-4 line-clamp-3">
+          <p className="text-sm text-[rgba(255,255,255,0.6)] leading-relaxed mb-4 line-clamp-2">
             {project.description}
           </p>
         )}
@@ -134,10 +96,11 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs",
                     "bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)]",
-                    "text-[rgba(255,255,255,0.6)] hover:text-[#00f5ff]",
+                    "text-[rgba(255,255,255,0.5)] hover:text-[#00f5ff]",
                     "hover:border-[rgba(0,245,255,0.3)] hover:bg-[rgba(0,245,255,0.05)]",
                     "transition-all duration-300",
                   )}
@@ -150,47 +113,31 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
         )}
 
-        {/* Status Quick Change */}
-        <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.05)]">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider">
-              Statut:
-            </span>
-            <Select value={currentStatus} onValueChange={handleStatusChange}>
-              <SelectTrigger
-                size="sm"
-                className="w-56 bg-transparent border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)] text-white"
-              >
-                <SelectValue>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{
-                        backgroundColor: PROJECT_STATUS_COLORS[currentStatus],
-                      }}
-                    />
-                    <span>{PROJECT_STATUS_LABELS[currentStatus]}</span>
-                  </div>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent className="w-56 min-w-56">
-                {STATUS_OPTIONS.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{
-                          backgroundColor: PROJECT_STATUS_COLORS[status],
-                        }}
-                      />
-                      <span>{PROJECT_STATUS_LABELS[status]}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {/* Steps progress */}
+        {project.steps.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.05)]">
+            <div className="flex items-center justify-between text-[10px] text-[rgba(255,255,255,0.4)] uppercase tracking-wider mb-2">
+              <span>Plan</span>
+              <span>
+                {project.steps.filter((s) => s.completedAt).length} /{" "}
+                {project.steps.length}
+              </span>
+            </div>
+            <div className="flex gap-1">
+              {project.steps.map((step) => (
+                <div
+                  key={step.id}
+                  className="h-1 flex-1 rounded-full"
+                  style={{
+                    backgroundColor: step.completedAt
+                      ? `${statusColor}80`
+                      : "rgba(255,255,255,0.1)",
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

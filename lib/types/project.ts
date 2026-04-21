@@ -15,8 +15,14 @@ export const projectSchema = z.object({
   links: z.array(projectLinkSchema),
 });
 
+export const projectStepSchema = z.object({
+  title: z.string().min(1, "Le titre est requis"),
+  description: z.string().optional(),
+});
+
 export type ProjectFormValues = z.infer<typeof projectSchema>;
 export type ProjectLinkFormValues = z.infer<typeof projectLinkSchema>;
+export type ProjectStepFormValues = z.infer<typeof projectStepSchema>;
 
 // Project DTO
 export interface ProjectLinkDTO {
@@ -25,12 +31,22 @@ export interface ProjectLinkDTO {
   url: string;
 }
 
+export interface ProjectStepDTO {
+  id: string;
+  title: string;
+  description: string | null;
+  order: number;
+  completedAt: Date | null;
+  completionComment: string | null;
+}
+
 export interface ProjectDTO {
   id: string;
   title: string;
   description: string | null;
   status: ProjectStatus;
   links: ProjectLinkDTO[];
+  steps: ProjectStepDTO[];
   createdAt: Date;
   updatedAt: Date;
 }

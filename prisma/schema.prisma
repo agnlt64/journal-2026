@@ -123,7 +123,8 @@ model Project {
   
   // External links/resources
   links       ProjectLink[]
-  
+  steps       ProjectStep[]
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   
@@ -142,9 +143,26 @@ model ProjectLink {
   id          String    @id @default(cuid())
   projectId   String
   project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  title       String    // Display title for the link
-  url         String    // The actual URL
-  
+
+  title       String
+  url         String
+
   createdAt   DateTime  @default(now())
+}
+
+model ProjectStep {
+  id                String    @id @default(cuid())
+  projectId         String
+  project           Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  title             String
+  description       String?   @db.Text
+  order             Int
+  completedAt       DateTime?
+  completionComment String?   @db.Text
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([projectId, order])
 }
