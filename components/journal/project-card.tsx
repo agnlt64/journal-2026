@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ProjectDTO,
   PROJECT_STATUS_LABELS,
@@ -7,7 +5,6 @@ import {
 } from "@/lib/types";
 import { FolderGit, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 interface ProjectCardProps {
   project: ProjectDTO;
@@ -16,11 +13,10 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const statusColor = PROJECT_STATUS_COLORS[project.status];
-  const router = useRouter();
 
   return (
     <div
-      onClick={() => router.push(`/projets/${project.id}`)}
+      // onClick={() => router.push(`/projets/${project.id}`)}
       className={cn(
         "relative rounded-xl overflow-hidden cursor-pointer",
         "bg-[rgba(10,10,18,0.5)] border",
