@@ -3,12 +3,21 @@ import { getUserSettings } from "@/actions/user";
 import { Feed } from "@/components/journal/feed";
 import { Sparkles } from "lucide-react";
 
-export default async function Home() {
-  const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
-    getEntries(1, "", true),
-    getTags(),
-    getUserSettings(),
-  ]);
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/')({
+  loader: async () => {
+    return Promise.all([
+      getEntries(1, "", true),
+      getTags(),
+      getUserSettings(),
+    ]);
+  },
+  component: Home
+});
+
+function Home() {
+  const [{ data: initialEntries, total }, tags, settings] = Route.useLoaderData()
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -57,12 +66,12 @@ export default async function Home() {
         </div>
       </header>
 
-      <Feed
+      {/* <Feed
         initialEntries={initialEntries}
         initialTotal={total}
         itemsPerPage={settings.itemsPerPage}
         availableTags={tags}
-      />
+      /> */}
     </div>
   );
 }

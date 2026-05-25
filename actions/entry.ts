@@ -1,11 +1,8 @@
-"use server";
-
-import { db } from "@/lib/db";
+import { createServerFn } from "@tanstack/react-start";
 import { getOrCreateUser } from "@/lib/user-context";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
-import { revalidatePath } from "next/cache";
 import type { Image, Tag } from "@/lib/generated/prisma/client";
-import { Prisma } from "@/lib/generated/prisma/client";
+// import { db } from "@/lib/db";
 
 // Default tags to create for new users
 const DEFAULT_TAGS = [
@@ -14,71 +11,73 @@ const DEFAULT_TAGS = [
   { name: "rêve", color: "#8b5cf6" }, // Purple
 ];
 
-export async function ensureDefaultTags(userId: string) {
-  for (const tag of DEFAULT_TAGS) {
-    await db.tag.upsert({
-      where: { userId_name: { userId, name: tag.name } },
-      create: { userId, name: tag.name, color: tag.color },
-      update: {},
-    });
-  }
-}
-
-export async function getTags(): Promise<TagDTO[]> {
-  const user = await getOrCreateUser();
-  await ensureDefaultTags(user.id);
-
-  const tags = await db.tag.findMany({
-    where: { userId: user.id },
-    orderBy: { name: "asc" },
+export const ensureDefaultTags = createServerFn()
+  .inputValidator((userId: string) => userId)
+  .handler(async ({ data: userId }) => {
+    // for (const tag of DEFAULT_TAGS) {
+    //   await db.tag.upsert({
+    //     where: { userId_name: { userId, name: tag.name } },
+    //     create: { userId, name: tag.name, color: tag.color },
+    //     update: {},
+    //   });
+    // }
   });
 
-  return tags.map((t) => ({ id: t.id, name: t.name, color: t.color }));
-}
+export const getTags = createServerFn().handler(async () => {
+  // const user = await getOrCreateUser();
+  // await ensureDefaultTags({ data: user.id});
+
+  // const tags = await db.tag.findMany({
+  //   where: { userId: user.id },
+  //   orderBy: { name: "asc" },
+  // });
+
+  // return tags.map((t) => ({ id: t.id, name: t.name, color: t.color }));
+});
 
 export async function createTag(name: string, color: string): Promise<TagDTO> {
-  const user = await getOrCreateUser();
+  return {id: "", name:"", color: ""}
+  // const user = await getOrCreateUser();
 
-  const tag = await db.tag.create({
-    data: { userId: user.id, name, color },
-  });
+  // const tag = await db.tag.create({
+  //   data: { userId: user.id, name, color },
+  // });
 
-  return { id: tag.id, name: tag.name, color: tag.color };
+  // return { id: tag.id, name: tag.name, color: tag.color };
 }
 
 export async function createEntry(
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getOrCreateUser();
-  const parsed = entrySchema.parse(data);
+  // const user = await getOrCreateUser();
+  // const parsed = entrySchema.parse(data);
 
-  if (parsed.isLocked && !user.pinCodeHash) {
-    throw new Error(
-      "You must set a Global PIN in settings before locking entries.",
-    );
-  }
+  // if (parsed.isLocked && !user.pinCodeHash) {
+  //   throw new Error(
+  //     "You must set a Global PIN in settings before locking entries.",
+  //   );
+  // }
 
-  await db.entry.create({
-    data: {
-      userId: user.id,
-      content: parsed.content || "",
-      date: parsed.date,
-      wakeTime: parsed.wakeTime,
-      sleepTime: parsed.sleepTime,
-      didSport: parsed.didSport,
-      asmr: parsed.asmr,
-      screenTime: parsed.screenTime,
-      isLocked: parsed.isLocked,
-      tags: parsed.tagIds?.length
-        ? {
-            connect: parsed.tagIds.map((id) => ({ id })),
-          }
-        : undefined,
-    },
-  });
+  // await db.entry.create({
+  //   data: {
+  //     userId: user.id,
+  //     content: parsed.content || "",
+  //     date: parsed.date,
+  //     wakeTime: parsed.wakeTime,
+  //     sleepTime: parsed.sleepTime,
+  //     didSport: parsed.didSport,
+  //     asmr: parsed.asmr,
+  //     screenTime: parsed.screenTime,
+  //     isLocked: parsed.isLocked,
+  //     tags: parsed.tagIds?.length
+  //       ? {
+  //         connect: parsed.tagIds.map((id) => ({ id })),
+  //       }
+  //       : undefined,
+  //   },
+  // });
 
-  revalidatePath("/");
-  return { success: true };
+  // return { success: true };
 }
 
 export async function getEntries(
@@ -86,124 +85,122 @@ export async function getEntries(
   searchQuery = "",
   includeEmpty = false,
 ): Promise<{ data: EntryDTO[]; total: number }> {
-  const user = await getOrCreateUser();
-  const itemsPerPage = user.itemsPerPage || 20;
+  return {data: [], total: 0}
+  // const user = await getOrCreateUser();
+  // const itemsPerPage = user.itemsPerPage || 20;
 
-  const where: Prisma.EntryWhereInput = {
-    userId: user.id,
-    ...(searchQuery
-      ? {
-          content: {
-            contains: searchQuery,
-            mode: Prisma.QueryMode.insensitive,
-          },
-        }
-      : !includeEmpty
-        ? { content: { not: "" } }
-        : {}),
-  };
+  // const where = {
+  //   userId: user.id,
+  //   ...(searchQuery
+  //     ? {
+  //       content: {
+  //         contains: searchQuery,
+  //       },
+  //     }
+  //     : !includeEmpty
+  //       ? { content: { not: "" } }
+  //       : {}),
+  // };
 
-  const [entries, total] = await Promise.all([
-    db.entry.findMany({
-      where,
-      orderBy: { date: "desc" },
-      skip: (page - 1) * itemsPerPage,
-      take: itemsPerPage,
-      include: { images: true, tags: true },
-    }),
-    db.entry.count({ where }),
-  ]);
+  // const [entries, total] = await Promise.all([
+  //   db.entry.findMany({
+  //     where,
+  //     orderBy: { date: "desc" },
+  //     skip: (page - 1) * itemsPerPage,
+  //     take: itemsPerPage,
+  //     include: { images: true, tags: true },
+  //   }),
+  //   db.entry.count({ where }),
+  // ]);
 
-  // Transform to DTO with Redaction
-  const dtos: EntryDTO[] = entries.map((e) => {
-    const isLocked = e.isLocked;
+  // // Transform to DTO with Redaction
+  // const dtos: EntryDTO[] = entries.map((e) => {
+  //   const isLocked = e.isLocked;
 
-    return {
-      id: e.id,
-      content: isLocked ? null : e.content,
-      date: e.date,
-      tags: e.tags.map((t: Tag) => ({
-        id: t.id,
-        name: t.name,
-        color: t.color,
-      })),
-      wakeTime: e.wakeTime,
-      sleepTime: e.sleepTime,
-      didSport: e.didSport,
-      asmr: e.asmr,
-      screenTime: e.screenTime,
-      isLocked: e.isLocked,
-      images: isLocked
-        ? []
-        : e.images.map((i: Image) => ({
-            id: i.id,
-            url: i.url,
-          })),
-      createdAt: e.createdAt,
-      updatedAt: e.updatedAt,
-    };
-  });
+  //   return {
+  //     id: e.id,
+  //     content: isLocked ? null : e.content,
+  //     date: e.date,
+  //     tags: e.tags.map((t: Tag) => ({
+  //       id: t.id,
+  //       name: t.name,
+  //       color: t.color,
+  //     })),
+  //     wakeTime: e.wakeTime,
+  //     sleepTime: e.sleepTime,
+  //     didSport: e.didSport,
+  //     asmr: e.asmr,
+  //     screenTime: e.screenTime,
+  //     isLocked: e.isLocked,
+  //     images: isLocked
+  //       ? []
+  //       : e.images.map((i: Image) => ({
+  //         id: i.id,
+  //         url: i.url,
+  //       })),
+  //     createdAt: e.createdAt,
+  //     updatedAt: e.updatedAt,
+  //   };
+  // });
 
-  return { data: dtos, total };
+  // return { data: dtos, total };
 }
 
 export async function getLockedEntry(id: string, pin: string) {
-  const user = await getOrCreateUser();
+//   const user = await getOrCreateUser();
 
-  if (!user.pinCodeHash) throw new Error("No PIN set");
-  if (user.pinCodeHash !== pin) {
-    return { success: false, error: "Invalid PIN" };
-  }
+//   if (!user.pinCodeHash) throw new Error("No PIN set");
+//   if (user.pinCodeHash !== pin) {
+//     return { success: false, error: "Invalid PIN" };
+//   }
 
-  const entry = await db.entry.findUnique({
-    where: { id, userId: user.id },
-    include: { images: true, tags: true },
-  });
+//   const entry = await db.entry.findUnique({
+//     where: { id, userId: user.id },
+//     include: { images: true, tags: true },
+//   });
 
-  if (!entry) return { success: false, error: "Not found" };
+//   if (!entry) return { success: false, error: "Not found" };
 
-  return {
-    success: true,
-    data: {
-      ...entry,
-      tags: entry.tags.map((t: Tag) => ({
-        id: t.id,
-        name: t.name,
-        color: t.color,
-      })),
-      images: entry.images.map((i: Image) => ({ id: i.id, url: i.url })),
-    },
-  };
-}
+//   return {
+//     success: true,
+//     data: {
+//       ...entry,
+//       tags: entry.tags.map((t: Tag) => ({
+//         id: t.id,
+//         name: t.name,
+//         color: t.color,
+//       })),
+//       images: entry.images.map((i: Image) => ({ id: i.id, url: i.url })),
+//     },
+//   };
+// }
 
-export async function deleteEntry(id: string) {
-  const user = await getOrCreateUser();
-  await db.entry.delete({ where: { id, userId: user.id } });
-  revalidatePath("/");
+// export async function deleteEntry(id: string) {
+//   const user = await getOrCreateUser();
+//   await db.entry.delete({ where: { id, userId: user.id } });
 }
 
 export async function updateEntry(
   id: string,
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getOrCreateUser();
-  const parsed = entrySchema.parse(data);
+  // const user = await getOrCreateUser();
+  // const parsed = entrySchema.parse(data);
 
-  await db.entry.update({
-    where: { id, userId: user.id },
-    data: {
-      content: parsed.content || "",
-      date: parsed.date,
-      wakeTime: parsed.wakeTime,
-      sleepTime: parsed.sleepTime,
-      didSport: parsed.didSport,
-      asmr: parsed.asmr,
-      screenTime: parsed.screenTime,
-      isLocked: parsed.isLocked,
-      tags: {
-        set: parsed.tagIds?.map((tid) => ({ id: tid })) || [],
-      },
-    },
-  });
-  revalidatePath("/");
+  // await db.entry.update({
+  //   where: { id, userId: user.id },
+  //   data: {
+  //     content: parsed.content || "",
+  //     date: parsed.date,
+  //     wakeTime: parsed.wakeTime,
+  //     sleepTime: parsed.sleepTime,
+  //     didSport: parsed.didSport,
+  //     asmr: parsed.asmr,
+  //     screenTime: parsed.screenTime,
+  //     isLocked: parsed.isLocked,
+  //     tags: {
+  //       set: parsed.tagIds?.map((tid) => ({ id: tid })) || [],
+  //     },
+  //   },
+  // });
 }

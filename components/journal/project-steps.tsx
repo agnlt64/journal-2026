@@ -185,7 +185,7 @@ function SortableStep({
       <div
         ref={setNodeRef}
         style={style}
-        className="h-[52px] rounded-xl border-2 border-dashed border-[rgba(255,255,255,0.15)] bg-[rgba(255,255,255,0.02)]"
+        className="h-13 rounded-xl border-2 border-dashed border-[rgba(255,255,255,0.15)] bg-[rgba(255,255,255,0.02)]"
       />
     );
   }
