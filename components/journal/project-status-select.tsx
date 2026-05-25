@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   ProjectDTO,
@@ -7,7 +5,7 @@ import {
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_OPTIONS,
 } from "@/lib/types";
-import { updateProjectStatus } from "@/actions/project";
+import { updateProjectStatus } from "@/src/utils/projects/projects.functions";
 import {
   Select,
   SelectContent,
@@ -30,7 +28,7 @@ export function ProjectStatusSelect({
   async function handleChange(value: ProjectDTO["status"] | null) {
     if (!value) return;
     setStatus(value);
-    await updateProjectStatus(projectId, value);
+    await updateProjectStatus({ data: { id: projectId, status: value}});
   }
 
   return (

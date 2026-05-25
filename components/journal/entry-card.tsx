@@ -1,5 +1,3 @@
-"use client";
-
 import { EntryDTO } from "@/lib/types";
 import { format } from "date-fns";
 import { useAppStore } from "@/store/use-app-store";

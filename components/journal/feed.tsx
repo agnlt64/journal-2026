@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
 import { getEntries } from "@/src/utils/entries/entries.functions";
 import { EntryDTO, TagDTO } from "@/lib/types";
