@@ -6,7 +6,7 @@ import { useAppStore } from "@/store/use-app-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, Sun, Moon, Activity, Edit, Zap } from "lucide-react";
-import { getLockedEntry } from "@/actions/entry";
+import { getLockedEntry } from "@/src/utils/entries/entries.functions";
 import { cn } from "@/lib/utils";
 import { EntryDialog } from "./entry-dialog";
 import { useState } from "react";
@@ -34,7 +34,12 @@ export function EntryCard({
     e.preventDefault();
     setError("");
     try {
-      const res = await getLockedEntry(entry.id, pinInput);
+      const res = await getLockedEntry({
+        data: {
+          id: entry.id,
+          pin: pinInput
+        }
+      });
       if (res.success && res.data) {
         setEntry(res.data);
         setIsUnlocking(false);

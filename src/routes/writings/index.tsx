@@ -1,4 +1,4 @@
-import { getWritings } from "@/actions/writing";
+import { getWritings } from "@/src/utils/writings/writings.functions"
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { Feather, Sparkles, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";

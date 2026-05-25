@@ -1,5 +1,5 @@
-import { getEntries, getTags } from "@/actions/entry";
-import { getUserSettings } from "@/actions/user";
+import { getEntries, getTags } from "@/src/utils/entries/entries.functions";
+import { getUserSettings } from "@/src/utils/user/user.functions";
 import { Feed } from "@/components/journal/feed";
 import { Sparkles } from "lucide-react";
 
@@ -7,17 +7,18 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    return Promise.all([
-      getEntries(1, "", true),
+    const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
+      getEntries({data: {page: 1, searchQuery: "", includeEmpty: true}}),
       getTags(),
       getUserSettings(),
     ]);
+    return {initialEntries, total, tags, settings}
   },
   component: Home
 });
 
 function Home() {
-  const [{ data: initialEntries, total }, tags, settings] = Route.useLoaderData()
+  const { initialEntries, total, tags, settings } = Route.useLoaderData()
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -66,12 +67,12 @@ function Home() {
         </div>
       </header>
 
-      {/* <Feed
+      <Feed
         initialEntries={initialEntries}
         initialTotal={total}
         itemsPerPage={settings.itemsPerPage}
         availableTags={tags}
-      /> */}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getEntries } from "@/actions/entry";
+import { getEntries } from "@/src/utils/entries/entries.functions";
 import { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
 import { EntryDialog } from "./entry-dialog";
@@ -42,11 +42,13 @@ export function Feed({
   const refreshEntries = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, total: newTotal } = await getEntries(
-        page,
-        searchQuery,
-        true,
-      );
+      const { data, total: newTotal } = await getEntries({
+        data: {
+          page,
+          searchQuery,
+          includeEmpty: true,
+        }
+      });
       setEntries(data);
       setTotal(newTotal);
       setRefreshKey((prev) => prev + 1);
@@ -59,11 +61,13 @@ export function Feed({
     const handler = setTimeout(async () => {
       setLoading(true);
       try {
-        const { data, total: newTotal } = await getEntries(
-          1,
-          searchQuery,
-          true,
-        );
+        const { data, total: newTotal } = await getEntries({
+          data: {
+            page: 1,
+            searchQuery,
+            includeEmpty: true,
+          }
+        });
         setEntries(data);
         setTotal(newTotal);
         setPage(1);
@@ -78,11 +82,13 @@ export function Feed({
   async function goToPage(newPage: number) {
     setLoading(true);
     try {
-      const { data, total: newTotal } = await getEntries(
-        newPage,
-        searchQuery,
-        true,
-      );
+      const { data, total: newTotal } = await getEntries({
+        data: {
+          page: newPage,
+          searchQuery,
+          includeEmpty: true
+        }
+      });
       setEntries(data);
       setTotal(newTotal);
       setPage(newPage);
@@ -94,10 +100,10 @@ export function Feed({
   const filteredEntries =
     selectedTagIds.length > 0
       ? entries.filter((entry) =>
-          selectedTagIds.some((tagId) =>
-            entry.tags.some((t) => t.id === tagId),
-          ),
-        )
+        selectedTagIds.some((tagId) =>
+          entry.tags.some((t) => t.id === tagId),
+        ),
+      )
       : entries;
 
   function toggleTag(tagId: string) {

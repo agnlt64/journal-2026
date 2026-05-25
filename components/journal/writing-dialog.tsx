@@ -1,10 +1,8 @@
-"use client";
-
 import { useState, cloneElement, isValidElement } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { writingSchema, WritingFormValues } from "@/lib/types";
-import { createWriting } from "@/actions/writing";
+import { createWriting } from "@/src/utils/writings/writings.functions";
 
 import {
   Dialog,
@@ -31,7 +29,7 @@ export function WritingDialog({ children }: WritingDialogProps) {
   const { register, handleSubmit, reset } = form;
 
   async function onSubmit(data: WritingFormValues) {
-    await createWriting(data);
+    await createWriting({ data: { data }});
     setOpen(false);
     reset();
   }

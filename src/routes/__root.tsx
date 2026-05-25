@@ -5,6 +5,8 @@ import {
   Scripts
 } from "@tanstack/react-router";
 import appCss from "./globals.css?url";
+import { Header } from "@/components/layout/header";
+import { Sidebar } from "@/components/layout/sidebar";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -33,13 +35,16 @@ function RootLayout() {
         <HeadContent />
       </head>
       <body
-        // className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}
+      // className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}
       >
-        <Outlet />
+        <Sidebar />
+        <Header />
+
+        <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
+          <Outlet />
+        </main>
+
         <Scripts />
-        {/* <Header />
-        <Sidebar /> */}
-        {/* <main className="ml-24 pt-28 pb-8 px-6 relative z-10">{children}</main> */}
       </body>
     </html>
   );

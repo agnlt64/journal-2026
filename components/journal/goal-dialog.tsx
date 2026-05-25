@@ -4,7 +4,7 @@ import { useState, cloneElement, isValidElement } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { goalSchema, GoalFormValues } from "@/lib/types";
-import { createGoal } from "@/actions/goal";
+import { createGoal } from "@/src/utils/goals/goals.functions";
 
 import {
   Dialog,
@@ -35,7 +35,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
   const { register, handleSubmit, reset, setValue, control } = form;
 
   async function onSubmit(data: GoalFormValues) {
-    await createGoal(data);
+    await createGoal({ data: { data }});
     setOpen(false);
     reset();
   }

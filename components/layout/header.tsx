@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Diamond, Hexagon } from "lucide-react";
 
@@ -14,7 +13,8 @@ const navItems = [
 ];
 
 export function Header() {
-  const pathname = usePathname();
+  // const pathname = usePathname();
+  const pathname = "TODO: REPLACE";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-20">
@@ -24,7 +24,7 @@ export function Header() {
           <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[rgba(0,245,255,0.5)] to-transparent" />
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
               <div className="absolute inset-0 bg-[#00f5ff] blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
               <Hexagon className="w-8 h-8 text-[#00f5ff] relative z-10 stroke-[1.5]" />
@@ -47,7 +47,7 @@ export function Header() {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  to={item.href}
                   className={cn(
                     "relative px-4 py-2 text-xs font-medium tracking-[0.15em] transition-all duration-500 rounded-lg group",
                     isActive
