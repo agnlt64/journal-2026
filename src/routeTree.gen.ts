@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WritingsRouteImport } from './routes/writings'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as ProjetsRouteImport } from './routes/projets'
+import { Route as ObjectifsRouteImport } from './routes/objectifs'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WritingsRoute = WritingsRouteImport.update({
@@ -29,6 +30,11 @@ const ProjetsRoute = ProjetsRouteImport.update({
   path: '/projets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ObjectifsRoute = ObjectifsRouteImport.update({
+  id: '/objectifs',
+  path: '/objectifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/objectifs': typeof ObjectifsRoute
   '/projets': typeof ProjetsRoute
   '/stats': typeof StatsRoute
   '/writings': typeof WritingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/objectifs': typeof ObjectifsRoute
   '/projets': typeof ProjetsRoute
   '/stats': typeof StatsRoute
   '/writings': typeof WritingsRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/objectifs': typeof ObjectifsRoute
   '/projets': typeof ProjetsRoute
   '/stats': typeof StatsRoute
   '/writings': typeof WritingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/projets' | '/stats' | '/writings'
+  fullPaths: '/' | '/objectifs' | '/projets' | '/stats' | '/writings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/projets' | '/stats' | '/writings'
-  id: '__root__' | '/' | '/projets' | '/stats' | '/writings'
+  to: '/' | '/objectifs' | '/projets' | '/stats' | '/writings'
+  id: '__root__' | '/' | '/objectifs' | '/projets' | '/stats' | '/writings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ObjectifsRoute: typeof ObjectifsRoute
   ProjetsRoute: typeof ProjetsRoute
   StatsRoute: typeof StatsRoute
   WritingsRoute: typeof WritingsRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjetsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/objectifs': {
+      id: '/objectifs'
+      path: '/objectifs'
+      fullPath: '/objectifs'
+      preLoaderRoute: typeof ObjectifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ObjectifsRoute: ObjectifsRoute,
   ProjetsRoute: ProjetsRoute,
   StatsRoute: StatsRoute,
   WritingsRoute: WritingsRoute,

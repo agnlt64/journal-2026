@@ -1,8 +1,6 @@
-"use client";
-
 import { useState } from "react";
 import { GoalDTO } from "@/lib/types";
-import { toggleGoalCompletion, updateGoalRemark } from "@/actions/goal";
+import { toggleGoalCompletion, updateGoalRemark } from "@/src/utils/goals/goals.functions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,7 +32,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
   async function handleToggle() {
     setIsUpdating(true);
     try {
-      await toggleGoalCompletion(goal.id);
+      await toggleGoalCompletion({ data: { goalId: goal.id } });
     } finally {
       setIsUpdating(false);
     }
@@ -43,7 +41,12 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
   async function handleSaveRemark() {
     setIsSavingRemark(true);
     try {
-      await updateGoalRemark(goal.id, remarkText || null);
+      await updateGoalRemark({
+        data: {
+          goalId: goal.id,
+          remark: remarkText || null
+        }
+      });
       setIsEditingRemark(false);
     } finally {
       setIsSavingRemark(false);
@@ -63,10 +66,10 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
 
   const formattedCompletedAt = goal.completedAt
     ? new Intl.DateTimeFormat("fr-FR", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date(goal.completedAt))
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(goal.completedAt))
     : null;
 
   return (
@@ -76,10 +79,10 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
         "bg-[rgba(10,10,18,0.5)] border border-[rgba(255,0,110,0.1)]",
         "hover:border-[rgba(255,0,110,0.25)]",
         goal.isCompleted &&
-          "border-[rgba(0,245,255,0.2)] bg-[rgba(0,245,255,0.03)]",
+        "border-[rgba(0,245,255,0.2)] bg-[rgba(0,245,255,0.03)]",
         !goal.isCompleted &&
-          isPastDeadline &&
-          "border-[rgba(255,0,110,0.25)] bg-[rgba(255,0,110,0.03)]",
+        isPastDeadline &&
+        "border-[rgba(255,0,110,0.25)] bg-[rgba(255,0,110,0.03)]",
         "animate-fade-in-up",
       )}
       style={{ animationDelay: `${index * 50}ms` }}
