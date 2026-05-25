@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updateCounter } from "@/actions/stats";
+import { updateCounter } from "@/src/utils/stats/stats.functions";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 
@@ -16,7 +16,7 @@ export function Counter({ initialValue }: CounterProps) {
   async function handleUpdate(delta: number) {
     setLoading(true);
     try {
-      const newValue = await updateCounter(delta);
+      const newValue = await updateCounter({ data: delta});
       setValue(newValue);
     } finally {
       setLoading(false);
