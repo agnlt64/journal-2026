@@ -40,9 +40,7 @@ function RootLayout() {
       <head>
         <HeadContent />
       </head>
-      <body
-      // className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} dark min-h-screen`}
-      >
+      <body className="dark min-h-screen">
         <Sidebar />
         <Header />
 
