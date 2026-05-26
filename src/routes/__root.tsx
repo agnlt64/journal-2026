@@ -5,7 +5,7 @@ import {
   Scripts
 } from "@tanstack/react-router";
 import appCss from "./globals.css?url";
-import favicon from "@/public/favicon.svg";
+import favicon from "./favicon.svg";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 
