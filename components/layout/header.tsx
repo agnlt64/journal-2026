@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Diamond, Hexagon } from "lucide-react";
 
@@ -11,8 +11,9 @@ const navItems = [
 ];
 
 export function Header() {
-  // const pathname = usePathname();
-  const pathname = "TODO: REPLACE";
+  const pathname = useLocation({
+    select: location => location.pathname
+  });
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-20">

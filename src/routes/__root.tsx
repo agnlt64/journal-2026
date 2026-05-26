@@ -5,6 +5,7 @@ import {
   Scripts
 } from "@tanstack/react-router";
 import appCss from "./globals.css?url";
+import favicon from "@/public/favicon.svg";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 
@@ -16,13 +17,18 @@ export const Route = createRootRoute({
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
-      { title: "TanStack Start Starter" }
+      { title: "Journal 2026" }
     ],
     links: [
       {
-        rel: 'stylesheet',
+        rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "shortcut icon",
+        type: "image/x-icon",
+        href: favicon,
+      }
     ],
   }),
   component: RootLayout,
