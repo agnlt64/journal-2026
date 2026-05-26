@@ -1,6 +1,5 @@
 import { EntryDTO } from "@/lib/types";
 import { format } from "date-fns";
-import { useAppStore } from "@/store/use-app-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, Sun, Moon, Activity, Edit, Zap } from "lucide-react";
@@ -24,7 +23,6 @@ export function EntryCard({
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [error, setError] = useState("");
-  const isGlobalBlurred = useAppStore((s) => s.isBlurred);
 
   const isLocked = entry.isLocked && !entry.content;
 
@@ -60,7 +58,6 @@ export function EntryCard({
         "group relative rounded-2xl transition-all duration-500 overflow-hidden",
         "bg-[rgba(10,10,18,0.5)] border border-[rgba(0,245,255,0.1)]",
         "hover:border-[rgba(0,245,255,0.3)] hover:shadow-[0_0_40px_rgba(0,245,255,0.1)]",
-        isGlobalBlurred && "blur-md hover:blur-none",
         "animate-fade-in-up",
       )}
       style={{ animationDelay: `${index * 100}ms` }}

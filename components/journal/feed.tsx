@@ -5,7 +5,6 @@ import { EntryCard } from "./entry-card";
 import { EntryDialog } from "./entry-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAppStore } from "@/store/use-app-store";
 import { Loader2, ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,8 +28,7 @@ export function Feed({
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const searchQuery = useAppStore((s) => s.searchQuery);
-  const setSearchQuery = useAppStore((s) => s.setSearchQuery);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const totalPages = Math.ceil(total / itemsPerPage);
   const hasPrevPage = page > 1;
