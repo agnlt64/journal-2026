@@ -1,5 +1,3 @@
-"use client";
-
 import { EntryDialog } from "@/components/journal/entry-dialog";
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { GoalDialog } from "@/components/journal/goal-dialog";

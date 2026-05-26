@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useMemo } from "react";
 import {
@@ -11,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { StatsEntry } from "@/actions/stats";
+import { StatsEntry } from "@/src/utils/stats/stats.functions";
 
 interface SleepChartProps {
   entries: StatsEntry[];

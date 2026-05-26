@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, cloneElement, isValidElement } from "react";
 import { useForm } from "react-hook-form";
 import { updateSettings, getUserSettings } from "@/src/utils/user/user.functions";

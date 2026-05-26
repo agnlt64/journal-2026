@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { updateCounter } from "@/src/utils/stats/stats.functions";
 import { Button } from "@/components/ui/button";

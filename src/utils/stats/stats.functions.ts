@@ -6,6 +6,15 @@ import {
   updateCounter as updateCounter_
 } from "./stats.server";
 
+export interface StatsEntry {
+  id: string;
+  date: Date;
+  wakeTime: Date | null;
+  sleepTime: Date | null;
+  screenTime: number | null;
+}
+
+
 export const getStatsData = createServerFn().handler(async () => {
   return getStatsData_();
 });
