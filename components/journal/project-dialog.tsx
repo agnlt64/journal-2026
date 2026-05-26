@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, cloneElement, isValidElement } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +9,7 @@ import {
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_OPTIONS,
 } from "@/lib/types";
-import { createProject, updateProject } from "@/actions/project";
+import { createProject, updateProject } from "@/src/utils/projects/projects.functions";
 
 import {
   Dialog,
@@ -48,21 +46,21 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
     resolver: zodResolver(projectSchema),
     defaultValues: projectToEdit
       ? {
-          title: projectToEdit.title,
-          description: projectToEdit.description || "",
-          status: projectToEdit.status,
-          links: projectToEdit.links.map((l) => ({
-            id: l.id,
-            title: l.title,
-            url: l.url,
-          })),
-        }
+        title: projectToEdit.title,
+        description: projectToEdit.description || "",
+        status: projectToEdit.status,
+        links: projectToEdit.links.map((l) => ({
+          id: l.id,
+          title: l.title,
+          url: l.url,
+        })),
+      }
       : {
-          title: "",
-          description: "",
-          status: "IDEA",
-          links: [],
-        },
+        title: "",
+        description: "",
+        status: "IDEA",
+        links: [],
+      },
   });
 
   const { register, control, handleSubmit, reset, setValue } = form;
@@ -76,9 +74,14 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
   async function onSubmit(data: ProjectFormValues) {
     try {
       if (projectToEdit) {
-        await updateProject(projectToEdit.id, data);
+        await updateProject({
+          data: {
+            id: projectToEdit.id,
+            data
+          }
+        });
       } else {
-        await createProject(data);
+        await createProject({ data });
       }
       setOpen(false);
       reset();

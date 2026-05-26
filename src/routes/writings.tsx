@@ -1,10 +1,18 @@
-import { getWritings } from "@/actions/writing";
+import { createFileRoute } from '@tanstack/react-router';
+import { getWritings } from "@/src/utils/writings/writings.functions"
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { Feather, Sparkles, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default async function WritingsPage() {
-  const writings = await getWritings();
+export const Route = createFileRoute('/writings')({
+  loader: async () => {
+    return getWritings();
+  },
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const writings = Route.useLoaderData();
 
   return (
     <div className="max-w-3xl mx-auto">

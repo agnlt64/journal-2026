@@ -1,4 +1,5 @@
-import { getStatsData, getEntryDates, getCounter } from "@/actions/stats";
+import { createFileRoute } from '@tanstack/react-router';
+import { getStatsData, getEntryDates, getCounter } from "@/src/utils/stats/stats.functions";
 import { SleepChart } from "@/components/stats/sleep-chart";
 import { ScreenTimeChart } from "@/components/stats/screen-time-chart";
 import { EntryCalendar } from "@/components/stats/entry-calendar";
@@ -6,12 +7,22 @@ import { Counter } from "@/components/stats/counter";
 import { Moon, Smartphone, CalendarDays, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default async function StatsPage() {
-  const [entries, entryDates, counterValue] = await Promise.all([
-    getStatsData(),
-    getEntryDates(),
-    getCounter(),
-  ]);
+
+export const Route = createFileRoute('/stats')({
+  loader: async () => {
+    const [entries, entryDates, counterValue] = await Promise.all([
+      getStatsData(),
+      getEntryDates(),
+      getCounter(),
+    ]);
+
+    return { entries, entryDates, counterValue }
+  },
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { entries, entryDates, counterValue } = Route.useLoaderData();
 
   return (
     <div className="max-w-4xl mx-auto">

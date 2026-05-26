@@ -1,14 +1,24 @@
-import { getEntries, getTags } from "@/actions/entry";
-import { getUserSettings } from "@/actions/user";
+import { getEntries, getTags } from "@/src/utils/entries/entries.functions";
+import { getUserSettings } from "@/src/utils/user/user.functions";
 import { Feed } from "@/components/journal/feed";
 import { Sparkles } from "lucide-react";
 
-export default async function Home() {
-  const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
-    getEntries(1, "", true),
-    getTags(),
-    getUserSettings(),
-  ]);
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/')({
+  loader: async () => {
+    const [{ data: initialEntries, total }, tags, settings] = await Promise.all([
+      getEntries({data: {page: 1, searchQuery: "", includeEmpty: true}}),
+      getTags(),
+      getUserSettings(),
+    ]);
+    return {initialEntries, total, tags, settings}
+  },
+  component: Home
+});
+
+function Home() {
+  const { initialEntries, total, tags, settings } = Route.useLoaderData()
 
   return (
     <div className="max-w-3xl mx-auto">

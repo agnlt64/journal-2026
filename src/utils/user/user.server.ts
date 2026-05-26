@@ -1,8 +1,5 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
-import { revalidatePath } from "next/cache";
 
 export async function updateSettings(data: {
   blurLevel?: number;
@@ -16,11 +13,9 @@ export async function updateSettings(data: {
     data: {
       blurLevel: data.blurLevel,
       itemsPerPage: data.itemsPerPage,
-      pinCodeHash: data.pinCode, // Storing plain for now as per "simple auth" instruction interpretation, valid for personal local app.
+      pinCodeHash: data.pinCode,
     },
   });
-
-  revalidatePath("/");
 }
 
 export async function getUserSettings() {

@@ -1,10 +1,8 @@
-"use client";
-
 import { useState, useEffect, cloneElement, isValidElement } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
-import { createEntry, updateEntry, getTags, createTag } from "@/actions/entry";
+import { createEntry, updateEntry, getTags, createTag } from "@/src/utils/entries/entries.functions";
 
 import {
   Dialog,
@@ -62,29 +60,29 @@ export function EntryDialog({
 
   const defaultValues = entryToEdit
     ? {
-        ...entryToEdit,
-        content: entryToEdit.content ?? "",
-        date: new Date(entryToEdit.date),
-        tagIds: entryToEdit.tags?.map((t) => t.id) || [],
-        wakeTime: entryToEdit.wakeTime
-          ? new Date(entryToEdit.wakeTime)
-          : undefined,
-        sleepTime: entryToEdit.sleepTime
-          ? new Date(entryToEdit.sleepTime)
-          : undefined,
-        screenTime: entryToEdit.screenTime ?? undefined,
-        didSport: entryToEdit.didSport,
-        asmr: entryToEdit.asmr,
-        isLocked: entryToEdit.isLocked,
-      }
+      ...entryToEdit,
+      content: entryToEdit.content ?? "",
+      date: new Date(entryToEdit.date),
+      tagIds: entryToEdit.tags?.map((t) => t.id) || [],
+      wakeTime: entryToEdit.wakeTime
+        ? new Date(entryToEdit.wakeTime)
+        : undefined,
+      sleepTime: entryToEdit.sleepTime
+        ? new Date(entryToEdit.sleepTime)
+        : undefined,
+      screenTime: entryToEdit.screenTime ?? undefined,
+      didSport: entryToEdit.didSport,
+      asmr: entryToEdit.asmr,
+      isLocked: entryToEdit.isLocked,
+    }
     : {
-        content: "",
-        date: new Date(),
-        tagIds: [],
-        didSport: false,
-        asmr: false,
-        isLocked: false,
-      };
+      content: "",
+      date: new Date(),
+      tagIds: [],
+      didSport: false,
+      asmr: false,
+      isLocked: false,
+    };
 
   const form = useForm({
     resolver: zodResolver(entrySchema),
@@ -122,9 +120,16 @@ export function EntryDialog({
   async function onSubmit(data: EntryFormValues) {
     try {
       if (entryToEdit) {
-        await updateEntry(entryToEdit.id, { ...data, tagIds: selectedTagIds });
+        await updateEntry({
+          data: {
+            id: entryToEdit.id,
+            data: { ...data, tagIds: selectedTagIds }
+          }
+        });
       } else {
-        await createEntry({ ...data, tagIds: selectedTagIds });
+        await createEntry({
+          data: { ...data, tagIds: selectedTagIds }
+        });
       }
       setShow(false);
       reset();
@@ -142,7 +147,12 @@ export function EntryDialog({
   async function handleCreateTag() {
     if (!newTagName.trim()) return;
     try {
-      const newTag = await createTag(newTagName.trim(), newTagColor);
+      const newTag = await createTag({
+        data: {
+          name: newTagName.trim(),
+          color: newTagColor
+        }
+      });
       setAvailableTags((prev) => [...prev, newTag]);
       setSelectedTagIds((prev) => [...prev, newTag.id]);
       setNewTagName("");

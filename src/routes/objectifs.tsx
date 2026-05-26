@@ -1,4 +1,5 @@
-import { getGoals } from "@/actions/goal";
+import { createFileRoute } from '@tanstack/react-router';
+import { getGoals } from "@/src/utils/goals/goals.functions";
 import { GoalDialog } from "@/components/journal/goal-dialog";
 import { GoalCard } from "@/components/journal/goal-card";
 import { GoalDTO } from "@/lib/types";
@@ -26,9 +27,18 @@ function groupGoalsByPeriod(goals: GoalDTO[]): Map<string, GoalDTO[]> {
   return groups;
 }
 
-export default async function ObjectifsPage() {
-  const goals = await getGoals();
-  const groupedGoals = groupGoalsByPeriod(goals);
+export const Route = createFileRoute('/objectifs')({
+  loader: async () => {
+    const goals = await getGoals();
+    const groupedGoals = groupGoalsByPeriod(goals);
+
+    return { goals, groupedGoals };
+  },
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { goals, groupedGoals } = Route.useLoaderData();
 
   return (
     <div className="max-w-3xl mx-auto">

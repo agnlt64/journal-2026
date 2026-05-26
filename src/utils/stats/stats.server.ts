@@ -1,5 +1,3 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 

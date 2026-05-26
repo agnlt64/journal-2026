@@ -1,8 +1,6 @@
-"use client";
-
 import { useState, useEffect, cloneElement, isValidElement } from "react";
 import { useForm } from "react-hook-form";
-import { updateSettings, getUserSettings } from "@/actions/user";
+import { updateSettings, getUserSettings } from "@/src/utils/user/user.functions";
 
 import {
   Dialog,
@@ -52,9 +50,11 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
     setLoading(true);
     try {
       await updateSettings({
-        blurLevel: Number(data.blurLevel),
-        itemsPerPage: Number(data.itemsPerPage),
-        pinCode: data.pinCode || undefined,
+        data: {
+          blurLevel: Number(data.blurLevel),
+          itemsPerPage: Number(data.itemsPerPage),
+          pinCode: data.pinCode || undefined,
+        }
       });
       setOpen(false);
     } catch (e) {

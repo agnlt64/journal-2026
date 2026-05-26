@@ -1,11 +1,7 @@
-"use server";
-
-import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
-import { revalidatePath } from "next/cache";
 import type { Image, Tag } from "@/lib/generated/prisma/client";
-import { Prisma } from "@/lib/generated/prisma/client";
+import { db } from "@/lib/db";
 
 // Default tags to create for new users
 const DEFAULT_TAGS = [
@@ -71,13 +67,12 @@ export async function createEntry(
       isLocked: parsed.isLocked,
       tags: parsed.tagIds?.length
         ? {
-            connect: parsed.tagIds.map((id) => ({ id })),
-          }
+          connect: parsed.tagIds.map((id) => ({ id })),
+        }
         : undefined,
     },
   });
 
-  revalidatePath("/");
   return { success: true };
 }
 
@@ -89,15 +84,14 @@ export async function getEntries(
   const user = await getOrCreateUser();
   const itemsPerPage = user.itemsPerPage || 20;
 
-  const where: Prisma.EntryWhereInput = {
+  const where = {
     userId: user.id,
     ...(searchQuery
       ? {
-          content: {
-            contains: searchQuery,
-            mode: Prisma.QueryMode.insensitive,
-          },
-        }
+        content: {
+          contains: searchQuery,
+        },
+      }
       : !includeEmpty
         ? { content: { not: "" } }
         : {}),
@@ -136,9 +130,9 @@ export async function getEntries(
       images: isLocked
         ? []
         : e.images.map((i: Image) => ({
-            id: i.id,
-            url: i.url,
-          })),
+          id: i.id,
+          url: i.url,
+        })),
       createdAt: e.createdAt,
       updatedAt: e.updatedAt,
     };
@@ -179,7 +173,6 @@ export async function getLockedEntry(id: string, pin: string) {
 export async function deleteEntry(id: string) {
   const user = await getOrCreateUser();
   await db.entry.delete({ where: { id, userId: user.id } });
-  revalidatePath("/");
 }
 
 export async function updateEntry(
@@ -205,5 +198,4 @@ export async function updateEntry(
       },
     },
   });
-  revalidatePath("/");
 }

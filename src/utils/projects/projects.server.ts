@@ -1,5 +1,3 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import {
@@ -11,13 +9,8 @@ import {
   ProjectLinkDTO,
   ProjectStepDTO,
 } from "@/lib/types";
-import { revalidatePath } from "next/cache";
 import type { ProjectLink, ProjectStep } from "@/lib/generated/prisma/client";
 
-function revalidateProject(id?: string) {
-  revalidatePath("/projets");
-  if (id) revalidatePath(`/projets/${id}`);
-}
 
 function mapStep(s: ProjectStep): ProjectStepDTO {
   return {
@@ -111,7 +104,6 @@ export async function createProject(data: ProjectFormValues) {
     include: { links: true, steps: true },
   });
 
-  revalidateProject();
   return project;
 }
 
@@ -137,7 +129,6 @@ export async function updateProject(id: string, data: ProjectFormValues) {
     include: { links: true, steps: true },
   });
 
-  revalidateProject(id);
   return project;
 }
 
@@ -145,8 +136,6 @@ export async function deleteProject(id: string) {
   const user = await getOrCreateUser();
 
   await db.project.delete({ where: { id, userId: user.id } });
-
-  revalidateProject(id);
 }
 
 export async function updateProjectStatus(
@@ -159,8 +148,6 @@ export async function updateProjectStatus(
     where: { id, userId: user.id },
     data: { status },
   });
-
-  revalidateProject(id);
 }
 
 // ─── Project Steps ───────────────────────────────────────────────────────────
@@ -188,7 +175,6 @@ export async function createProjectStep(
     },
   });
 
-  revalidateProject(projectId);
   return mapStep(step);
 }
 
@@ -212,7 +198,6 @@ export async function updateProjectStep(
     },
   });
 
-  revalidateProject(existing.projectId);
   return mapStep(step);
 }
 
@@ -236,8 +221,6 @@ export async function deleteProjectStep(id: string) {
       db.projectStep.update({ where: { id: s.id }, data: { order: i } }),
     ),
   );
-
-  revalidateProject(existing.projectId);
 }
 
 export async function toggleProjectStep(
@@ -260,7 +243,6 @@ export async function toggleProjectStep(
     },
   });
 
-  revalidateProject(existing.projectId);
   return mapStep(step);
 }
 
@@ -281,6 +263,4 @@ export async function reorderProjectSteps(
       db.projectStep.update({ where: { id }, data: { order: i } }),
     ),
   );
-
-  revalidateProject(projectId);
 }

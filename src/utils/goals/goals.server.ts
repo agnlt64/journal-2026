@@ -1,9 +1,6 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { goalSchema } from "@/lib/types";
-import { revalidatePath } from "next/cache";
 
 export async function createGoal(data: unknown) {
   const user = await getOrCreateUser();
@@ -17,8 +14,6 @@ export async function createGoal(data: unknown) {
       deadline: parsed.deadline,
     },
   });
-
-  revalidatePath("/objectifs");
 }
 
 export async function getGoals() {
@@ -49,8 +44,6 @@ export async function toggleGoalCompletion(goalId: string) {
       completedAt: newCompleted ? new Date() : null,
     },
   });
-
-  revalidatePath("/objectifs");
 }
 
 export async function updateGoalRemark(goalId: string, remark: string | null) {
@@ -70,6 +63,4 @@ export async function updateGoalRemark(goalId: string, remark: string | null) {
       remark: remark?.trim() || null,
     },
   });
-
-  revalidatePath("/objectifs");
 }

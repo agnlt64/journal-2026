@@ -1,22 +1,26 @@
-import { getProject } from "@/actions/project";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { getProject } from '@/src/utils/projects/projects.functions';
+import { PROJECT_STATUS_COLORS } from "@/lib/types";
 import { ProjectDialog } from "@/components/journal/project-dialog";
 import { ProjectSteps } from "@/components/journal/project-steps";
 import { ProjectStatusSelect } from "@/components/journal/project-status-select";
 import { DeleteProjectButton } from "@/components/journal/delete-project-button";
-import { PROJECT_STATUS_COLORS } from "@/lib/types";
-import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ArrowLeft, FolderGit, ExternalLink, Edit } from "lucide-react";
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
+export const Route = createFileRoute('/projets/$projectId')({
+  loader: async ({ params: { projectId } }) => {
+    const project = await getProject({ data: projectId });
+    return project;
+  },
+  component: RouteComponent,
+});
 
-export default async function ProjetPage({ params }: Props) {
-  const { id } = await params;
-  const project = await getProject(id);
+function RouteComponent() {
+  const project = Route.useLoaderData();
 
-  if (!project) notFound();
+  if (!project) {
+    return <div>Project not found</div>
+  }
 
   const statusColor = PROJECT_STATUS_COLORS[project.status];
 
@@ -24,7 +28,7 @@ export default async function ProjetPage({ params }: Props) {
     <div className="max-w-4xl mx-auto">
       {/* Back */}
       <Link
-        href="/projets"
+        to="/projets"
         className="inline-flex items-center gap-2 text-xs text-[rgba(255,255,255,0.4)] hover:text-[rgba(255,255,255,0.7)] transition-colors mb-8 group"
       >
         <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />

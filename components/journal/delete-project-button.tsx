@@ -1,8 +1,5 @@
-"use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { deleteProject } from "@/actions/project";
+import { deleteProject } from "@/src/utils/projects/projects.functions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,13 +12,11 @@ import { Trash2 } from "lucide-react";
 export function DeleteProjectButton({ projectId }: { projectId: string }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
-      await deleteProject(projectId);
-      router.push("/projets");
+      await deleteProject({ data: projectId });
     } finally {
       setIsDeleting(false);
     }
