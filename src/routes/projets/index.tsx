@@ -1,4 +1,5 @@
-import { getProjects } from "@/actions/project";
+import { createFileRoute } from '@tanstack/react-router';
+import { getProjects } from "@/src/utils/projects/projects.functions";
 import { ProjectDialog } from "@/components/journal/project-dialog";
 import { ProjectCard } from "@/components/journal/project-card";
 import { FolderGit } from "lucide-react";
@@ -26,9 +27,18 @@ function groupProjectsByStatus(
   return groups;
 }
 
-export default async function ProjetsPage() {
-  const projects = await getProjects();
-  const groupedProjects = groupProjectsByStatus(projects);
+export const Route = createFileRoute('/projets/')({
+  loader: async () => {
+    const projects = await getProjects();
+    const groupedProjects = groupProjectsByStatus(projects);
+
+    return { projects, groupedProjects };
+  },
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { projects, groupedProjects } = Route.useLoaderData();
 
   return (
     <div className="max-w-4xl mx-auto">

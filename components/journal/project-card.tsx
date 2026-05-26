@@ -5,6 +5,7 @@ import {
 } from "@/lib/types";
 import { FolderGit, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 interface ProjectCardProps {
   project: ProjectDTO;
@@ -16,7 +17,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
   return (
     <div
-      // onClick={() => router.push(`/projets/${project.id}`)}
       className={cn(
         "relative rounded-xl overflow-hidden cursor-pointer",
         "bg-[rgba(10,10,18,0.5)] border",
@@ -29,17 +29,24 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         animationDelay: `${index * 50}ms`,
         borderColor: `${statusColor}30`,
       }}
-      role="link"
     >
+      {/* Full-card link overlay (separate <a> so inner links stay valid HTML) */}
+      <Link
+        to="/projets/$projectId"
+        params={{ projectId: project.id }}
+        aria-label={project.title}
+        className="absolute inset-0 z-0"
+      />
+
       {/* Top accent line */}
       <div
-        className="absolute top-0 left-0 right-0 h-px"
+        className="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style={{
           background: `linear-gradient(90deg, transparent, ${statusColor}50, transparent)`,
         }}
       />
 
-      <div className="p-5">
+      <div className="relative p-5 pointer-events-none">
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -92,8 +99,8 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                   className={cn(
+                    "relative z-10 pointer-events-auto",
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs",
                     "bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.08)]",
                     "text-[rgba(255,255,255,0.5)] hover:text-[#00f5ff]",

@@ -22,7 +22,7 @@ import {
   deleteProjectStep,
   toggleProjectStep,
   reorderProjectSteps,
-} from "@/actions/project";
+} from "@/src/utils/projects/projects.functions";
 import { ProjectStepDTO } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,8 +75,8 @@ function StepContent({
         isOverlay
           ? "bg-[rgba(15,15,25,0.95)] border-[rgba(255,255,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
           : isCompleted
-          ? "bg-[rgba(10,10,18,0.3)] border-[rgba(255,255,255,0.05)]"
-          : "bg-[rgba(10,10,18,0.5)] border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]",
+            ? "bg-[rgba(10,10,18,0.3)] border-[rgba(255,255,255,0.05)]"
+            : "bg-[rgba(10,10,18,0.5)] border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]",
       )}
     >
       {/* Drag handle */}
@@ -258,10 +258,12 @@ export function ProjectSteps({
     setSteps(reordered);
 
     startTransition(() => {
-      reorderProjectSteps(
-        projectId,
-        reordered.map((s) => s.id),
-      );
+      reorderProjectSteps({
+        data: {
+          projectId,
+          orderedIds: reordered.map((s) => s.id)
+        }
+      });
     });
   }
 
@@ -288,9 +290,14 @@ export function ProjectSteps({
     setIsAdding(false);
 
     startTransition(async () => {
-      const created = await createProjectStep(projectId, {
-        title,
-        description: addDescription.trim() || undefined,
+      const created = await createProjectStep({
+        data: {
+          projectId,
+          data: {
+            title,
+            description: addDescription.trim() || undefined,
+          }
+        }
       });
       setSteps((prev) =>
         prev.map((s) => (s.id === optimistic.id ? created : s)),
@@ -320,9 +327,14 @@ export function ProjectSteps({
     setEditStep(null);
 
     startTransition(async () => {
-      const updated = await updateProjectStep(editStep.id, {
-        title,
-        description: editDescription.trim() || undefined,
+      const updated = await updateProjectStep({
+        data: {
+          id: editStep.id,
+          data: {
+            title,
+            description: editDescription.trim() || undefined,
+          }
+        }
       });
       setSteps((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
     });
@@ -331,7 +343,7 @@ export function ProjectSteps({
   // ── Delete step ─────────────────────────────────────────────────────────────
   function handleDelete(id: string) {
     setSteps((prev) => prev.filter((s) => s.id !== id));
-    startTransition(() => deleteProjectStep(id));
+    startTransition(() => deleteProjectStep({ data: id }));
   }
 
   // ── Toggle step ─────────────────────────────────────────────────────────────
@@ -345,7 +357,12 @@ export function ProjectSteps({
         ),
       );
       startTransition(async () => {
-        const updated = await toggleProjectStep(step.id, false);
+        const updated = await toggleProjectStep({
+          data: {
+            id: step.id,
+            completed: false
+          }
+        });
         setSteps((prev) =>
           prev.map((s) => (s.id === updated.id ? updated : s)),
         );
@@ -372,11 +389,13 @@ export function ProjectSteps({
     setCompletionComment("");
 
     startTransition(async () => {
-      const updated = await toggleProjectStep(
-        completingStep.id,
-        true,
-        comment || undefined,
-      );
+      const updated = await toggleProjectStep({
+        data: {
+          id: completingStep.id,
+          completed: true,
+          comment: comment || undefined
+        }
+      });
       setSteps((prev) =>
         prev.map((s) => (s.id === updated.id ? updated : s)),
       );
