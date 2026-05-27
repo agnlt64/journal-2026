@@ -4,7 +4,6 @@ import {
   createEntry as createEntry_,
   createTag as createTag_,
   updateEntry as updateEntry_,
-  getLockedEntry as getLockedEntry_,
 } from "./entries.server";
 import { createServerFn } from "@tanstack/react-start";
 import type { EntryFormValues } from "@/lib/types";
@@ -35,10 +34,4 @@ export const updateEntry = createServerFn()
   .inputValidator((data: { id: string, data: EntryFormValues & { tagIds?: string[] } }) => data)
   .handler(async ({ data }) => {
     return updateEntry_(data.id, data.data);
-  });
-
-export const getLockedEntry = createServerFn()
-  .inputValidator((data: { id: string, pin: string }) => data)
-  .handler(async ({ data }) => {
-    return getLockedEntry_(data.id, data.pin)
   });

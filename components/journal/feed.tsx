@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 interface FeedProps {
   initialEntries: EntryDTO[];
   initialTotal: number;
-  itemsPerPage: number;
   availableTags: TagDTO[];
 }
 

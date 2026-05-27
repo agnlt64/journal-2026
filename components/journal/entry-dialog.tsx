@@ -29,8 +29,6 @@ import {
 
 import {
   CalendarIcon,
-  Lock,
-  Unlock,
   Plus,
   PenTool,
   Clock,

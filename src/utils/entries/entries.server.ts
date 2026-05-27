@@ -102,7 +102,6 @@ export async function getEntries(
     db.entry.count({ where }),
   ]);
 
-  // Transform to DTO with Redaction
   const dtos: EntryDTO[] = entries.map((e) => {
     return {
       id: e.id,
@@ -128,30 +127,6 @@ export async function getEntries(
   });
 
   return { data: dtos, total };
-}
-
-export async function getLockedEntry(id: string, pin: string) {
-  const user = await getOrCreateUser();
-
-  const entry = await db.entry.findUnique({
-    where: { id, userId: user.id },
-    include: { images: true, tags: true },
-  });
-
-  if (!entry) return { success: false, error: "Not found" };
-
-  return {
-    success: true,
-    data: {
-      ...entry,
-      tags: entry.tags.map((t: Tag) => ({
-        id: t.id,
-        name: t.name,
-        color: t.color,
-      })),
-      images: entry.images.map((i: Image) => ({ id: i.id, url: i.url })),
-    },
-  };
 }
 
 export async function deleteEntry(id: string) {
