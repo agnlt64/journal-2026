@@ -12,8 +12,6 @@ export const entrySchema = z.object({
   didSport: z.boolean().default(false),
   asmr: z.boolean().default(false),
   screenTime: z.number().optional(), // Temps d'écran moyen en minutes
-  // Lock Logic
-  isLocked: z.boolean().default(false),
 });
 
 export type EntryFormValues = z.infer<typeof entrySchema>;
@@ -25,13 +23,6 @@ export const writingSchema = z.object({
 
 export type WritingFormValues = z.infer<typeof writingSchema>;
 
-export const settingsSchema = z.object({
-  blurLevel: z.number().min(0).max(20),
-  itemsPerPage: z.number().min(5).max(100),
-});
-
-export type SettingsFormValues = z.infer<typeof settingsSchema>;
-
 // DTOs for Client Consumption
 
 export interface TagDTO {
@@ -42,7 +33,7 @@ export interface TagDTO {
 
 export interface EntryDTO {
   id: string;
-  content: string | null; // Null if locked
+  content: string;
   date: Date;
   tags: TagDTO[];
   // Specifics
@@ -52,8 +43,7 @@ export interface EntryDTO {
   asmr: boolean;
   screenTime: number | null;
 
-  isLocked: boolean;
-  images: ImageDTO[]; // Empty if locked
+  images: ImageDTO[];
 
   createdAt: Date;
   updatedAt: Date;

@@ -1,5 +1,5 @@
+import type { ProjectDTO } from "@/lib/types";
 import {
-  ProjectDTO,
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_COLORS,
 } from "@/lib/types";

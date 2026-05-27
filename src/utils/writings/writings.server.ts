@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
-import { writingSchema, WritingFormValues } from "@/lib/types";
+import { writingSchema } from "@/lib/types";
+import type { WritingFormValues } from "@/lib/types";
 
 export async function createWriting(data: WritingFormValues) {
   const user = await getOrCreateUser();

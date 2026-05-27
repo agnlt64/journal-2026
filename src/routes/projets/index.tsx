@@ -7,8 +7,8 @@ import {
   PROJECT_STATUS_COLORS,
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_ORDER,
-  ProjectDTO,
 } from "@/lib/types";
+import type { ProjectDTO } from '@/lib/types';
 
 function groupProjectsByStatus(
   projects: ProjectDTO[],

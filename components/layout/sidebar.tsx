@@ -2,7 +2,6 @@ import { EntryDialog } from "@/components/journal/entry-dialog";
 import { WritingDialog } from "@/components/journal/writing-dialog";
 import { GoalDialog } from "@/components/journal/goal-dialog";
 import { ProjectDialog } from "@/components/journal/project-dialog";
-import { SettingsDialog } from "@/components/journal/settings-dialog";
 import { Button } from "@/components/ui/button";
 import { Plus, Feather, Target, FolderGit, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -95,25 +94,6 @@ export function Sidebar() {
             />
           </Button>
         </ProjectDialog>
-
-        {/* Spacer */}
-        <div className="flex-1 min-h-5" />
-
-        {/* Settings */}
-        <SettingsDialog>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "w-12 h-12 rounded-xl transition-all duration-300 relative overflow-hidden group",
-              "bg-[rgba(255,255,255,0.02)]",
-              "border border-[rgba(255,255,255,0.1)]",
-              "hover:border-[rgba(255,255,255,0.3)]",
-            )}
-          >
-            <Settings className="w-5 h-5 text-[rgba(255,255,255,0.4)] group-hover:text-white transition-colors duration-300 group-hover:rotate-90" />
-          </Button>
-        </SettingsDialog>
       </div>
     </aside>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GoalDTO } from "@/lib/types";
+import type { GoalDTO } from "@/lib/types";
 import { toggleGoalCompletion, updateGoalRemark } from "@/src/utils/goals/goals.functions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { getGoals } from "@/src/utils/goals/goals.functions";
 import { GoalDialog } from "@/components/journal/goal-dialog";
 import { GoalCard } from "@/components/journal/goal-card";
-import { GoalDTO } from "@/lib/types";
+import type { GoalDTO } from "@/lib/types";
 import { Target, Flag, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 

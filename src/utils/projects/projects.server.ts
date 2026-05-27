@@ -3,6 +3,8 @@ import { getOrCreateUser } from "@/lib/user-context";
 import {
   projectSchema,
   projectStepSchema,
+} from "@/lib/types";
+import type {
   ProjectFormValues,
   ProjectStepFormValues,
   ProjectDTO,
@@ -111,6 +113,7 @@ export async function updateProject(id: string, data: ProjectFormValues) {
   const user = await getOrCreateUser();
   const parsed = projectSchema.parse(data);
 
+  // todo: use db.$transaction
   await db.projectLink.deleteMany({ where: { projectId: id } });
 
   const project = await db.project.update({

@@ -1,7 +1,8 @@
 import { useState, cloneElement, isValidElement } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { writingSchema, WritingFormValues } from "@/lib/types";
+import { writingSchema } from "@/lib/types";
+import type { WritingFormValues } from "@/lib/types";
 import { createWriting } from "@/src/utils/writings/writings.functions";
 
 import {

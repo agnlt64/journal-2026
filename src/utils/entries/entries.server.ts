@@ -1,5 +1,6 @@
 import { getOrCreateUser } from "@/lib/user-context";
-import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
+import type { EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
+import { entrySchema } from "@/lib/types";
 import type { Image, Tag } from "@/lib/generated/prisma/client";
 import { db } from "@/lib/db";
 
@@ -48,12 +49,6 @@ export async function createEntry(
   const user = await getOrCreateUser();
   const parsed = entrySchema.parse(data);
 
-  if (parsed.isLocked && !user.pinCodeHash) {
-    throw new Error(
-      "You must set a Global PIN in settings before locking entries.",
-    );
-  }
-
   await db.entry.create({
     data: {
       userId: user.id,
@@ -64,7 +59,6 @@ export async function createEntry(
       didSport: parsed.didSport,
       asmr: parsed.asmr,
       screenTime: parsed.screenTime,
-      isLocked: parsed.isLocked,
       tags: parsed.tagIds?.length
         ? {
           connect: parsed.tagIds.map((id) => ({ id })),
@@ -82,7 +76,7 @@ export async function getEntries(
   includeEmpty = false,
 ): Promise<{ data: EntryDTO[]; total: number }> {
   const user = await getOrCreateUser();
-  const itemsPerPage = user.itemsPerPage || 20;
+  const itemsPerPage = 20;
 
   const where = {
     userId: user.id,
@@ -110,11 +104,9 @@ export async function getEntries(
 
   // Transform to DTO with Redaction
   const dtos: EntryDTO[] = entries.map((e) => {
-    const isLocked = e.isLocked;
-
     return {
       id: e.id,
-      content: isLocked ? null : e.content,
+      content: e.content,
       date: e.date,
       tags: e.tags.map((t: Tag) => ({
         id: t.id,
@@ -126,10 +118,7 @@ export async function getEntries(
       didSport: e.didSport,
       asmr: e.asmr,
       screenTime: e.screenTime,
-      isLocked: e.isLocked,
-      images: isLocked
-        ? []
-        : e.images.map((i: Image) => ({
+      images: e.images.map((i: Image) => ({
           id: i.id,
           url: i.url,
         })),
@@ -143,11 +132,6 @@ export async function getEntries(
 
 export async function getLockedEntry(id: string, pin: string) {
   const user = await getOrCreateUser();
-
-  if (!user.pinCodeHash) throw new Error("No PIN set");
-  if (user.pinCodeHash !== pin) {
-    return { success: false, error: "Invalid PIN" };
-  }
 
   const entry = await db.entry.findUnique({
     where: { id, userId: user.id },
@@ -192,7 +176,6 @@ export async function updateEntry(
       didSport: parsed.didSport,
       asmr: parsed.asmr,
       screenTime: parsed.screenTime,
-      isLocked: parsed.isLocked,
       tags: {
         set: parsed.tagIds?.map((tid) => ({ id: tid })) || [],
       },

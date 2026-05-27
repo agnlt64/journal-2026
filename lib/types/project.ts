@@ -5,13 +5,13 @@ import { ProjectStatus } from "@/lib/generated/prisma/enums";
 export const projectLinkSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, "Le titre est requis"),
-  url: z.string().url("L'URL doit être valide"),
+  url: z.url("L'URL doit être valide"),
 });
 
 export const projectSchema = z.object({
   title: z.string().min(1, "Le titre est requis"),
   description: z.string().optional(),
-  status: z.nativeEnum(ProjectStatus),
+  status: z.enum(ProjectStatus),
   links: z.array(projectLinkSchema),
 });
 

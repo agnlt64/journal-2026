@@ -1,4 +1,4 @@
-import { EntryDTO } from "@/lib/types";
+import type { EntryDTO } from "@/lib/types";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,11 +20,8 @@ export function EntryCard({
   onEntryChange,
 }: EntryCardProps) {
   const [entry, setEntry] = useState(initialEntry);
-  const [isUnlocking, setIsUnlocking] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [error, setError] = useState("");
-
-  const isLocked = entry.isLocked && !entry.content;
 
   async function handleUnlock(e: React.FormEvent) {
     e.preventDefault();
@@ -38,7 +35,6 @@ export function EntryCard({
       });
       if (res.success && res.data) {
         setEntry(res.data);
-        setIsUnlocking(false);
         onEntryChange?.();
       } else {
         setError("CODE PIN INCORRECT");
@@ -93,7 +89,7 @@ export function EntryCard({
           {/* Tags & Edit - Same row */}
           <div className="flex items-center gap-3">
             <div className="flex flex-wrap gap-1.5 justify-end max-w-50">
-              {entry.tags?.map((tag) => (
+              {entry.tags.map((tag) => (
                 <span
                   key={tag.id}
                   className="px-2 py-0.5 rounded text-[10px] font-medium tracking-wider border"
@@ -152,62 +148,15 @@ export function EntryCard({
 
         {/* Content Area */}
         <div>
-          {isLocked ? (
-            <div className="flex flex-col items-center justify-center py-10">
-              <div className="relative mb-4">
-                <div className="absolute inset-0 bg-[#00f5ff] blur-2xl opacity-20" />
-                <div className="relative w-16 h-16 rounded-2xl bg-[rgba(0,245,255,0.1)] border border-[rgba(0,245,255,0.3)] flex items-center justify-center">
-                  <Lock className="w-7 h-7 text-[#00f5ff]" />
-                </div>
-              </div>
-              <p className="text-sm text-[rgba(255,255,255,0.4)] mb-4 tracking-wider font-mono">
-                ENTRÉE CHIFFRÉE
+          <div className="text-[rgba(255,255,255,0.8)] leading-relaxed">
+            {!entry.content || entry.content.length === 0 ? (
+              <p className="text-sm text-[rgba(255,255,255,0.3)] italic tracking-wide">
+                Aucun contenu enregistré pour ce jour...
               </p>
-
-              {!isUnlocking ? (
-                <Button
-                  onClick={() => setIsUnlocking(true)}
-                  variant="outline"
-                  className="rounded-xl border-[rgba(0,245,255,0.3)] text-[#00f5ff] hover:bg-[rgba(0,245,255,0.1)] hover:border-[rgba(0,245,255,0.5)] tracking-wider text-xs"
-                >
-                  DÉVERROUILLER
-                </Button>
-              ) : (
-                <form onSubmit={handleUnlock} className="flex gap-2">
-                  <Input
-                    type="password"
-                    value={pinInput}
-                    onChange={(e) => setPinInput(e.target.value)}
-                    placeholder="PIN"
-                    className="w-24 h-9 rounded-xl bg-[rgba(0,0,0,0.3)] border-[rgba(0,245,255,0.2)] text-center text-white placeholder:text-[rgba(255,255,255,0.3)] font-mono text-sm tracking-widest"
-                    autoFocus
-                  />
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="h-9 rounded-xl bg-[rgba(0,245,255,0.2)] text-[#00f5ff] border border-[rgba(0,245,255,0.3)] hover:bg-[rgba(0,245,255,0.3)]"
-                  >
-                    OUVRIR
-                  </Button>
-                </form>
-              )}
-              {error && (
-                <p className="text-xs text-[#ff3864] mt-3 tracking-wider">
-                  {error}
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="text-[rgba(255,255,255,0.8)] leading-relaxed">
-              {!entry.content || entry.content.length === 0 ? (
-                <p className="text-sm text-[rgba(255,255,255,0.3)] italic tracking-wide">
-                  Aucun contenu enregistré pour ce jour...
-                </p>
-              ) : (
-                <div className="whitespace-pre-wrap">{entry.content}</div>
-              )}
-            </div>
-          )}
+            ) : (
+              <div className="whitespace-pre-wrap">{entry.content}</div>
+            )}
+          </div>
         </div>
       </div>
     </article>

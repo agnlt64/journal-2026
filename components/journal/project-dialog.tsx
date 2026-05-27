@@ -1,10 +1,9 @@
 import { useState, cloneElement, isValidElement } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ProjectFormValues, ProjectDTO} from "@/lib/types";
 import {
   projectSchema,
-  ProjectFormValues,
-  ProjectDTO,
   PROJECT_STATUS_COLORS,
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_OPTIONS,

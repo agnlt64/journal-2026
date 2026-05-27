@@ -1,7 +1,12 @@
 import { useState, useEffect, cloneElement, isValidElement } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { entrySchema, EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
+import { entrySchema } from "@/lib/types";
+import type {
+  EntryFormValues,
+  EntryDTO,
+  TagDTO
+} from "@/lib/types";
 import { createEntry, updateEntry, getTags, createTag } from "@/src/utils/entries/entries.functions";
 
 import {
@@ -61,9 +66,9 @@ export function EntryDialog({
   const defaultValues = entryToEdit
     ? {
       ...entryToEdit,
-      content: entryToEdit.content ?? "",
+      content: entryToEdit.content,
       date: new Date(entryToEdit.date),
-      tagIds: entryToEdit.tags?.map((t) => t.id) || [],
+      tagIds: entryToEdit.tags.map((t) => t.id),
       wakeTime: entryToEdit.wakeTime
         ? new Date(entryToEdit.wakeTime)
         : undefined,
@@ -73,7 +78,6 @@ export function EntryDialog({
       screenTime: entryToEdit.screenTime ?? undefined,
       didSport: entryToEdit.didSport,
       asmr: entryToEdit.asmr,
-      isLocked: entryToEdit.isLocked,
     }
     : {
       content: "",
@@ -81,7 +85,6 @@ export function EntryDialog({
       tagIds: [],
       didSport: false,
       asmr: false,
-      isLocked: false,
     };
 
   const form = useForm({
@@ -91,21 +94,20 @@ export function EntryDialog({
 
   const { register, handleSubmit, setValue, reset, control } = form;
   const date = useWatch({ control, name: "date" });
-  const isLocked = useWatch({ control, name: "isLocked" });
   const wakeTime = useWatch({ control, name: "wakeTime" });
   const sleepTime = useWatch({ control, name: "sleepTime" });
   const screenTime = useWatch({ control, name: "screenTime" });
   const didSport = useWatch({ control, name: "didSport" });
   const asmr = useWatch({ control, name: "asmr" });
 
-  const isMonday = date ? new Date(date).getDay() === 1 : false;
+  const isMonday = new Date(date).getDay() === 1;
 
   useEffect(() => {
     if (show) {
       getTags().then((tags) => {
         setAvailableTags(tags);
         if (entryToEdit) {
-          setSelectedTagIds(entryToEdit.tags?.map((t) => t.id) || []);
+          setSelectedTagIds(entryToEdit.tags.map((t) => t.id));
         } else {
           setSelectedTagIds([]);
         }
@@ -288,20 +290,16 @@ export function EntryDialog({
                       "w-full justify-start text-left font-normal rounded-xl h-11",
                       "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)]",
                       "text-white hover:bg-[rgba(255,255,255,0.05)] hover:border-[rgba(0,245,255,0.3)]",
-                      !date && "text-[rgba(255,255,255,0.3)]",
+                      "text-[rgba(255,255,255,0.3)]",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 text-[#00f5ff]" />
-                    {date ? (
-                      new Date(date).toLocaleDateString("fr-FR", {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })
-                    ) : (
-                      <span>Choisir une date</span>
-                    )}
+                    {new Date(date).toLocaleDateString("fr-FR", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </Button>
                 }
               />
@@ -450,31 +448,8 @@ export function EntryDialog({
             )}
           </div>
 
-          {/* Lock & Submit */}
+          {/* Submit */}
           <div className="flex items-center justify-between border-t border-[rgba(255,255,255,0.05)] pt-6">
-            <div className="flex items-center gap-3">
-              <Button
-                type="button"
-                onClick={() => setValue("isLocked", !isLocked)}
-                className={cn(
-                  "rounded-xl transition-all duration-300 h-10",
-                  isLocked
-                    ? "bg-[rgba(255,0,110,0.15)] text-[#ff006e] border border-[rgba(255,0,110,0.4)] hover:bg-[rgba(255,0,110,0.25)]"
-                    : "bg-[rgba(255,255,255,0.03)] text-[rgba(255,255,255,0.5)] border border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)]",
-                )}
-              >
-                {isLocked ? (
-                  <Lock className="w-4 h-4 mr-2" />
-                ) : (
-                  <Unlock className="w-4 h-4 mr-2" />
-                )}
-                {isLocked ? "VERROUILLÉ" : "DÉVERROUILLÉ"}
-              </Button>
-              <span className="text-xs text-[rgba(255,255,255,0.3)]">
-                {isLocked ? "Code PIN requis" : "Entrée publique"}
-              </span>
-            </div>
-
             <Button
               type="submit"
               className={cn(

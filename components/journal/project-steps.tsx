@@ -6,9 +6,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragStartEvent,
-  DragEndEvent,
 } from "@dnd-kit/core";
+import type { DragStartEvent, DragEndEvent } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -23,7 +22,7 @@ import {
   toggleProjectStep,
   reorderProjectSteps,
 } from "@/src/utils/projects/projects.functions";
-import { ProjectStepDTO } from "@/lib/types";
+import type { ProjectStepDTO } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

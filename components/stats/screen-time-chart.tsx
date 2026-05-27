@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { StatsEntry } from "@/src/utils/stats/stats.functions";
+import type { StatsEntry } from "@/src/utils/stats/stats.functions";
 
 interface ScreenTimeChartProps {
   entries: StatsEntry[];

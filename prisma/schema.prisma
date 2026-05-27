@@ -11,11 +11,7 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   passwordHash  String    // Pour le login principal
-  pinCodeHash   String?   // Code PIN à 4 chiffres (hashé pour sécurité)
   
-  // User Settings
-  blurLevel     Int       @default(10) // Niveau de flou par défaut
-  itemsPerPage  Int       @default(20)
   counter       Int       @default(0)  // Compteur persistant
   
   entries       Entry[]
@@ -56,9 +52,6 @@ model Entry {
   didSport    Boolean   @default(false)
   asmr        Boolean   @default(false)
   screenTime  Int?      // Temps d'écran moyen en minutes (renseigné le lundi)
-  
-  // Gestion du Lock
-  isLocked    Boolean   @default(false)
   
   // Images
   images      Image[]

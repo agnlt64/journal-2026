@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { WritingFormValues } from "@/lib/types";
+import type { WritingFormValues } from "@/lib/types";
 import {
   getWritings as getWritings_,
   createWriting as createWriting_

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getEntries } from "@/src/utils/entries/entries.functions";
-import { EntryDTO, TagDTO } from "@/lib/types";
+import type { EntryDTO, TagDTO } from "@/lib/types";
 import { EntryCard } from "./entry-card";
 import { EntryDialog } from "./entry-dialog";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,6 @@ interface FeedProps {
 export function Feed({
   initialEntries,
   initialTotal,
-  itemsPerPage,
   availableTags,
 }: FeedProps) {
   const [entries, setEntries] = useState<EntryDTO[]>(initialEntries);
@@ -30,6 +29,7 @@ export function Feed({
 
   const [searchQuery, setSearchQuery] = useState('');
 
+  const itemsPerPage = 20;
   const totalPages = Math.ceil(total / itemsPerPage);
   const hasPrevPage = page > 1;
   const hasNextPage = page < totalPages;

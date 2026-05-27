@@ -12,7 +12,11 @@ import {
     toggleProjectStep as toggleProjectStep_,
     reorderProjectSteps as reorderProjectSteps_,
 } from "./projects.server";
-import { ProjectFormValues, ProjectDTO, ProjectStepFormValues } from "@/lib/types";
+import type {
+  ProjectFormValues,
+  ProjectDTO,
+  ProjectStepFormValues
+} from "@/lib/types";
 
 export const createProject = createServerFn()
   .inputValidator((data: ProjectFormValues) => data)

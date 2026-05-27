@@ -1,7 +1,8 @@
 import { useState, cloneElement, isValidElement } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { goalSchema, GoalFormValues } from "@/lib/types";
+import { goalSchema } from "@/lib/types";
+import type { GoalFormValues } from "@/lib/types";
 import { createGoal } from "@/src/utils/goals/goals.functions";
 
 import {
@@ -104,6 +105,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
               type="date"
               onChange={handleDateChange}
               value={
+                /* eslint-disable @typescript-eslint/no-unnecessary-condition */
                 deadlineValue ? deadlineValue.toISOString().split("T")[0] : ""
               }
               className="rounded-xl bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.08)] text-white"
