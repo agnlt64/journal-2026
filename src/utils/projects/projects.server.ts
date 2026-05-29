@@ -15,7 +15,7 @@ import type {
   Project,
   ProjectLink,
   ProjectStep,
-} from "@/lib/generated/prisma/client";
+} from "@/generated/prisma/client";
 
 // ─── DTO mappers ──────────────────────────────────────────────────────────────
 

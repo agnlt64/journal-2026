@@ -1,7 +1,7 @@
 import { getOrCreateUser } from "@/lib/user-context";
 import type { EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { entrySchema } from "@/lib/types";
-import type { Image, Tag } from "@/lib/generated/prisma/client";
+import type { Image, Tag } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
 
 // Default tags to create for new users

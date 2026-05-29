@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { writingSchema } from "@/lib/types";
 import type { WritingDTO, WritingFormValues } from "@/lib/types";
-import type { Writing } from "@/lib/generated/prisma/client";
+import type { Writing } from "@/generated/prisma/client";
 
 function mapWriting(w: Writing): WritingDTO {
   return {

@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { goalSchema } from "@/lib/types";
 import type { GoalDTO, GoalFormValues } from "@/lib/types";
-import type { Goal } from "@/lib/generated/prisma/client";
+import type { Goal } from "@/generated/prisma/client";
 
 function mapGoal(g: Goal): GoalDTO {
   return {
