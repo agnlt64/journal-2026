@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import { FolderGit, Plus, Link2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "@tanstack/react-router";
@@ -89,7 +90,7 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
       reset();
     } catch (e) {
       console.error(e);
-      alert("Erreur lors de l'enregistrement du projet");
+      toast.error("Erreur lors de l'enregistrement du projet. Regardez la console.");
     }
   }
 

@@ -8,6 +8,7 @@ import appCss from "./globals.css?url";
 import favicon from "./favicon.svg";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -47,7 +48,7 @@ function RootLayout() {
         <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
           <Outlet />
         </main>
-
+        <Toaster />
         <Scripts />
       </body>
     </html>

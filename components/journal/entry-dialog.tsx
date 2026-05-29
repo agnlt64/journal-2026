@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
+import { toast } from "sonner";
 import {
   Popover,
   PopoverContent,
@@ -138,9 +139,7 @@ export function EntryDialog({
       onSuccess?.();
     } catch (e) {
       console.error(e);
-      alert(
-        "Erreur lors de l'enregistrement. Assurez-vous d'avoir défini un code PIN si vous verrouillez l'entrée.",
-      );
+      toast.error("Erreur lors de l'enregistrement de l'entrée. Regardez la console.");
     }
   }
 
@@ -157,6 +156,7 @@ export function EntryDialog({
       setSelectedTagIds((prev) => [...prev, newTag.id]);
       setNewTagName("");
     } catch (e) {
+      toast.error("Erreur lors de la création du tag. Regardez la console.");
       console.error(e);
     }
   }
