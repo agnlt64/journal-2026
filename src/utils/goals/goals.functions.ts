@@ -5,11 +5,12 @@ import {
   toggleGoalCompletion as toggleGoalCompletion_,
   updateGoalRemark as updateGoalRemark_,
 } from "./goals.server";
+import type { GoalFormValues } from "@/lib/types";
 
 export const createGoal = createServerFn()
-  .inputValidator((data: { data: unknown }) => data)
+  .inputValidator((data: GoalFormValues) => data)
   .handler(async ({ data }) => {
-    return createGoal_(data.data)
+    return createGoal_(data)
   });
 
 export const getGoals = createServerFn().handler(async () => {

@@ -34,7 +34,7 @@ export function GoalDialog({ children }: GoalDialogProps) {
   const { register, handleSubmit, reset, setValue, control } = form;
 
   async function onSubmit(data: GoalFormValues) {
-    await createGoal({ data: { data }});
+    await createGoal({ data });
     setOpen(false);
     reset();
   }

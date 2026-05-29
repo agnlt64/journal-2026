@@ -1,15 +1,8 @@
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
+import type { StatsEntryDTO } from "@/lib/types";
 
-export interface StatsEntry {
-  id: string;
-  date: Date;
-  wakeTime: Date | null;
-  sleepTime: Date | null;
-  screenTime: number | null;
-}
-
-export async function getStatsData(): Promise<StatsEntry[]> {
+export async function getStatsData(): Promise<StatsEntryDTO[]> {
   const user = await getOrCreateUser();
 
   const entries = await db.entry.findMany({
@@ -24,7 +17,13 @@ export async function getStatsData(): Promise<StatsEntry[]> {
     orderBy: { date: "asc" },
   });
 
-  return entries;
+  return entries.map((e) => ({
+    id: e.id,
+    date: e.date,
+    wakeTime: e.wakeTime,
+    sleepTime: e.sleepTime,
+    screenTime: e.screenTime,
+  }));
 }
 
 export async function getEntryDates(): Promise<Date[]> {

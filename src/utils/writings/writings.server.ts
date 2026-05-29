@@ -1,9 +1,19 @@
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { writingSchema } from "@/lib/types";
-import type { WritingFormValues } from "@/lib/types";
+import type { WritingDTO, WritingFormValues } from "@/lib/types";
+import type { Writing } from "@/lib/generated/prisma/client";
 
-export async function createWriting(data: WritingFormValues) {
+function mapWriting(w: Writing): WritingDTO {
+  return {
+    id: w.id,
+    title: w.title,
+    content: w.content,
+    createdAt: w.createdAt,
+  };
+}
+
+export async function createWriting(data: WritingFormValues): Promise<void> {
   const user = await getOrCreateUser();
   const parsed = writingSchema.parse(data);
 
@@ -16,10 +26,11 @@ export async function createWriting(data: WritingFormValues) {
   });
 }
 
-export async function getWritings() {
+export async function getWritings(): Promise<WritingDTO[]> {
   const user = await getOrCreateUser();
-  return await db.writing.findMany({
+  const writings = await db.writing.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
+  return writings.map(mapWriting);
 }

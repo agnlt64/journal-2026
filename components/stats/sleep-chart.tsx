@@ -11,10 +11,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import type { StatsEntry } from "@/src/utils/stats/stats.functions";
+import type { StatsEntryDTO } from "@/lib/types";
 
 interface SleepChartProps {
-  entries: StatsEntry[];
+  entries: StatsEntryDTO[];
 }
 
 // Convert time to shifted hours for night-centric display

@@ -11,7 +11,22 @@ import type {
   ProjectLinkDTO,
   ProjectStepDTO,
 } from "@/lib/types";
-import type { ProjectLink, ProjectStep } from "@/lib/generated/prisma/client";
+import type {
+  Project,
+  ProjectLink,
+  ProjectStep,
+} from "@/lib/generated/prisma/client";
+
+// ─── DTO mappers ──────────────────────────────────────────────────────────────
+
+type ProjectWithRelations = Project & {
+  links: ProjectLink[];
+  steps: ProjectStep[];
+};
+
+function mapLink(l: ProjectLink): ProjectLinkDTO {
+  return { id: l.id, title: l.title, url: l.url };
+}
 
 function mapStep(s: ProjectStep): ProjectStepDTO {
   return {
@@ -23,6 +38,21 @@ function mapStep(s: ProjectStep): ProjectStepDTO {
     completionComment: s.completionComment,
   };
 }
+
+function mapProject(p: ProjectWithRelations): ProjectDTO {
+  return {
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    status: p.status,
+    links: p.links.map(mapLink),
+    steps: p.steps.map(mapStep),
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+  };
+}
+
+// ─── Projects ─────────────────────────────────────────────────────────────────
 
 export async function getProjects(): Promise<ProjectDTO[]> {
   const user = await getOrCreateUser();
@@ -36,22 +66,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
     },
   });
 
-  return projects.map((p) => ({
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    status: p.status,
-    links: p.links.map(
-      (l: ProjectLink): ProjectLinkDTO => ({
-        id: l.id,
-        title: l.title,
-        url: l.url,
-      }),
-    ),
-    steps: p.steps.map(mapStep),
-    createdAt: p.createdAt,
-    updatedAt: p.updatedAt,
-  }));
+  return projects.map(mapProject);
 }
 
 export async function getProject(id: string): Promise<ProjectDTO | null> {
@@ -65,27 +80,12 @@ export async function getProject(id: string): Promise<ProjectDTO | null> {
     },
   });
 
-  if (!p) return null;
-
-  return {
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    status: p.status,
-    links: p.links.map(
-      (l: ProjectLink): ProjectLinkDTO => ({
-        id: l.id,
-        title: l.title,
-        url: l.url,
-      }),
-    ),
-    steps: p.steps.map(mapStep),
-    createdAt: p.createdAt,
-    updatedAt: p.updatedAt,
-  };
+  return p ? mapProject(p) : null;
 }
 
-export async function createProject(data: ProjectFormValues) {
+export async function createProject(
+  data: ProjectFormValues,
+): Promise<ProjectDTO> {
   const user = await getOrCreateUser();
   const parsed = projectSchema.parse(data);
 
@@ -105,10 +105,13 @@ export async function createProject(data: ProjectFormValues) {
     include: { links: true, steps: true },
   });
 
-  return project;
+  return mapProject(project);
 }
 
-export async function updateProject(id: string, data: ProjectFormValues) {
+export async function updateProject(
+  id: string,
+  data: ProjectFormValues,
+): Promise<ProjectDTO> {
   const user = await getOrCreateUser();
   const parsed = projectSchema.parse(data);
 
@@ -131,33 +134,31 @@ export async function updateProject(id: string, data: ProjectFormValues) {
     include: { links: true, steps: true },
   });
 
-  return project;
+  return mapProject(project);
 }
 
-export async function deleteProject(id: string) {
+export async function deleteProject(id: string): Promise<void> {
   const user = await getOrCreateUser();
-
   await db.project.delete({ where: { id, userId: user.id } });
 }
 
 export async function updateProjectStatus(
   id: string,
   status: ProjectDTO["status"],
-) {
+): Promise<void> {
   const user = await getOrCreateUser();
-
   await db.project.update({
     where: { id, userId: user.id },
     data: { status },
   });
 }
 
-// ─── Project Steps ───────────────────────────────────────────────────────────
+// ─── Project Steps ────────────────────────────────────────────────────────────
 
 export async function createProjectStep(
   projectId: string,
   data: ProjectStepFormValues,
-) {
+): Promise<ProjectStepDTO> {
   const user = await getOrCreateUser();
   const parsed = projectStepSchema.parse(data);
 
@@ -183,7 +184,7 @@ export async function createProjectStep(
 export async function updateProjectStep(
   id: string,
   data: ProjectStepFormValues,
-) {
+): Promise<ProjectStepDTO> {
   const user = await getOrCreateUser();
   const parsed = projectStepSchema.parse(data);
 
@@ -203,7 +204,7 @@ export async function updateProjectStep(
   return mapStep(step);
 }
 
-export async function deleteProjectStep(id: string) {
+export async function deleteProjectStep(id: string): Promise<void> {
   const user = await getOrCreateUser();
 
   const existing = await db.projectStep.findFirst({
@@ -229,7 +230,7 @@ export async function toggleProjectStep(
   id: string,
   completed: boolean,
   comment?: string,
-) {
+): Promise<ProjectStepDTO> {
   const user = await getOrCreateUser();
 
   const existing = await db.projectStep.findFirst({
@@ -251,7 +252,7 @@ export async function toggleProjectStep(
 export async function reorderProjectSteps(
   projectId: string,
   orderedIds: string[],
-) {
+): Promise<void> {
   const user = await getOrCreateUser();
 
   const project = await db.project.findUnique({

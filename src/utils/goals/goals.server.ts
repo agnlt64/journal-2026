@@ -1,8 +1,23 @@
 import { db } from "@/lib/db";
 import { getOrCreateUser } from "@/lib/user-context";
 import { goalSchema } from "@/lib/types";
+import type { GoalDTO, GoalFormValues } from "@/lib/types";
+import type { Goal } from "@/lib/generated/prisma/client";
 
-export async function createGoal(data: unknown) {
+function mapGoal(g: Goal): GoalDTO {
+  return {
+    id: g.id,
+    title: g.title,
+    description: g.description,
+    deadline: g.deadline,
+    isCompleted: g.isCompleted,
+    completedAt: g.completedAt,
+    remark: g.remark,
+    createdAt: g.createdAt,
+  };
+}
+
+export async function createGoal(data: GoalFormValues): Promise<void> {
   const user = await getOrCreateUser();
   const parsed = goalSchema.parse(data);
 
@@ -16,24 +31,22 @@ export async function createGoal(data: unknown) {
   });
 }
 
-export async function getGoals() {
+export async function getGoals(): Promise<GoalDTO[]> {
   const user = await getOrCreateUser();
-  return await db.goal.findMany({
+  const goals = await db.goal.findMany({
     where: { userId: user.id },
     orderBy: { deadline: "asc" },
   });
+  return goals.map(mapGoal);
 }
 
-export async function toggleGoalCompletion(goalId: string) {
+export async function toggleGoalCompletion(goalId: string): Promise<void> {
   const user = await getOrCreateUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },
   });
-
-  if (!goal) {
-    throw new Error("Goal not found");
-  }
+  if (!goal) throw new Error("Goal not found");
 
   const newCompleted = !goal.isCompleted;
 
@@ -46,21 +59,19 @@ export async function toggleGoalCompletion(goalId: string) {
   });
 }
 
-export async function updateGoalRemark(goalId: string, remark: string | null) {
+export async function updateGoalRemark(
+  goalId: string,
+  remark: string | null,
+): Promise<void> {
   const user = await getOrCreateUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },
   });
-
-  if (!goal) {
-    throw new Error("Goal not found");
-  }
+  if (!goal) throw new Error("Goal not found");
 
   await db.goal.update({
     where: { id: goalId },
-    data: {
-      remark: remark?.trim() || null,
-    },
+    data: { remark: remark?.trim() || null },
   });
 }

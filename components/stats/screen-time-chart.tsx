@@ -10,10 +10,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import type { StatsEntry } from "@/src/utils/stats/stats.functions";
+import type { StatsEntryDTO } from "@/lib/types";
 
 interface ScreenTimeChartProps {
-  entries: StatsEntry[];
+  entries: StatsEntryDTO[];
 }
 
 // Get ISO week number
