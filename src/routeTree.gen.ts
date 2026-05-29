@@ -15,6 +15,7 @@ import { Route as ObjectifsRouteImport } from './routes/objectifs'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjetsIndexRouteImport } from './routes/projets/index'
 import { Route as ProjetsProjectIdRouteImport } from './routes/projets/$projectId'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const WritingsRoute = WritingsRouteImport.update({
   id: '/writings',
@@ -46,6 +47,11 @@ const ProjetsProjectIdRoute = ProjetsProjectIdRouteImport.update({
   path: '/projets/$projectId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/writings': typeof WritingsRoute
   '/projets/$projectId': typeof ProjetsProjectIdRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/writings': typeof WritingsRoute
   '/projets/$projectId': typeof ProjetsProjectIdRoute
   '/projets': typeof ProjetsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/writings': typeof WritingsRoute
   '/projets/$projectId': typeof ProjetsProjectIdRoute
   '/projets/': typeof ProjetsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/writings'
     | '/projets/$projectId'
     | '/projets/'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/writings'
     | '/projets/$projectId'
     | '/projets'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/writings'
     | '/projets/$projectId'
     | '/projets/'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   WritingsRoute: typeof WritingsRoute
   ProjetsProjectIdRoute: typeof ProjetsProjectIdRoute
   ProjetsIndexRoute: typeof ProjetsIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjetsProjectIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   WritingsRoute: WritingsRoute,
   ProjetsProjectIdRoute: ProjetsProjectIdRoute,
   ProjetsIndexRoute: ProjetsIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -9,6 +9,8 @@ import favicon from "./favicon.svg";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthGate } from "@/components/auth/auth-gate";
+import { getSessionUser } from "@/src/utils/auth/auth.functions";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -32,22 +34,30 @@ export const Route = createRootRoute({
       }
     ],
   }),
+  loader: async () => ({ user: await getSessionUser() }),
   component: RootLayout,
 })
 
 function RootLayout() {
+  const { user } = Route.useLoaderData();
+
   return (
     <html lang="fr" className="dark">
       <head>
         <HeadContent />
       </head>
       <body className="dark min-h-screen">
-        <Sidebar />
-        <Header />
-
-        <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
-          <Outlet />
-        </main>
+        {user ? (
+          <>
+            <Sidebar />
+            <Header />
+            <main className="ml-24 pt-28 pb-8 px-6 relative z-10">
+              <Outlet />
+            </main>
+          </>
+        ) : (
+          <AuthGate />
+        )}
         <Toaster />
         <Scripts />
       </body>

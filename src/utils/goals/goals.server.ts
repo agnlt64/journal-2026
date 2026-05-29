@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { getOrCreateUser } from "@/lib/user-context";
+import { requireUser } from "@/lib/user-context";
 import { goalSchema } from "@/lib/types";
 import type { GoalDTO, GoalFormValues } from "@/lib/types";
 import type { Goal } from "@/generated/prisma/client";
@@ -18,7 +18,7 @@ function mapGoal(g: Goal): GoalDTO {
 }
 
 export async function createGoal(data: GoalFormValues): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = goalSchema.parse(data);
 
   await db.goal.create({
@@ -32,7 +32,7 @@ export async function createGoal(data: GoalFormValues): Promise<void> {
 }
 
 export async function getGoals(): Promise<GoalDTO[]> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const goals = await db.goal.findMany({
     where: { userId: user.id },
     orderBy: { deadline: "asc" },
@@ -41,7 +41,7 @@ export async function getGoals(): Promise<GoalDTO[]> {
 }
 
 export async function toggleGoalCompletion(goalId: string): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },
@@ -63,7 +63,7 @@ export async function updateGoalRemark(
   goalId: string,
   remark: string | null,
 ): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const goal = await db.goal.findFirst({
     where: { id: goalId, userId: user.id },

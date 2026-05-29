@@ -1,4 +1,4 @@
-import { getOrCreateUser } from "@/lib/user-context";
+import { requireUser } from "@/lib/user-context";
 import type { EntryFormValues, EntryDTO, TagDTO } from "@/lib/types";
 import { entrySchema } from "@/lib/types";
 import type { Image, Tag } from "@/generated/prisma/client";
@@ -22,7 +22,7 @@ export async function ensureDefaultTags(userId: string) {
 }
 
 export async function getTags(): Promise<TagDTO[]> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   await ensureDefaultTags(user.id);
 
   const tags = await db.tag.findMany({
@@ -34,7 +34,7 @@ export async function getTags(): Promise<TagDTO[]> {
 }
 
 export async function createTag(name: string, color: string): Promise<TagDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const tag = await db.tag.create({
     data: { userId: user.id, name, color },
@@ -46,7 +46,7 @@ export async function createTag(name: string, color: string): Promise<TagDTO> {
 export async function createEntry(
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = entrySchema.parse(data);
 
   await db.entry.create({
@@ -75,7 +75,7 @@ export async function getEntries(
   searchQuery = "",
   includeEmpty = false,
 ): Promise<{ data: EntryDTO[]; total: number }> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const itemsPerPage = 20;
 
   const where = {
@@ -130,7 +130,7 @@ export async function getEntries(
 }
 
 export async function deleteEntry(id: string) {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   await db.entry.delete({ where: { id, userId: user.id } });
 }
 
@@ -138,7 +138,7 @@ export async function updateEntry(
   id: string,
   data: EntryFormValues & { tagIds?: string[] },
 ) {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = entrySchema.parse(data);
 
   await db.entry.update({

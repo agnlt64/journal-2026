@@ -1,6 +1,7 @@
+
 generator client {
-  provider   = "prisma-client"
-  output     = "../generated/prisma"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -10,10 +11,7 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
-  passwordHash  String    // Pour le login principal
-  
-  counter       Int       @default(0)  // Compteur persistant
-  
+  counter       Int       @default(0) // Compteur persistant
   entries       Entry[]
   writings      Writing[]
   goals         Goal[]
@@ -22,62 +20,65 @@ model User {
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  name          String
+  emailVerified Boolean   @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
 }
 
 model Tag {
-  id        String   @id @default(cuid())
-  name      String
-  color     String   @default("#6366f1") // Default indigo color
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  entries   Entry[]  @relation("EntryTags")
-  
+  id      String  @id @default(cuid())
+  name    String
+  color   String  @default("#6366f1") // Default indigo color
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries Entry[] @relation("EntryTags")
+
   @@unique([userId, name])
 }
 
 model Entry {
-  id          String    @id @default(cuid())
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  content     String    @db.Text
-  date        DateTime  // Date de l'entrée (modifiable)
-  
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content    String    @db.Text
+  date       DateTime // Date de l'entrée (modifiable)
   // Tags
-  tags        Tag[]     @relation("EntryTags")
-  
+  tags       Tag[]     @relation("EntryTags")
   // Champs optionnels
-  wakeTime    DateTime? // Stocker l'heure
-  sleepTime   DateTime? // Stocker l'heure
-  didSport    Boolean   @default(false)
-  asmr        Boolean   @default(false)
-  screenTime  Int?      // Temps d'écran moyen en minutes (renseigné le lundi)
-  
+  wakeTime   DateTime? // Stocker l'heure
+  sleepTime  DateTime? // Stocker l'heure
+  didSport   Boolean   @default(false)
+  asmr       Boolean   @default(false)
+  screenTime Int? // Temps d'écran moyen en minutes (renseigné le lundi)
   // Images
-  images      Image[]
+  images     Image[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([userId, date]) // Optimisation pour le tri décroissant
+  // Optimisation pour le tri décroissant
+  @@index([userId, date])
 }
 
 model Image {
-  id        String   @id @default(cuid())
-  url       String
-  entryId   String
-  entry     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id      String @id @default(cuid())
+  url     String
+  entryId String
+  entry   Entry  @relation(fields: [entryId], references: [id], onDelete: Cascade)
 }
 
 // Les "Réflexions" hors journal
+
 model Writing {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
   title     String
   content   String   @db.Text
-  
   // Pas de date affichée, mais utile pour le tri interne
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,39 +88,34 @@ model Goal {
   id          String    @id @default(cuid())
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
   title       String
   description String?   @db.Text
-  deadline    DateTime  // Date limite pour réaliser l'objectif
-  
+  deadline    DateTime // Date limite pour réaliser l'objectif
   // Completion status
-  isCompleted   Boolean   @default(false)
-  completedAt   DateTime? // When the goal was marked as completed
-  
+  isCompleted Boolean   @default(false)
+  completedAt DateTime? // When the goal was marked as completed
   // Post-deadline remark
-  remark        String?   @db.Text  // Remark for past objectives
-  
+  remark      String?   @db.Text // Remark for past objectives
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
 // Project management
+
 model Project {
-  id          String    @id @default(cuid())
+  id          String        @id @default(cuid())
   userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   title       String
-  description String?   @db.Text
+  description String?       @db.Text
   status      ProjectStatus @default(IDEA)
-  
   // External links/resources
   links       ProjectLink[]
   steps       ProjectStep[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId, status])
 }
 
@@ -132,20 +128,20 @@ enum ProjectStatus {
 }
 
 model ProjectLink {
-  id          String    @id @default(cuid())
-  projectId   String
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  title       String
-  url         String
+  title String
+  url   String
 
-  createdAt   DateTime  @default(now())
+  createdAt DateTime @default(now())
 }
 
 model ProjectStep {
-  id                String    @id @default(cuid())
-  projectId         String
-  project           Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   title             String
   description       String?   @db.Text
@@ -153,8 +149,56 @@ model ProjectStep {
   completedAt       DateTime?
   completionComment String?   @db.Text
 
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([projectId, order])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

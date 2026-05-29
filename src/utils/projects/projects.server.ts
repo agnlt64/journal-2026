@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { getOrCreateUser } from "@/lib/user-context";
+import { requireUser } from "@/lib/user-context";
 import {
   projectSchema,
   projectStepSchema,
@@ -55,7 +55,7 @@ function mapProject(p: ProjectWithRelations): ProjectDTO {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
 export async function getProjects(): Promise<ProjectDTO[]> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const projects = await db.project.findMany({
     where: { userId: user.id },
@@ -70,7 +70,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
 }
 
 export async function getProject(id: string): Promise<ProjectDTO | null> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const p = await db.project.findUnique({
     where: { id, userId: user.id },
@@ -86,7 +86,7 @@ export async function getProject(id: string): Promise<ProjectDTO | null> {
 export async function createProject(
   data: ProjectFormValues,
 ): Promise<ProjectDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = projectSchema.parse(data);
 
   const project = await db.project.create({
@@ -112,7 +112,7 @@ export async function updateProject(
   id: string,
   data: ProjectFormValues,
 ): Promise<ProjectDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = projectSchema.parse(data);
 
   // todo: use db.$transaction
@@ -138,7 +138,7 @@ export async function updateProject(
 }
 
 export async function deleteProject(id: string): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   await db.project.delete({ where: { id, userId: user.id } });
 }
 
@@ -146,7 +146,7 @@ export async function updateProjectStatus(
   id: string,
   status: ProjectDTO["status"],
 ): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   await db.project.update({
     where: { id, userId: user.id },
     data: { status },
@@ -159,7 +159,7 @@ export async function createProjectStep(
   projectId: string,
   data: ProjectStepFormValues,
 ): Promise<ProjectStepDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = projectStepSchema.parse(data);
 
   // Verify project belongs to user
@@ -185,7 +185,7 @@ export async function updateProjectStep(
   id: string,
   data: ProjectStepFormValues,
 ): Promise<ProjectStepDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
   const parsed = projectStepSchema.parse(data);
 
   const existing = await db.projectStep.findFirst({
@@ -205,7 +205,7 @@ export async function updateProjectStep(
 }
 
 export async function deleteProjectStep(id: string): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const existing = await db.projectStep.findFirst({
     where: { id, project: { userId: user.id } },
@@ -231,7 +231,7 @@ export async function toggleProjectStep(
   completed: boolean,
   comment?: string,
 ): Promise<ProjectStepDTO> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const existing = await db.projectStep.findFirst({
     where: { id, project: { userId: user.id } },
@@ -253,7 +253,7 @@ export async function reorderProjectSteps(
   projectId: string,
   orderedIds: string[],
 ): Promise<void> {
-  const user = await getOrCreateUser();
+  const user = await requireUser();
 
   const project = await db.project.findUnique({
     where: { id: projectId, userId: user.id },
