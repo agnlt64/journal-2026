@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { FolderGit, Plus, Link2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "@tanstack/react-router";
 
 interface ProjectDialogProps {
   children?: React.ReactNode;
@@ -40,6 +41,7 @@ const STATUS_OPTIONS: {
 
 export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
@@ -83,6 +85,7 @@ export function ProjectDialog({ children, projectToEdit }: ProjectDialogProps) {
         await createProject({ data });
       }
       setOpen(false);
+      await router.invalidate();
       reset();
     } catch (e) {
       console.error(e);

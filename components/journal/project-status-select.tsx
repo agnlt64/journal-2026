@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { ProjectDTO } from "@/lib/types";
 import {
   PROJECT_STATUS_COLORS,
@@ -13,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "@tanstack/react-router";
 
 interface ProjectStatusSelectProps {
   projectId: string;
@@ -23,16 +23,16 @@ export function ProjectStatusSelect({
   projectId,
   currentStatus,
 }: ProjectStatusSelectProps) {
-  const [status, setStatus] = useState<ProjectDTO["status"]>(currentStatus);
+  const router = useRouter();
 
   async function handleChange(value: ProjectDTO["status"] | null) {
-    if (!value) return;
-    setStatus(value);
+    if (!value || value === currentStatus) return;
     await updateProjectStatus({ data: { id: projectId, status: value}});
+    await router.invalidate();
   }
 
   return (
-    <Select value={status} onValueChange={handleChange}>
+    <Select value={currentStatus} onValueChange={handleChange}>
       <SelectTrigger
         size="sm"
         className="w-56 bg-transparent border-[rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.2)] text-white"
@@ -41,9 +41,9 @@ export function ProjectStatusSelect({
           <div className="flex items-center gap-2">
             <div
               className="w-2 h-2 rounded-full shrink-0"
-              style={{ backgroundColor: PROJECT_STATUS_COLORS[status] }}
+              style={{ backgroundColor: PROJECT_STATUS_COLORS[currentStatus] }}
             />
-            <span className="text-sm">{PROJECT_STATUS_LABELS[status]}</span>
+            <span className="text-sm">{PROJECT_STATUS_LABELS[currentStatus]}</span>
           </div>
         </SelectValue>
       </SelectTrigger>

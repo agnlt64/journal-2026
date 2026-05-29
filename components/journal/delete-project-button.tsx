@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { deleteProject } from "@/src/utils/projects/projects.functions";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +13,15 @@ import { Trash2 } from "lucide-react";
 export function DeleteProjectButton({ projectId }: { projectId: string }) {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
+  const router = useRouter();
 
   async function handleDelete() {
     setIsDeleting(true);
     try {
       await deleteProject({ data: projectId });
+      await router.invalidate();
+      await navigate({ to: "/projets" });
     } finally {
       setIsDeleting(false);
     }

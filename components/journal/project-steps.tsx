@@ -43,6 +43,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "@tanstack/react-router";
 
 // ─── Step content (shared between sortable row and drag overlay) ──────────────
 
@@ -214,6 +215,7 @@ export function ProjectSteps({
   initialSteps,
   statusColor,
 }: ProjectStepsProps) {
+  const router = useRouter();
   const [steps, setSteps] = useState<ProjectStepDTO[]>(initialSteps);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -256,13 +258,14 @@ export function ProjectSteps({
     }));
     setSteps(reordered);
 
-    startTransition(() => {
-      reorderProjectSteps({
+    startTransition(async () => {
+      await reorderProjectSteps({
         data: {
           projectId,
           orderedIds: reordered.map((s) => s.id)
         }
       });
+      router.invalidate();
     });
   }
 
@@ -301,6 +304,7 @@ export function ProjectSteps({
       setSteps((prev) =>
         prev.map((s) => (s.id === optimistic.id ? created : s)),
       );
+      router.invalidate();
     });
   }
 
@@ -336,13 +340,17 @@ export function ProjectSteps({
         }
       });
       setSteps((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+      router.invalidate();
     });
   }
 
   // ── Delete step ─────────────────────────────────────────────────────────────
   function handleDelete(id: string) {
     setSteps((prev) => prev.filter((s) => s.id !== id));
-    startTransition(() => deleteProjectStep({ data: id }));
+    startTransition(async () => {
+      await deleteProjectStep({ data: id });
+      router.invalidate();
+    });
   }
 
   // ── Toggle step ─────────────────────────────────────────────────────────────
@@ -365,6 +373,7 @@ export function ProjectSteps({
         setSteps((prev) =>
           prev.map((s) => (s.id === updated.id ? updated : s)),
         );
+        router.invalidate();
       });
     } else {
       setCompletingStep(step);
@@ -398,6 +407,7 @@ export function ProjectSteps({
       setSteps((prev) =>
         prev.map((s) => (s.id === updated.id ? updated : s)),
       );
+      router.invalidate();
     });
   }
 

@@ -13,6 +13,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "@tanstack/react-router";
 
 interface GoalCardProps {
   goal: GoalDTO;
@@ -24,6 +25,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
   const [isEditingRemark, setIsEditingRemark] = useState(false);
   const [remarkText, setRemarkText] = useState(goal.remark || "");
   const [isSavingRemark, setIsSavingRemark] = useState(false);
+  const router = useRouter();
 
   const now = new Date();
   const deadlineDate = new Date(goal.deadline);
@@ -33,6 +35,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
     setIsUpdating(true);
     try {
       await toggleGoalCompletion({ data: { goalId: goal.id } });
+      await router.invalidate();
     } finally {
       setIsUpdating(false);
     }
@@ -47,6 +50,7 @@ export function GoalCard({ goal, index = 0 }: GoalCardProps) {
           remark: remarkText || null
         }
       });
+      await router.invalidate();
       setIsEditingRemark(false);
     } finally {
       setIsSavingRemark(false);

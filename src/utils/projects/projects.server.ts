@@ -13,7 +13,6 @@ import type {
 } from "@/lib/types";
 import type { ProjectLink, ProjectStep } from "@/lib/generated/prisma/client";
 
-
 function mapStep(s: ProjectStep): ProjectStepDTO {
   return {
     id: s.id,

@@ -12,12 +12,10 @@ interface EntryCardProps {
 }
 
 export function EntryCard({
-  entry: initialEntry,
+  entry,
   index = 0,
   onEntryChange,
 }: EntryCardProps) {
-  const [entry, _] = useState(initialEntry);
-
   const entryDate = new Date(entry.date);
   const isEvening = entryDate.getHours() >= 18 || entryDate.getHours() < 6;
   const hasActivity = entry.didSport || entry.asmr || entry.wakeTime;
