@@ -8,7 +8,6 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 8,
   },
-  baseURL: "http://localhost:2999/",
   database: prismaAdapter(db, {
     provider: "postgresql",
   }),

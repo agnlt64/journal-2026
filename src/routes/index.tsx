@@ -1,4 +1,5 @@
 import { getEntries, getTags } from "@/src/utils/entries/entries.functions";
+import { getSessionUser } from "@/src/utils/auth/auth.functions";
 import { Feed } from "@/components/journal/feed";
 import { Sparkles } from "lucide-react";
 
@@ -6,6 +7,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
+    const user = await getSessionUser();
+    if (!user) return { initialEntries: [], total: 0, tags: [] };
+
     const [{ data: initialEntries, total }, tags] = await Promise.all([
       getEntries({data: {page: 1, searchQuery: "", includeEmpty: true}}),
       getTags(),
